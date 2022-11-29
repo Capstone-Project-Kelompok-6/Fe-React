@@ -70,7 +70,7 @@ const Navbar = () => {
 								href="#classes-info"
 								className="block rounded py-2 pl-3 pr-4 text-xl text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:border-0 lg:p-0 lg:hover:bg-transparent lg:hover:text-blue-700 lg:dark:hover:bg-transparent lg:dark:hover:text-white"
 							>
-								Membership
+								Classes Info
 							</a>
 						</li>
 						<li>
@@ -79,6 +79,14 @@ const Navbar = () => {
 								className="block rounded py-2 pl-3 pr-4 text-xl text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:border-0 lg:p-0 lg:hover:bg-transparent lg:hover:text-blue-700 lg:dark:hover:bg-transparent lg:dark:hover:text-white"
 							>
 								Class
+							</a>
+						</li>
+						<li>
+							<a
+								href="#testimonial"
+								className="block rounded py-2 pl-3 pr-4 text-xl text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:border-0 lg:p-0 lg:hover:bg-transparent lg:hover:text-blue-700 lg:dark:hover:bg-transparent lg:dark:hover:text-white"
+							>
+								Testimoni
 							</a>
 						</li>
 						<li>
