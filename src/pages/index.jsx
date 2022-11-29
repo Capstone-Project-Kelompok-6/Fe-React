@@ -1,3 +1,4 @@
 import LandingPage from "./LandingPage";
+import LoginPage from "./LoginPage";
 
-export { LandingPage };
+export { LandingPage, LoginPage };
