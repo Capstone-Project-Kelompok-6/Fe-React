@@ -9,7 +9,7 @@ const Testimonial = () => {
 	SwiperCore.use([Autoplay]);
 
 	return (
-		<div className="container">
+		<div className="container pt-24 pb-16">
 			<div className="text-center">
 				<h1 className="text-xl font-semibold lg:text-4xl lg:font-normal">
 					What are they saying?
