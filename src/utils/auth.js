@@ -28,7 +28,6 @@ const Auth = {
 		if (!data.access_token || !data.refresh_token) return null;
 		const expireAccessToken = new Date(data.exp_access);
 		const expireRefreshToken = new Date(data.exp_refresh);
-		console.log({ expireAccessToken, expireRefreshToken });
 		Cookies.set("token", data.access_token, { expires: expireAccessToken });
 		Cookies.set("rt", data.refresh_token, { expires: expireRefreshToken });
 		Cookies.set("sub", data.full_name, { expires: expireAccessToken });

@@ -5,7 +5,6 @@ import CONST from "../utils/constants";
 const exceptionApiUrlforRT = (config) => {
 	if (!config) return null;
 	const arr = [config.url.includes("/auth/login")];
-	console.log(arr.includes(true));
 	return arr.includes(true);
 };
 
@@ -41,5 +40,5 @@ export const successHandler = (response) => {
 };
 
 export const errorHandler = (error) => {
-	if (error.status === 401 && window.location.replace("*")) return Promise.reject({ ...error });
+	if (error.status === 401 && window.location.replace(location.pathname)) return Promise.reject({ ...error });
 };
