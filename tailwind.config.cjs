@@ -29,7 +29,9 @@ module.exports = {
 				"tertiary-1": "#1E1E1E",
 				"tertiary-2": "#595959",
 				"tertiary-3": "#3240B3",
+				"tertiary-4": "#4ADD7C",
 				"tertiary-background-1": "#D7DAF4",
+				"dark-4": "#737373",
 				dark: "#404040",
 			},
 			boxShadow: {
@@ -46,6 +48,7 @@ module.exports = {
 			},
 			borderRadius: {
 				16: "16px",
+				20: "20px",
 				100: "100px",
 			},
 		},
