@@ -23,7 +23,7 @@ const FormLogin = () => {
 			.then((result) => {
 				if (result) {
 					setTimeout(
-						() => navigate("/"),
+						() => navigate("/dashboard"),
 						Swal.fire({
 							icon: "success",
 							title: "Success",
