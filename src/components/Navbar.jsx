@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { navbarCollections } from "../mocks/navbarCollections";
 
 const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
-	const onClick = () => {
-		setIsOpen((current) => !current);
+	const handleOpenNavbar = () => {
+		setIsOpen(!isOpen);
 	};
 
 	return (
@@ -17,21 +18,14 @@ const Navbar = () => {
 					</span>
 				</Link>
 				<button
-					onClick={onClick}
+					onClick={handleOpenNavbar}
 					data-collapse-toggle="navbar-default"
 					type="button"
 					className="ml-3 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 lg:hidden"
 					aria-controls="navbar-default"
-					aria-expanded="false"
-				>
+					aria-expanded="false">
 					<span className="sr-only">Open main menu</span>
-					<svg
-						className="h-6 w-6"
-						aria-hidden="true"
-						fill="currentColor"
-						viewBox="0 0 20 20"
-						xmlns="http://www.w3.org/2000/svg"
-					>
+					<svg className="h-6 w-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
 						<path
 							fillRule="evenodd"
 							d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
@@ -39,61 +33,23 @@ const Navbar = () => {
 						/>
 					</svg>
 				</button>
-				<div
-					className={
-						isOpen
-							? "w-full lg:block lg:w-auto"
-							: "hidden w-full lg:block lg:w-auto"
-					}
-					id="navbar-default"
-				>
+				<div className={isOpen ? "w-full lg:block lg:w-auto" : "hidden w-full lg:block lg:w-auto"} id="navbar-default">
 					<ul className="mt-4 flex flex-col rounded-lg bg-white p-4 font-medium lg:mt-0 lg:flex-row lg:space-x-8 lg:border-0 lg:bg-white lg:text-sm lg:font-medium">
+						{navbarCollections.map((item, idx) => {
+							return (
+								<li key={idx}>
+									<a
+										href={item.path}
+										className="mb-4 block rounded text-xl font-medium text-neutral-100-2 lg:border-0 lg:p-0 lg:hover:bg-transparent lg:hover:text-blue-700"
+										aria-current="page"
+										onClick={handleOpenNavbar}>
+										{item.name}
+									</a>
+								</li>
+							);
+						})}
 						<li>
-							<a
-								href="#hero"
-								className="block rounded py-2 pl-3 pr-4 text-xl text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:border-0 lg:p-0 lg:hover:bg-transparent lg:hover:text-blue-700 lg:dark:hover:bg-transparent lg:dark:hover:text-white"
-								aria-current="page"
-							>
-								Home
-							</a>
-						</li>
-						<li>
-							<a
-								href="#about"
-								className="block rounded py-2 pl-3 pr-4 text-xl text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:border-0 lg:p-0 lg:hover:bg-transparent lg:hover:text-blue-700 lg:dark:hover:bg-transparent lg:dark:hover:text-white"
-							>
-								About Us
-							</a>
-						</li>
-						<li>
-							<a
-								href="#classes-info"
-								className="block rounded py-2 pl-3 pr-4 text-xl text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:border-0 lg:p-0 lg:hover:bg-transparent lg:hover:text-blue-700 lg:dark:hover:bg-transparent lg:dark:hover:text-white"
-							>
-								Classes Info
-							</a>
-						</li>
-						<li>
-							<a
-								href="#classes-list"
-								className="block rounded py-2 pl-3 pr-4 text-xl text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:border-0 lg:p-0 lg:hover:bg-transparent lg:hover:text-blue-700 lg:dark:hover:bg-transparent lg:dark:hover:text-white"
-							>
-								Class
-							</a>
-						</li>
-						<li>
-							<a
-								href="#testimonial"
-								className="block rounded py-2 pl-3 pr-4 text-xl text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:border-0 lg:p-0 lg:hover:bg-transparent lg:hover:text-blue-700 lg:dark:hover:bg-transparent lg:dark:hover:text-white"
-							>
-								Testimoni
-							</a>
-						</li>
-						<li>
-							<Link
-								to="/login"
-								className="block rounded py-2 pl-3 pr-4 text-xl text-primary-violet hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white lg:border-0 lg:p-0 lg:hover:bg-transparent lg:hover:text-blue-700 lg:dark:hover:bg-transparent lg:dark:hover:text-white"
-							>
+							<Link to="/login" className="block rounded text-xl font-bold text-primary-violet lg:border-0 lg:p-0 lg:hover:text-blue-700">
 								Login
 							</Link>
 						</li>
