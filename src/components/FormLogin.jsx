@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
 import Swal from "sweetalert2";
 import AuthAPI from "../apis/auth.api";
@@ -92,10 +92,10 @@ const FormLogin = () => {
 				<div className="lg:m-auto">
 					<div className="border-1 lg:bg-neutral rounded-none p-3 shadow-none lg:mx-auto lg:w-2/4 lg:rounded-100 lg:border-gray-200 lg:shadow-7">
 						<div className="text-center">
-							<h1 className="text-3xl font-semibold lg:text-5xl">
+							<Link to="/" className="text-3xl font-semibold lg:text-5xl">
 								<span className="text-neutral-100-2">Work</span>
 								<span className="text-primary-violet">Fit.</span>
-							</h1>
+							</Link>
 							<p className="my-1 text-sm font-medium lg:text-base">How do I get started?</p>
 							<img src={loginImg} alt="Login" className="mx-auto" />
 							<h1 className="my-1 text-2xl font-semibold lg:text-4xl">Welcome Back Admin!</h1>

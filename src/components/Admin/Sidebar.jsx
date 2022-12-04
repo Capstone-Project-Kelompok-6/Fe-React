@@ -69,8 +69,8 @@ const Sidebar = () => {
 											<div
 												className={
 													isActive
-														? "flex items-center rounded-lg bg-primary-violet bg-opacity-10 p-2 text-sm font-semibold text-primary-violet transition-all duration-300 ease-in-out hover:bg-indigo-200"
-														: "flex items-center rounded-lg p-2 text-sm font-normal text-neutral-80 transition-all duration-300 ease-in-out hover:bg-indigo-100"
+														? "mb-1 flex items-center rounded-lg bg-primary-violet bg-opacity-10 p-2 text-sm font-semibold text-primary-violet transition-all duration-300 ease-in-out hover:bg-indigo-200"
+														: "mb-1 flex items-center rounded-lg p-2 text-sm font-normal text-neutral-80 transition-all duration-300 ease-in-out hover:bg-indigo-100"
 												}>
 												{isActive ? item.iconActive : item.iconInactive}
 												<span className="ml-3 font-medium">{item.name}</span>
@@ -86,8 +86,8 @@ const Sidebar = () => {
 								<div
 									className={
 										active === "/classes/offline" || active === "/classes/online"
-											? "flex items-center rounded-lg bg-primary-violet bg-opacity-10 p-2 text-sm font-semibold text-primary-violet transition-all duration-300 ease-in-out hover:bg-indigo-200"
-											: "flex items-center rounded-lg p-2 text-sm font-normal text-neutral-80 transition-all duration-300 ease-in-out hover:bg-indigo-100"
+											? "mb-1 flex items-center rounded-lg bg-primary-violet bg-opacity-10 p-2 text-sm font-semibold text-primary-violet transition-all duration-300 ease-in-out hover:bg-indigo-200"
+											: "mb-1 flex items-center rounded-lg p-2 text-sm font-normal text-neutral-80 transition-all duration-300 ease-in-out hover:bg-indigo-100"
 									}>
 									{active === "/classes/offline" || active === "/classes/online" ? (
 										<i className="fi fi-sr-school ml-2 flex items-center justify-center text-base"></i>
@@ -104,8 +104,8 @@ const Sidebar = () => {
 								<div
 									className={
 										active === "/booking/offline" || active === "/booking/online"
-											? "flex items-center rounded-lg bg-primary-violet bg-opacity-10 p-2 text-sm font-semibold text-primary-violet transition-all duration-300 ease-in-out hover:bg-indigo-200"
-											: "flex items-center rounded-lg p-2 text-sm font-normal text-neutral-80 transition-all duration-300 ease-in-out hover:bg-indigo-100"
+											? "mb-1 flex items-center rounded-lg bg-primary-violet bg-opacity-10 p-2 text-sm font-semibold text-primary-violet transition-all duration-300 ease-in-out hover:bg-indigo-200"
+											: "mb-1 flex items-center rounded-lg p-2 text-sm font-normal text-neutral-80 transition-all duration-300 ease-in-out hover:bg-indigo-100"
 									}>
 									{active === "/booking/offline" || active === "/booking/online" ? (
 										<i className="fi fi-sr-book-alt ml-2 flex items-center justify-center text-base"></i>
@@ -125,8 +125,8 @@ const Sidebar = () => {
 											<div
 												className={
 													isActive
-														? "flex items-center rounded-lg bg-primary-violet bg-opacity-10 p-2 text-sm font-semibold text-primary-violet transition-all duration-300 ease-in-out hover:bg-indigo-200"
-														: "flex items-center rounded-lg p-2 text-sm font-normal text-neutral-80 transition-all duration-300 ease-in-out hover:bg-indigo-100"
+														? "mb-1 flex items-center rounded-lg bg-primary-violet bg-opacity-10 p-2 text-sm font-semibold text-primary-violet transition-all duration-300 ease-in-out hover:bg-indigo-200"
+														: "mb-1 flex items-center rounded-lg p-2 text-sm font-normal text-neutral-80 transition-all duration-300 ease-in-out hover:bg-indigo-100"
 												}>
 												{isActive ? item.iconActive : item.iconInactive}
 												<span className="ml-3 font-medium">{item.name}</span>
@@ -136,25 +136,6 @@ const Sidebar = () => {
 								</li>
 							);
 						})}
-						{/* {bookingSidebarCollections.map((item, idx) => {
-							return (
-								<li key={idx}>
-									<NavLink to={item.path}>
-										{({ isActive }) => (
-											<div
-												className={
-													isActive
-														? "flex items-center rounded-lg bg-primary-violet bg-opacity-10 p-2 text-sm font-semibold text-primary-violet transition-all duration-300 ease-in-out hover:bg-indigo-200"
-														: "flex items-center rounded-lg p-2 text-sm font-normal text-neutral-80 transition-all duration-300 ease-in-out hover:bg-indigo-100"
-												}>
-												{isActive ? item.iconActive : item.iconInactive}
-												<span className="ml-3 font-medium">{item.name}</span>
-											</div>
-										)}
-									</NavLink>
-								</li>
-							);
-						})} */}
 					</ul>
 				</div>
 				<div className="relative">
