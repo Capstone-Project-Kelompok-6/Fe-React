@@ -1,16 +1,6 @@
 import React from "react";
 
-import {
-	Navbar,
-	Hero,
-	AboutUs,
-	ClassesInfo,
-	Testimonial,
-	Footer,
-	ClassesList,
-	InstructorInfo,
-	ToTop,
-} from "../components/LayoutLanding";
+import { Navbar, Hero, AboutUs, ClassesInfo, Testimonial, Footer, ClassesList, InstructorInfo, ToTop } from "../components/LayoutLanding";
 
 const LandingPage = () => {
 	return (

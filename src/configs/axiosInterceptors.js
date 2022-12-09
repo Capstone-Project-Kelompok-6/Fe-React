@@ -19,7 +19,7 @@ export const requestHandler = async (config) => {
 		if (token) {
 			config.headers["Authorization"] = `Bearer ${token}`;
 		} else if (!exceptionApiUrlforRT(config)) {
-			const newToken = await axios.post(`${CONST.BASE_URL_API}/refresh`, {
+			const newToken = await axios.patch(`${CONST.BASE_URL_API}/auth/refresh`, {
 				refresh_token: Auth.getRefreshToken(),
 			});
 
@@ -40,5 +40,8 @@ export const successHandler = (response) => {
 };
 
 export const errorHandler = (error) => {
-	if (error.status === 401 && window.location.replace(location.pathname)) return Promise.reject({ ...error });
+	if (error.response && error.response.status === 401) {
+		Auth.signOut();
+	}
+	return Promise.reject({ ...error });
 };
