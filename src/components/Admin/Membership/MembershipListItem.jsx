@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { formatShortDate } from "../../../utils/formatDate";
+import { actionDropdownEdit } from "../../../utils/globalVariable";
 import ModalEditMembership from "./ModalEditMembership";
 
 const MembershipListItem = ({ data }) => {
@@ -33,10 +34,7 @@ const MembershipListItem = ({ data }) => {
 						<div className="absolute top-0 right-0 z-10 mr-1 mt-7 w-32 rounded-xl bg-white shadow-4 transition duration-300">
 							<ul className="list-reset">
 								<li>
-									<button
-										type="button"
-										className="mr-2 inline-flex w-full items-center rounded-xl px-5 py-2.5 text-center text-sm font-normal text-neutral-100-2 transition duration-300 ease-in-out hover:rounded-xl hover:bg-yellow-50 focus:outline-none"
-										onClick={handleModalEditTrigger}>
+									<button type="button" className={actionDropdownEdit} onClick={handleModalEditTrigger}>
 										<i className="fi fi-sr-pencil mr-2 -ml-1 mt-1 text-sm text-secondary-yellow"></i>
 										Edit
 									</button>
