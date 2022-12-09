@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
+import { createInstructor } from "../../../stores/features/instructorSlice";
 import {
 	cancelButton,
 	inputError,
@@ -30,6 +33,7 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 	const [errors, setErrors] = useState(baseErrors);
 	const [values, setValues] = useState(baseValues);
 	const imageInstructor = useRef(null);
+	const dispatch = useDispatch();
 
 	const MAX_FILE_SIZE = 1024;
 	const maxLengthPhoneNumber = 13;
@@ -125,15 +129,62 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 		}
 	};
 
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		const formData = new FormData(e.target);
+		const instructor_name = formData.get("instructor_name");
+		const image = formData.get("image");
+		const email = formData.get("email");
+		const phone_number = formData.get("phone_number");
+
+		if (!errors.instructor_name && !errors.image && !errors.email && !errors.phone_number) {
+			try {
+				dispatch(createInstructor({ instructor_name, image, email, phone_number })).then((res) => {
+					if (!res.error) {
+						setTimeout(
+							() =>
+								Swal.fire({
+									icon: "success",
+									title: "Saved",
+									text: "Instructor data successfully saved",
+									showConfirmButton: false,
+									timer: 2000,
+									background: "#fefefe",
+								}),
+							1000
+						);
+						handleModalCreateTrigger();
+					} else {
+						Swal.fire("Sorry", res.error.message.split(":")[1], "info");
+					}
+				});
+			} catch (error) {
+				Swal.fire("Sorry", error.message, "info");
+			}
+		} else {
+			setTimeout(
+				() =>
+					Swal.fire({
+						icon: "error",
+						title: "Instructor data cannot saved",
+						text: "Please, check your inputed data",
+						background: "#fefefe",
+					}),
+				1000
+			);
+		}
+	};
+
 	return (
 		<div className="relative z-50">
-			<div className="fixed inset-0 z-50 bg-gray-600 bg-opacity-50 transition-opacity"></div>
+			<div className="fixed inset-0 z-50 bg-gray-600 bg-opacity-80 transition-opacity"></div>
 
 			<div className="fixed inset-0 z-50 items-center justify-center overflow-y-auto">
 				<div className="flex w-full items-end justify-center px-4 pt-16 pb-6 sm:h-full sm:items-center sm:p-0 md:h-full">
 					<div className="relative h-full w-full max-w-sm sm:max-w-sm md:h-auto md:max-w-md lg:max-w-lg xl:max-w-xl">
-						<form className="rounded-xl bg-white shadow-4">
-							<div className="flex items-center justify-between rounded-t border-b p-4">
+						<form onSubmit={handleSubmit} className="rounded-xl bg-white shadow-4">
+							<div className="flex items-center justify-between rounded-t p-4">
 								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">Add New Instructor</h3>
 							</div>
 							<div className="space-y-6 p-6">
@@ -175,7 +226,7 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 										</div>
 									) : (
 										<div className="my-5 flex w-full items-center justify-center">
-											<div className="flex h-32 w-32 flex-col items-center justify-center rounded-full border-2 border-dashed border-neutral-80">
+											<div className="flex h-32 w-32 flex-col items-center justify-center rounded-full border-2 border-dashed border-neutral-80 bg-neutral-background">
 												<div className="flex flex-col items-center justify-center pt-5 pb-5">
 													<i className="fi fi-rr-camera text-2xl text-neutral-80"></i>
 												</div>
@@ -254,7 +305,7 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 									</div>
 								</div>
 							</div>
-							<div className="flex items-center justify-center space-x-2 border-t border-gray-200 p-6">
+							<div className="flex items-center justify-center space-x-2 p-6">
 								<button type="button" className={cancelButton} onClick={handleModalCreateTrigger}>
 									Cancel
 								</button>
