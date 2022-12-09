@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { inputError, inputNotError, labelError, labelNotError, regexNameValidation } from "../../../utils/globalVariable";
+import { cancelButton, inputError, inputNotError, labelError, labelNotError, regexNameValidation, saveButton } from "../../../utils/globalVariable";
 
 const baseValues = {
 	workout: "",
@@ -169,34 +169,18 @@ const ModalCreateWorkout = ({ handleModalCreateTrigger }) => {
 										</div>
 									</div>
 									<div className="relative">
-										<textarea
-											id="description"
-											name="description"
-											type="text"
-											rows="5"
-											className="peer w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 first-line:block focus:border-blue-500 focus:ring-blue-500"
-											placeholder=" "
-											required></textarea>
-										<label
-											htmlFor="description"
-											className="absolute top-1 left-1 z-10 origin-[0] -translate-y-3 scale-75 transform bg-white px-2 text-sm text-neutral-60 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-3 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600">
+										<textarea id="description" name="description" type="text" rows="5" className={inputNotError} placeholder=" " required></textarea>
+										<label htmlFor="description" className={labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']"> Description</span>
 										</label>
 									</div>
 								</div>
 							</div>
 							<div className="flex items-center justify-center space-x-2 border-t border-gray-200 p-6">
-								<button
-									data-modal-toggle="staticModal"
-									type="button"
-									className="w-full rounded-xl border border-secondary-navy bg-white px-5 py-2.5 text-sm font-medium text-primary-violet hover:bg-gray-100 hover:text-violet-900 focus:z-10 focus:outline-none focus:ring-4 focus:ring-blue-300"
-									onClick={handleModalCreateTrigger}>
+								<button type="button" className={cancelButton} onClick={handleModalCreateTrigger}>
 									Cancel
 								</button>
-								<button
-									data-modal-toggle="staticModal"
-									type="submit"
-									className="w-full rounded-xl bg-secondary-navy px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300">
+								<button type="submit" className={saveButton}>
 									Save
 								</button>
 							</div>

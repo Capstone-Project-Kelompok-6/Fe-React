@@ -89,7 +89,7 @@ const FormLogin = () => {
 									<span className="text-neutral-100-2">Work</span>
 									<span className="text-primary-violet">Fit.</span>
 								</Link>
-								<p className="my-1 text-sm font-medium lg:text-base">Lets”s Start A New Life Today</p>
+								<p className="my-1 text-sm font-normal text-neutral-100-2 lg:text-base">Lets”s Start A New Life Today</p>
 								<img src={loginImg} alt="Login" className="mx-auto" />
 								<h1 className="my-1 text-2xl font-semibold lg:text-3xl">Welcome Back Admin!</h1>
 							</div>
@@ -152,7 +152,7 @@ const FormLogin = () => {
 									</button>
 								)}
 							</form>
-							<div className="copyright mt-10 text-center text-xs font-medium lg:text-base">
+							<div className="copyright mt-10 text-center text-xs font-normal text-tertiary-6 lg:text-base">
 								<span>Copyright @ 2022 Gym Membership.</span>
 								<br />
 								<span>All right reserved.</span>

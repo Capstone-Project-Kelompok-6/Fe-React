@@ -40,13 +40,13 @@ const MembershipList = () => {
 			<div className="fixed left-0 right-0 z-20 w-full bg-white bg-opacity-90 px-6 py-2 shadow-3 backdrop-blur-sm">
 				<div className="flex items-center space-x-4">
 					<div className="min-w-0 flex-1">
-						<h2 className="text-sm font-semibold text-neutral-100-2 md:pl-52 md:text-base">Manage Membership</h2>
+						<h2 className="text-sm font-medium text-neutral-100-2 md:pl-52 md:text-lg">Manage Membership</h2>
 					</div>
 					<div className="inline-flex items-center text-sm font-medium text-neutral-100-2">
 						<div className="relative mt-1 mr-3 mb-1 hidden w-full md:block md:w-48 lg:w-80">
 							<input
 								type="text"
-								className="block w-full rounded-lg border border-primary-violet bg-white p-2 pr-8 text-sm text-gray-900 placeholder-neutral-80 focus:border-blue-500 focus:ring-blue-500"
+								className="block w-full rounded-lg border border-primary-violet bg-white p-2 pr-8 text-sm text-neutral-100-2 placeholder-neutral-80 placeholder:text-neutral-60 focus:border-blue-500 focus:ring-blue-500"
 								placeholder="Search by membership name"
 								required
 								value={keyword}
@@ -80,11 +80,11 @@ const MembershipList = () => {
 								: "pointer-events-none fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 						}
 						onClick={handleSearchTrigger}></div>
-					<div className="fixed top-0 right-0 z-40 mr-32 mt-24 w-52 rounded-xl bg-white shadow-4 transition-all duration-300 md:hidden">
+					<div className="fixed top-0 right-0 z-40 mr-32 mt-24 w-48 rounded-xl bg-white shadow-4 transition-all duration-300 md:hidden">
 						<div className="relative">
 							<input
 								type="text"
-								className="block w-full rounded-lg border border-primary-violet bg-white p-2 pr-8 text-sm text-gray-900 placeholder-neutral-80 placeholder:text-[10px] focus:border-blue-500 focus:ring-blue-500"
+								className="block w-full rounded-lg border border-primary-violet bg-white p-2 pr-8 text-sm text-neutral-100-2 placeholder:text-[10px] placeholder:text-neutral-60 focus:border-blue-500 focus:ring-blue-500"
 								placeholder="Search by membership name"
 								required
 								value={keyword}
@@ -101,7 +101,7 @@ const MembershipList = () => {
 				<div>
 					{membership.data.rows?.length > 0 ? (
 						<div>
-							<div className="mb-6 grid gap-3 pt-20 md:grid-cols-2 xl:grid-cols-3">
+							<div className="mb-6 grid grid-cols-1 gap-3 pt-20 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
 								{membership.data.rows?.map((item) => {
 									return <MembershipListItem key={item.user_id} data={item} />;
 								})}

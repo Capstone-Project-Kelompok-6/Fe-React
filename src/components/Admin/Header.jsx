@@ -33,7 +33,7 @@ const Header = ({ handledrawerTrigger }) => {
 			</div>
 			<div className="flex w-auto items-center pr-2 text-right transition-all duration-300 sm:w-auto md:w-auto md:pr-0 lg:w-auto xl:w-auto">
 				<div className="relative">
-					<h2 className="text-sm font-bold leading-relaxed tracking-tight text-neutral-100-2 sm:text-sm md:text-lg lg:text-lg xl:text-lg">
+					<h2 className="text-sm font-semibold leading-relaxed tracking-tight text-neutral-100-2 sm:text-sm md:text-lg lg:text-lg xl:text-lg">
 						Welcome {Auth.getUserDetail().fullname}
 					</h2>
 					{active === "/dashboard" ? null : (
