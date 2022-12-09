@@ -3,6 +3,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { contentSidebarCollections, mainSidebarCollections } from "../../mocks/sidebarCollections";
 import Auth from "../../utils/auth";
+import { sidebarActive, sidebarInActive } from "../../utils/globalVariable";
 
 const Sidebar = () => {
 	const navigate = useNavigate();
@@ -66,14 +67,9 @@ const Sidebar = () => {
 								<li key={idx}>
 									<NavLink to={item.path}>
 										{({ isActive }) => (
-											<div
-												className={
-													isActive
-														? "mb-1 flex items-center rounded-lg bg-primary-violet bg-opacity-10 p-2 text-sm font-semibold text-primary-violet transition-all duration-300 ease-in-out hover:bg-indigo-200"
-														: "mb-1 flex items-center rounded-lg p-2 text-sm font-normal text-neutral-80 transition-all duration-300 ease-in-out hover:bg-indigo-100"
-												}>
+											<div className={isActive ? sidebarActive : sidebarInActive}>
 												{isActive ? item.iconActive : item.iconInactive}
-												<span className="ml-3 font-medium">{item.name}</span>
+												<span className="ml-3">{item.name}</span>
 											</div>
 										)}
 									</NavLink>
@@ -83,36 +79,26 @@ const Sidebar = () => {
 						<div className="ml-2 flex px-2 py-2 text-base font-bold text-primary-violet">Manage Classes</div>
 						<li>
 							<NavLink to="/classes/offline">
-								<div
-									className={
-										active === "/classes/offline" || active === "/classes/online"
-											? "mb-1 flex items-center rounded-lg bg-primary-violet bg-opacity-10 p-2 text-sm font-semibold text-primary-violet transition-all duration-300 ease-in-out hover:bg-indigo-200"
-											: "mb-1 flex items-center rounded-lg p-2 text-sm font-normal text-neutral-80 transition-all duration-300 ease-in-out hover:bg-indigo-100"
-									}>
+								<div className={active === "/classes/offline" || active === "/classes/online" ? sidebarActive : sidebarInActive}>
 									{active === "/classes/offline" || active === "/classes/online" ? (
 										<i className="fi fi-sr-school ml-2 flex items-center justify-center text-base"></i>
 									) : (
 										<i className="fi fi-rr-school ml-2 flex items-center justify-center text-base"></i>
 									)}
-									<span className="ml-3 font-medium">Classes</span>
+									<span className="ml-3">Classes</span>
 								</div>
 							</NavLink>
 						</li>
 
 						<li>
 							<NavLink to="/booking/offline">
-								<div
-									className={
-										active === "/booking/offline" || active === "/booking/online"
-											? "mb-1 flex items-center rounded-lg bg-primary-violet bg-opacity-10 p-2 text-sm font-semibold text-primary-violet transition-all duration-300 ease-in-out hover:bg-indigo-200"
-											: "mb-1 flex items-center rounded-lg p-2 text-sm font-normal text-neutral-80 transition-all duration-300 ease-in-out hover:bg-indigo-100"
-									}>
+								<div className={active === "/booking/offline" || active === "/booking/online" ? sidebarActive : sidebarInActive}>
 									{active === "/booking/offline" || active === "/booking/online" ? (
 										<i className="fi fi-sr-book-alt ml-2 flex items-center justify-center text-base"></i>
 									) : (
 										<i className="fi fi-rr-book-alt ml-2 flex items-center justify-center text-base"></i>
 									)}
-									<span className="ml-3 font-medium">Booking</span>
+									<span className="ml-3">Booking</span>
 								</div>
 							</NavLink>
 						</li>
@@ -122,14 +108,9 @@ const Sidebar = () => {
 								<li key={idx}>
 									<NavLink to={item.path}>
 										{({ isActive }) => (
-											<div
-												className={
-													isActive
-														? "mb-1 flex items-center rounded-lg bg-primary-violet bg-opacity-10 p-2 text-sm font-semibold text-primary-violet transition-all duration-300 ease-in-out hover:bg-indigo-200"
-														: "mb-1 flex items-center rounded-lg p-2 text-sm font-normal text-neutral-80 transition-all duration-300 ease-in-out hover:bg-indigo-100"
-												}>
+											<div className={isActive ? sidebarActive : sidebarInActive}>
 												{isActive ? item.iconActive : item.iconInactive}
-												<span className="ml-3 font-medium">{item.name}</span>
+												<span className="ml-3">{item.name}</span>
 											</div>
 										)}
 									</NavLink>
