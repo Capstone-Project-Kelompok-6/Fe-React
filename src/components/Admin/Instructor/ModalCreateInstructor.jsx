@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import { inputError, inputNotError, labelError, labelNotError, regexEmailValidation, regexNameValidation } from "../../../utils/globalVariable";
+import {
+	cancelButton,
+	inputError,
+	inputNotError,
+	labelError,
+	labelNotError,
+	regexEmailValidation,
+	regexNameValidation,
+	saveButton,
+} from "../../../utils/globalVariable";
 
 const baseErrors = {
 	instructor_name: "",
@@ -126,10 +135,6 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 						<form className="rounded-xl bg-white shadow-4">
 							<div className="flex items-center justify-between rounded-t border-b p-4">
 								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">Add New Instructor</h3>
-								<button
-									type="button"
-									className="ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900"
-									data-modal-toggle="editUserModal"></button>
 							</div>
 							<div className="space-y-6 p-6">
 								<div>
@@ -250,15 +255,10 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 								</div>
 							</div>
 							<div className="flex items-center justify-center space-x-2 border-t border-gray-200 p-6">
-								<button
-									type="button"
-									className="w-full rounded-xl border border-secondary-navy bg-white px-5 py-2.5 text-sm font-medium text-primary-violet hover:bg-gray-100 hover:text-violet-900 focus:z-10 focus:outline-none focus:ring-4 focus:ring-blue-300"
-									onClick={handleModalCreateTrigger}>
+								<button type="button" className={cancelButton} onClick={handleModalCreateTrigger}>
 									Cancel
 								</button>
-								<button
-									type="submit"
-									className="w-full rounded-xl bg-secondary-navy px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300">
+								<button type="submit" className={saveButton}>
 									Save
 								</button>
 							</div>
