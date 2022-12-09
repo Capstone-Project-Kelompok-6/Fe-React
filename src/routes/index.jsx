@@ -1,8 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "../components/Admin/MainLayout";
-import { DashboardPage, LandingPage, LoginPage, NotFoundPage } from "../pages";
-import MembershipPage from "../pages/Admin/MembershipPage";
+import { DashboardPage, InstructorPage, LandingPage, LoginPage, MembershipPage, NotFoundPage } from "../pages";
 import PrivateRoute from "./PrivateRoute";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -19,6 +18,7 @@ const Router = () => {
 						<Route path="/" element={<MainLayout />}>
 							<Route path="dashboard" element={<DashboardPage />} />
 							<Route path="membership" element={<MembershipPage />} />
+							<Route path="instructor" element={<InstructorPage />} />
 						</Route>
 					</Route>
 					<Route path="*" element={<NotFoundPage />} />
