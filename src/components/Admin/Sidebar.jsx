@@ -41,15 +41,15 @@ const Sidebar = () => {
 						navigate("/login");
 						Swal.fire({
 							icon: "success",
-							title: "Logout berhasil",
+							title: "Logout Success",
 							showConfirmButton: false,
 							timer: 1500,
 						});
 					} catch (error) {
 						return Swal.fire({
 							icon: "error",
-							title: "Maaf",
-							text: "Anda gagal logout",
+							title: "Sorry",
+							text: "You failed to logout",
 						});
 					}
 				}

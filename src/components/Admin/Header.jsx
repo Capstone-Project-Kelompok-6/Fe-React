@@ -1,10 +1,8 @@
 import React from "react";
-import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
+import Auth from "../../utils/auth";
 
 const Header = ({ handledrawerTrigger }) => {
-	const user = Cookies.get("sub");
-
 	return (
 		<header className="fixed top-0 left-0 z-40 flex h-14 w-full items-center justify-between bg-white bg-opacity-90 px-4 py-2 backdrop-blur-sm md:px-6">
 			<div className="flex w-2/3 items-center">
@@ -27,7 +25,7 @@ const Header = ({ handledrawerTrigger }) => {
 			<div className="flex w-52 items-center text-right transition-all duration-300 ease-in-out sm:w-auto md:w-auto lg:w-auto xl:w-auto">
 				<div className="relative">
 					<h2 className="text-xs font-bold leading-relaxed tracking-tight text-neutral-100-2 sm:text-sm md:text-lg lg:text-lg xl:text-lg">
-						Welcome {user}
+						Welcome {Auth.getUserDetail().fullname}
 					</h2>
 				</div>
 			</div>
