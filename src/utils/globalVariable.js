@@ -12,7 +12,7 @@ export const inputNotError =
 export const regexNameValidation = /^[a-zA-Z\s]*$/;
 export const regexEmailValidation =
 	/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-export const regexPasswordValidation = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm;
+export const regexPasswordValidation = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
 
 // Tabs
 export const activeTab = "inline-block rounded-full border border-primary-violet bg-tertiary-background-1 px-3 py-1 text-xs text-tertiary-3";

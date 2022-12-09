@@ -86,7 +86,7 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 
 		if (name === "password") {
 			if (!regexPasswordValidation.test(value)) {
-				setErrors({ ...errors, password: "Password must contain minimum one capital letters and one numbers" });
+				setErrors({ ...errors, password: "Password must contain minimum one capital letter and one number" });
 			} else if (value.length <= 8) {
 				setErrors({ ...errors, password: "Password must be more than 8 characters" });
 			} else {
