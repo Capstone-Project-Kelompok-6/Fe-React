@@ -35,7 +35,7 @@ const MembershipListItem = ({ data }) => {
 								<li>
 									<button
 										type="button"
-										className="mr-2 inline-flex w-full items-center rounded-xl px-5 py-2.5 text-center text-sm font-medium text-neutral-100-2 transition duration-300 ease-in-out hover:rounded-xl hover:bg-yellow-50 focus:outline-none"
+										className="mr-2 inline-flex w-full items-center rounded-xl px-5 py-2.5 text-center text-sm font-normal text-neutral-100-2 transition duration-300 ease-in-out hover:rounded-xl hover:bg-yellow-50 focus:outline-none"
 										onClick={handleModalEditTrigger}>
 										<i className="fi fi-sr-pencil mr-2 -ml-1 mt-1 text-sm text-secondary-yellow"></i>
 										Edit
@@ -47,10 +47,10 @@ const MembershipListItem = ({ data }) => {
 				)}
 			</div>
 			<div className="flex items-center space-x-3">
-				<img className="h-11 w-11 rounded-full object-cover object-center" src={image} alt={image_name} />
+				<img className="h-12 w-12 rounded-full object-cover object-center" src={image} alt={image_name} />
 				<div className="min-w-0 flex-1">
-					<div className="text-base font-semibold text-neutral-100-2">
-						{full_name}
+					<div className="text-base">
+						<span className="truncate font-normal not-italic text-neutral-100-2">{full_name}</span>
 						{is_active === true ? (
 							<div className="ml-2 inline-flex items-center font-medium text-secondary-navy">
 								<i className="fi fi-rr-badge-check"></i>
@@ -60,7 +60,7 @@ const MembershipListItem = ({ data }) => {
 						)}
 					</div>
 					<div className="flex flex-wrap">
-						<p className="truncate text-sm font-normal text-neutral-100-2">{email}</p>
+						<p className="truncate text-xs font-normal not-italic text-neutral-80">{email}</p>
 					</div>
 				</div>
 			</div>
@@ -71,7 +71,7 @@ const MembershipListItem = ({ data }) => {
 					</span>
 				</div>
 				<div className="flex-1">
-					<p className="font-medium text-neutral-100-2">{phone_number}</p>
+					<p className="font-normal not-italic text-neutral-100-2">{phone_number}</p>
 				</div>
 			</div>
 			<div className="flex items-center space-x-3 text-sm">
@@ -81,7 +81,7 @@ const MembershipListItem = ({ data }) => {
 					</span>
 				</div>
 				<div className="flex-1">
-					<p className="font-medium text-neutral-100-2">{formatShortDate(created_at)}</p>
+					<p className="font-normal not-italic text-neutral-100-2">{formatShortDate(created_at)}</p>
 				</div>
 			</div>
 			{modalEditTrigger && (
