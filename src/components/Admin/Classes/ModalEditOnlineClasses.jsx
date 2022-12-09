@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import ReactPlayer from "react-player";
 import Select from "react-select";
-import thumbnail from "../../../assets/img/png/thumbnail.png";
+import { cancelButton, inputNotError, labelNotError, saveButton } from "../../../utils/globalVariable";
 
 const baseErrors = {
 	video: "",
@@ -67,7 +66,7 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger }) => {
 			<div className="fixed inset-0 z-50 items-center justify-center overflow-y-auto">
 				<div className="flex w-full items-end justify-center px-4 py-20 sm:h-full sm:items-center sm:p-0 md:h-screen">
 					<div className="relative h-full w-full max-w-sm sm:max-w-sm md:h-auto md:max-w-md lg:max-w-lg xl:max-w-xl">
-						<form className="rounded-xl bg-white shadow" encType="multipart/form-data">
+						<form className="rounded-xl bg-white shadow">
 							<div className="flex items-center justify-between rounded-t border-b p-4">
 								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">Edit Online Classes</h3>
 							</div>
@@ -82,12 +81,10 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger }) => {
 												maxLength={maxTitle}
 												onInput={maxLengthCheck}
 												onChange={(e) => setTitle(e.target.value)}
-												className="peer block w-full appearance-none rounded-lg border border-neutral-60 bg-transparent px-2.5 pb-1.5 pt-3 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
+												className={inputNotError}
 												placeholder=" "
 											/>
-											<label
-												htmlFor="video_title"
-												className="absolute top-1 left-1 z-10 origin-[0] -translate-y-3 scale-75 transform bg-white px-2 text-sm text-neutral-60 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-3 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600">
+											<label htmlFor="video_title" className={labelNotError}>
 												<span className="block after:ml-1 after:text-red-500 after:content-['*']">Video Title</span>
 											</label>
 										</div>
@@ -107,19 +104,10 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger }) => {
 										{fileDataURL ? (
 											<div className="my-5 flex w-full items-center justify-center">
 												<div className="flex flex-col items-center justify-center">
-													<ReactPlayer
-														url={fileDataURL}
-														className="inset-0 h-52 w-80 rounded-lg border-2 border-dashed border-neutral-80 object-fill object-center transition-all duration-300 ease-in-out"
-														playing
-														width="320px"
-														height="208px"
+													<video
+														src={fileDataURL}
 														controls
-														playIcon={
-															<button>
-																<i className="fi fi-sr-play text-2xl text-white"></i>
-															</button>
-														}
-														light={thumbnail}
+														className="inset-0 h-52 w-80 rounded-lg border-2 border-dashed border-gray-300 object-fill object-center"
 													/>
 												</div>
 											</div>
@@ -144,47 +132,24 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger }) => {
 										/>
 									</div>
 									<div className="relative">
-										<input
-											type="number"
-											min="1"
-											id="price"
-											name="price"
-											className="peer block w-full appearance-none rounded-lg border border-neutral-60 bg-transparent px-2.5 pb-1.5 pt-3 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
-											placeholder=" "
-										/>
-										<label
-											htmlFor="price"
-											className="absolute top-1 left-1 z-10 origin-[0] -translate-y-3 scale-75 transform bg-white px-2 text-sm text-neutral-60 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-3 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600">
+										<input type="number" min="1" id="price" name="price" className={inputNotError} placeholder=" " />
+										<label htmlFor="price" className={labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">Price</span>
 										</label>
 									</div>
 									<div className="relative">
-										<textarea
-											id="description"
-											name="description"
-											rows="5"
-											className="peer w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 first-line:block focus:border-blue-500 focus:ring-blue-500"
-											placeholder=" "></textarea>
-										<label
-											htmlFor="description"
-											className="absolute top-1 left-1 z-10 origin-[0] -translate-y-3 scale-75 transform bg-white px-2 text-sm text-neutral-60 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-3 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600">
+										<textarea id="description" name="description" rows="5" className={inputNotError} placeholder=" "></textarea>
+										<label htmlFor="description" className={labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']"> Information</span>
 										</label>
 									</div>
 								</div>
 							</div>
 							<div className="flex items-center justify-center space-x-2 border-t border-gray-200 p-6">
-								<button
-									data-modal-toggle="staticModal"
-									type="button"
-									className="w-full rounded-xl border border-secondary-navy bg-white px-5 py-2.5 text-sm font-medium text-primary-violet hover:bg-gray-100 hover:text-violet-900 focus:z-10 focus:outline-none focus:ring-4 focus:ring-blue-300"
-									onClick={handleModalEditTrigger}>
+								<button type="button" className={cancelButton} onClick={handleModalEditTrigger}>
 									Cancel
 								</button>
-								<button
-									data-modal-toggle="staticModal"
-									type="submit"
-									className="w-full rounded-xl bg-secondary-navy px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300">
+								<button type="submit" className={saveButton}>
 									Save
 								</button>
 							</div>
