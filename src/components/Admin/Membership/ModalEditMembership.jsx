@@ -1,14 +1,53 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
+import { editMembership } from "../../../stores/features/membershipSlice";
 
-const ModalEditMembership = ({ handleModalEditTrigger, handleActionDrowpdon }) => {
+const ModalEditMembership = ({ handleModalEditTrigger, handleActionDrowpdon, update }) => {
+	const { user_id, email } = update;
+	const dispatch = useDispatch();
+
+	const handleUpdate = (e) => {
+		e.preventDefault();
+
+		const formData = new FormData(e.target);
+		const email = formData.get("email");
+
+		try {
+			dispatch(editMembership({ user_id, email })).then((res) => {
+				if (!res.error) {
+					setTimeout(
+						() =>
+							Swal.fire({
+								icon: "success",
+								title: "Updated",
+								text: "Membership data successfully updated",
+								showConfirmButton: false,
+								timer: 2000,
+								background: "#ffffff",
+							}),
+						1000
+					);
+
+					handleModalEditTrigger();
+					handleActionDrowpdon();
+				} else {
+					Swal.fire("Sorry", res.error.message.split(":")[1], "error");
+				}
+			});
+		} catch (error) {
+			Swal.fire("Sorry", error.message, "error");
+		}
+	};
+
 	return (
 		<div className="relative z-50">
 			<div className="fixed inset-0 z-50 bg-gray-400 bg-opacity-50 transition-opacity"></div>
 
 			<div className="fixed inset-0 z-50 items-center justify-center overflow-y-auto">
-				<div className="flex w-full items-end justify-center px-4 py-20 sm:h-full sm:items-center sm:p-0 md:h-screen">
-					<div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
-						<form className="rounded-xl bg-white shadow">
+				<div className="flex w-full items-end justify-center px-4 pt-16 pb-4 sm:h-full sm:items-center sm:p-0 md:h-full">
+					<div className="relative h-full w-full max-w-sm sm:max-w-sm md:h-auto md:max-w-md lg:max-w-lg xl:max-w-xl">
+						<form onSubmit={handleUpdate} className="rounded-xl bg-white shadow">
 							<div className="flex items-center justify-between rounded-t border-b p-4">
 								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">Edit Membership</h3>
 								<button
@@ -24,6 +63,8 @@ const ModalEditMembership = ({ handleModalEditTrigger, handleActionDrowpdon }) =
 										name="email"
 										className="border-1 peer block w-full appearance-none rounded-lg border-gray-300 bg-transparent px-2.5 pb-1.5 pt-3 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
 										placeholder=" "
+										required
+										defaultValue={email}
 									/>
 									<label
 										htmlFor="email"
