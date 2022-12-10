@@ -7,5 +7,17 @@ import InstructorPage from "./Admin/InstructorPage";
 import OfflineClassesPage from "./Admin/OfflineClassesPage";
 import OnlineClassesPage from "./Admin/OnlineClassesPage";
 import WorkoutPage from "./Admin/WorkoutPage";
+import OfflineBookingPage from "./Admin/OfflineBookingPage";
 
-export { DashboardPage, LandingPage, LoginPage, NotFoundPage, MembershipPage, InstructorPage, OfflineClassesPage, OnlineClassesPage, WorkoutPage };
+export {
+	DashboardPage,
+	LandingPage,
+	LoginPage,
+	NotFoundPage,
+	MembershipPage,
+	InstructorPage,
+	OfflineClassesPage,
+	OnlineClassesPage,
+	WorkoutPage,
+	OfflineBookingPage,
+};
