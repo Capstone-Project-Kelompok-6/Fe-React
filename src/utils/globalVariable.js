@@ -1,4 +1,4 @@
-// Label and Input
+// Label, Input. and Select
 export const labelError =
 	"absolute top-1 left-1 z-10 origin-[0] -translate-y-3 scale-75 transform bg-white px-2 text-sm text-secondary-red duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1 peer-focus:-translate-y-3 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-secondary-red";
 
@@ -16,6 +16,9 @@ export const searchInputForLgScreen =
 
 export const searchInputForSmScreen =
 	"block w-full rounded-lg border border-primary-violet bg-white p-2 pr-8 text-sm text-neutral-100-2 placeholder:text-[10px] placeholder:text-neutral-60 focus:border-blue-500 focus:ring-blue-500";
+
+export const select =
+	"block w-full appearance-none rounded-lg bg-transparent text-sm font-normal text-neutral-60 focus:border-blue-600 focus:outline-none focus:ring-0";
 
 // Regex Validation
 export const regexNameValidation = /^[a-zA-Z\s]*$/;
@@ -61,8 +64,14 @@ export const actionDeleteButton =
 export const actionDropdownEdit =
 	"mr-2 inline-flex w-full items-center rounded-xl px-5 py-2.5 text-center text-sm font-normal text-neutral-100-2 transition duration-300 ease-in-out hover:rounded-xl hover:bg-yellow-50 focus:outline-none";
 
+export const confirmButtonSwal =
+	"focus:outline-none text-white bg-secondary-red hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2";
+
+export const cancelButtonSwal =
+	"text-primary-violet hover:text-white border border-secondary-navy hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2";
+
 export const actionDropdownDelete =
-	"mr-2 inline-flex w-full items-center rounded-b-xl px-5 py-2.5 text-center text-sm font-medium text-neutral-100-2 transition duration-300 ease-in-out hover:rounded-b-xl hover:bg-red-50 focus:outline-none";
+	"mr-2 inline-flex w-full items-center rounded-b-xl px-5 py-2.5 text-center text-sm font-normal text-neutral-100-2 transition duration-300 ease-in-out hover:rounded-b-xl hover:bg-red-50 focus:outline-none";
 
 // Sidebar
 export const sidebarActive =
