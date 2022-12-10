@@ -68,7 +68,7 @@ export const confirmButtonSwal =
 	"focus:outline-none text-white bg-secondary-red hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2";
 
 export const cancelButtonSwal =
-	"text-primary-violet hover:text-white border border-secondary-navy hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2";
+	"text-secondary-red hover:text-secondary-red border border-secondary-red hover:bg-red-200 focus:ring-1 focus:outline-none focus:ring-secondary-red font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2";
 
 export const actionDropdownDelete =
 	"mr-2 inline-flex w-full items-center rounded-b-xl px-5 py-2.5 text-center text-sm font-normal text-neutral-100-2 transition duration-300 ease-in-out hover:rounded-b-xl hover:bg-red-50 focus:outline-none";

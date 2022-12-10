@@ -49,8 +49,10 @@ export const successHandler = (response) => {
 };
 
 export const errorHandler = (error) => {
-	if (error.response && error.response.status === 401) {
-		// Auth.signOut();
+	if (error.response.status === 401) {
+		Auth.signOut();
+	} else {
+		return Promise.reject({ ...error });
 	}
 	return Promise.reject({ ...error });
 };

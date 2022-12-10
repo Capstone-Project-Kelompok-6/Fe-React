@@ -41,7 +41,7 @@ const ModalCreateOfflineClasses = ({ handleModalCreateTrigger }) => {
 								text: "Offline classes data successfully saved",
 								showConfirmButton: false,
 								timer: 2000,
-								background: "#fefefe",
+								background: "#ffffff",
 							}),
 						1000
 					);

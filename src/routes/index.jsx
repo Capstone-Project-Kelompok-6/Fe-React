@@ -10,6 +10,7 @@ import {
 	MembershipPage,
 	NotFoundPage,
 	OfflineClassesPage,
+	OnlineClassesPage,
 	WorkoutPage,
 } from "../pages";
 import PrivateRoute from "./PrivateRoute";
@@ -26,30 +27,13 @@ const Router = () => {
 					</Route>
 					<Route element={<PrivateRoute />}>
 						<Route path="/" element={<MainLayout />}>
-							<Route
-								path="dashboard"
-								element={<DashboardPage />}
-							/>
-							<Route
-								path="membership"
-								element={<MembershipPage />}
-							/>
-							<Route
-								path="instructor"
-								element={<InstructorPage />}
-							/>
-							<Route
-								path="workout"
-								element={<WorkoutPage />}
-							/>
-							<Route
-								path="classes"
-								element={<LayoutClasses />}
-							>
-								<Route
-									path="offline"
-									element={<OfflineClassesPage />}
-								/>
+							<Route path="dashboard" element={<DashboardPage />} />
+							<Route path="membership" element={<MembershipPage />} />
+							<Route path="instructor" element={<InstructorPage />} />
+							<Route path="workout" element={<WorkoutPage />} />
+							<Route path="classes" element={<LayoutClasses />}>
+								<Route path="offline" element={<OfflineClassesPage />} />
+								<Route path="online" element={<OnlineClassesPage />} />
 							</Route>
 						</Route>
 					</Route>

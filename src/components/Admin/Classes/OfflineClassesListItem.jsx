@@ -44,7 +44,7 @@ const OfflineClassesListItem = ({ data }) => {
 									text: "Offline classes data successfully deleted",
 									showConfirmButton: false,
 									timer: 2000,
-									background: "#fefefe",
+									background: "#ffffff",
 								}),
 							1000
 						);
@@ -57,7 +57,7 @@ const OfflineClassesListItem = ({ data }) => {
 									text: "Offline classes data cannot deleted",
 									showConfirmButton: false,
 									timer: 2000,
-									background: "#fefefe",
+									background: "#ffffff",
 								}),
 							1000
 						);
