@@ -8,6 +8,7 @@ import OfflineClassesPage from "./Admin/OfflineClassesPage";
 import OnlineClassesPage from "./Admin/OnlineClassesPage";
 import WorkoutPage from "./Admin/WorkoutPage";
 import OfflineBookingPage from "./Admin/OfflineBookingPage";
+import OnlineBookingPage from "./Admin/OnlineBookingPage";
 
 export {
 	DashboardPage,
@@ -20,4 +21,5 @@ export {
 	OnlineClassesPage,
 	WorkoutPage,
 	OfflineBookingPage,
+	OnlineBookingPage,
 };
