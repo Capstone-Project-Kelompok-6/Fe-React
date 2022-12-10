@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDebounce } from "use-debounce";
 import MembershipAPI from "../../../apis/membership.api";
+import { addButton, dataNotFound, searchInputForLgScreen, searchInputForSmScreen } from "../../../utils/globalVariable";
 import MembershipListItem from "./MembershipListItem";
 import ModalCreateMembership from "./ModalCreateMembership";
 import SkeletonLoadingMembership from "./SkeletonLoadingMembership";
@@ -46,7 +47,7 @@ const MembershipList = () => {
 						<div className="relative mt-1 mr-3 mb-1 hidden w-full md:block md:w-48 lg:w-80">
 							<input
 								type="text"
-								className="block w-full rounded-lg border border-primary-violet bg-white p-2 pr-8 text-sm text-neutral-100-2 placeholder-neutral-80 placeholder:text-neutral-60 focus:border-blue-500 focus:ring-blue-500"
+								className={searchInputForLgScreen}
 								placeholder="Search by membership name"
 								required
 								value={keyword}
@@ -61,10 +62,7 @@ const MembershipList = () => {
 								<i className="fi fi-rr-search mt-1 text-lg"></i>
 							</button>
 						</div>
-						<button
-							type="button"
-							className="inline-flex items-center rounded-lg bg-secondary-navy px-3 py-1.5 text-center text-[10px] font-normal text-white focus:outline-none focus:ring-4 focus:ring-blue-300 md:px-3 md:py-1"
-							onClick={handleModalCreateTrigger}>
+						<button type="button" className={addButton} onClick={handleModalCreateTrigger}>
 							<i className="fi fi-rr-plus-small mr-1 mt-1 text-sm md:text-lg"></i>
 							<span className="text-xs">Add New</span>
 						</button>
@@ -84,7 +82,7 @@ const MembershipList = () => {
 						<div className="relative">
 							<input
 								type="text"
-								className="block w-full rounded-lg border border-primary-violet bg-white p-2 pr-8 text-sm text-neutral-100-2 placeholder:text-[10px] placeholder:text-neutral-60 focus:border-blue-500 focus:ring-blue-500"
+								className={searchInputForSmScreen}
 								placeholder="Search by membership name"
 								required
 								value={keyword}
@@ -109,7 +107,7 @@ const MembershipList = () => {
 						</div>
 					) : (
 						<div className="pt-20 pb-6">
-							<div className="flex flex-wrap items-center justify-center rounded-xl bg-white py-4 px-6 text-xs font-semibold leading-7 text-neutral-80 shadow-4">
+							<div className={dataNotFound}>
 								<i className="fi fi-rr-info mr-3 text-sm"></i>
 								Data membership not found
 							</div>

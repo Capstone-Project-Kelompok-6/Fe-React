@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
+import { editInstructor } from "../../../stores/features/instructorSlice";
 import {
 	cancelButton,
 	inputError,
@@ -24,11 +27,13 @@ const baseValues = {
 	phone_number: "",
 };
 
-const ModalEditInstructor = ({ handleModalEditTrigger }) => {
+const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
+	const { instructor_id, instructor_image, image_name, instructor_name, phone_number, email } = update;
 	const [file, setFile] = useState(null);
 	const [fileDataURL, setFileDataURL] = useState(null);
 	const [errors, setErrors] = useState(baseErrors);
 	const [values, setValues] = useState(baseValues);
+	const dispatch = useDispatch();
 
 	const MAX_FILE_SIZE = 1024;
 	const maxLengthPhoneNumber = 13;
@@ -118,15 +123,53 @@ const ModalEditInstructor = ({ handleModalEditTrigger }) => {
 		}
 	};
 
+	const handleUpdate = (e) => {
+		e.preventDefault();
+		const formData = new FormData(e.target);
+		const instructor_name = formData.get("instructor_name");
+		const image = formData.get("image");
+		const email = formData.get("email");
+		const phone_number = formData.get("phone_number");
+
+		if (!errors.instructor_name && !errors.image && !errors.email && !errors.phone_number) {
+			dispatch(editInstructor({ instructor_id, instructor_name, image, image_name, email, phone_number }));
+			handleModalEditTrigger();
+
+			setTimeout(
+				() =>
+					Swal.fire({
+						icon: "success",
+						title: "Updated",
+						text: "Instructor data successfully updated",
+						showConfirmButton: false,
+						timer: 2000,
+						background: "#fefefe",
+					}),
+				1000
+			);
+		} else {
+			setTimeout(
+				() =>
+					Swal.fire({
+						icon: "error",
+						title: "Instructor data cannot saved",
+						text: "Please, check your inputed data",
+						background: "#fefefe",
+					}),
+				1000
+			);
+		}
+	};
+
 	return (
 		<div className="relative z-50">
-			<div className="fixed inset-0 z-50 bg-gray-600 bg-opacity-50 transition-opacity"></div>
+			<div className="fixed inset-0 z-50 bg-gray-600 bg-opacity-80 transition-opacity"></div>
 
 			<div className="fixed inset-0 z-50 items-center justify-center overflow-y-auto">
 				<div className="flex w-full items-end justify-center px-4 pt-16 pb-6 sm:h-full sm:items-center sm:p-0 md:h-full">
 					<div className="relative h-full w-full max-w-sm sm:max-w-sm md:h-auto md:max-w-md lg:max-w-lg xl:max-w-xl">
-						<form className="rounded-xl bg-white shadow-4">
-							<div className="flex items-center justify-between rounded-t border-b p-4">
+						<form onSubmit={handleUpdate} className="rounded-xl bg-white shadow-4">
+							<div className="flex items-center justify-between rounded-t p-4">
 								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">Edit Instructor</h3>
 							</div>
 							<div className="space-y-6 p-6">
@@ -140,6 +183,7 @@ const ModalEditInstructor = ({ handleModalEditTrigger }) => {
 											placeholder=" "
 											onChange={handleChange}
 											required
+											defaultValue={instructor_name}
 										/>
 										<label htmlFor="instructor_name" className={errors.instructor_name ? labelError : labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">Fullname</span>
@@ -163,7 +207,11 @@ const ModalEditInstructor = ({ handleModalEditTrigger }) => {
 									) : (
 										<div className="my-5 flex w-full items-center justify-center">
 											<div className="flex flex-col items-center justify-center">
-												<img src="" alt="" className="h-32 w-32 rounded-full border-2 border-dashed border-neutral-80 object-cover" />
+												<img
+													src={instructor_image}
+													alt={image_name}
+													className="h-32 w-32 rounded-full border-2 border-dashed border-neutral-80 object-cover"
+												/>
 											</div>
 										</div>
 									)}
@@ -196,6 +244,7 @@ const ModalEditInstructor = ({ handleModalEditTrigger }) => {
 											placeholder=" "
 											onChange={handleChange}
 											required
+											defaultValue={email}
 										/>
 										<label htmlFor="email" className={errors.email ? labelError : labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">Email</span>
@@ -222,6 +271,7 @@ const ModalEditInstructor = ({ handleModalEditTrigger }) => {
 											required
 											maxLength={maxLengthPhoneNumber}
 											onInput={maxLengthCheck}
+											defaultValue={phone_number}
 										/>
 										<label htmlFor="phone_number" className={errors.phone_number ? labelError : labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">Phone Number</span>
@@ -236,7 +286,7 @@ const ModalEditInstructor = ({ handleModalEditTrigger }) => {
 									</div>
 								</div>
 							</div>
-							<div className="flex items-center justify-center space-x-2 border-t border-gray-200 p-6">
+							<div className="flex items-center justify-center space-x-2 p-6">
 								<button type="button" className={cancelButton} onClick={handleModalEditTrigger}>
 									Cancel
 								</button>
