@@ -15,6 +15,7 @@ import {
 	WorkoutPage,
 	OfflineBookingPage,
 	OnlineBookingPage,
+	ArticlePage,
 } from "../pages";
 import PrivateRoute from "./PrivateRoute";
 import ProtectedRoute from "./ProtectedRoute";
@@ -30,48 +31,19 @@ const Router = () => {
 					</Route>
 					<Route element={<PrivateRoute />}>
 						<Route path="/" element={<MainLayout />}>
-							<Route
-								path="dashboard"
-								element={<DashboardPage />}
-							/>
-							<Route
-								path="membership"
-								element={<MembershipPage />}
-							/>
-							<Route
-								path="instructor"
-								element={<InstructorPage />}
-							/>
-							<Route
-								path="workout"
-								element={<WorkoutPage />}
-							/>
-							<Route
-								path="classes"
-								element={<LayoutClasses />}
-							>
-								<Route
-									path="offline"
-									element={<OfflineClassesPage />}
-								/>
-								<Route
-									path="online"
-									element={<OnlineClassesPage />}
-								/>
+							<Route path="dashboard" element={<DashboardPage />} />
+							<Route path="membership" element={<MembershipPage />} />
+							<Route path="instructor" element={<InstructorPage />} />
+							<Route path="workout" element={<WorkoutPage />} />
+							<Route path="classes" element={<LayoutClasses />}>
+								<Route path="offline" element={<OfflineClassesPage />} />
+								<Route path="online" element={<OnlineClassesPage />} />
 							</Route>
-							<Route
-								path="booking"
-								element={<LayoutBooking />}
-							>
-								<Route
-									path="offline"
-									element={<OfflineBookingPage />}
-								/>
-								<Route
-									path="online"
-									element={<OnlineBookingPage />}
-								/>
+							<Route path="booking" element={<LayoutBooking />}>
+								<Route path="offline" element={<OfflineBookingPage />} />
+								<Route path="online" element={<OnlineBookingPage />} />
 							</Route>
+							<Route path="article" element={<ArticlePage />} />
 						</Route>
 					</Route>
 					<Route path="*" element={<NotFoundPage />} />

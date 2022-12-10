@@ -1,3 +1,4 @@
+import ArticlePage from "./Admin/ArticlePage";
 import DashboardPage from "./Admin/DashboardPage";
 import LandingPage from "./LandingPage";
 import LoginPage from "./LoginPage";
@@ -11,6 +12,7 @@ import OfflineBookingPage from "./Admin/OfflineBookingPage";
 import OnlineBookingPage from "./Admin/OnlineBookingPage";
 
 export {
+	ArticlePage,
 	DashboardPage,
 	LandingPage,
 	LoginPage,
