@@ -89,6 +89,15 @@ const BookingAPI = {
             throw new Error(message);
         }
     },
+    async filterOnlineBooking(workout_id) {
+        try {
+            const response = await axiosInstance.get(`/books/online?workout=${workout_id}`);
+            return response;
+        } catch (error) {
+            const { message } = error.response.data;
+            throw new Error(message);
+        }
+    },
     async deleteOnlineBooking(data) {
         try {
             const book_id = data.book_id;
