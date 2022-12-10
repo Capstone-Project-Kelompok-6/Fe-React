@@ -1,54 +1,49 @@
 import React, { useEffect, useState } from "react";
-import { useDebounce } from "use-debounce";
 import { useSelector } from "react-redux";
+import { useDebounce } from "use-debounce";
+import BookingAPI from "../../../apis/booking.api";
+import WorkoutAPI from "../../../apis/workout.api";
 import {
 	activeTab,
-	addButton,
 	dataNotFound,
 	notActiveTab,
 	searchInputForLgScreen,
 	searchInputForSmScreen,
 } from "../../../utils/globalVariable";
-import BookingHeader from "./BookingHeader";
-import BookingTabs from "./BookingTabs";
-import BookingAPI from "./../../../apis/booking.api";
-import OfflineBookingListItem from "./OfflineBookingListItem";
-import SkeletonLoadingBooking from "./SkeletonLoadingBooking";
-import ModalCreateOfflineBooking from "./ModalCreateOfflineBooking";
-import WorkoutAPI from "../../../apis/workout.api";
 import SkeletonLoadingTabs from "../SkeletonLoadingTabs";
+import BookingTabs from "./BookingTabs";
+import BookingHeader from "./BookingHeader";
+import OnlineBookingListItem from "./OnlineBookingListItem";
+import SkeletonLoadingBooking from "./SkeletonLoadingBooking";
 
-const Initial_Offline_Booking = {
+const Initial_Online_Booking = {
 	data: [],
 	page: 0,
 	status: false,
 };
 
-const OfflineBookingList = () => {
-	const [offlineBooking, setOfflineBooking] = useState(
-		Initial_Offline_Booking,
-	);
-	const [workout, setWorkout] = useState(Initial_Offline_Booking);
-	const [modalCreateTrigger, setModalCreateTrigger] = useState(false);
+const OnlineBookingList = () => {
+	const [onlineBooking, setOnlineBooking] = useState(Initial_Online_Booking);
+	const [workout, setWorkout] = useState(Initial_Online_Booking);
 	const [searchTrigger, setSearchTrigger] = useState(false);
 	const [keyword, setKeyword] = useState("");
-	const loading = useSelector((state) => state.offlineBooking.loading);
-	const [debouncedKeyword] = useDebounce(keyword, 1300);
+	const loading = useSelector((state) => state.onlineBooking.loading);
+	const [debouncedKeyword] = useDebounce(keyword, 3000);
 	const loadingWorkout = useSelector((state) => state.workout.loading);
 	const [active, setActive] = useState(0);
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			BookingAPI.searchOfflineBooking(
+			BookingAPI.searchOnlineBooking(
 				debouncedKeyword.toLowerCase(),
 			).then((result) =>
-				setOfflineBooking({ status: true, data: result.data.data }),
+				setOnlineBooking({ status: true, data: result.data.data }),
 			);
 		} else {
 			setTimeout(
 				() =>
-					BookingAPI.getOfflineBooking().then((result) =>
-						setOfflineBooking({
+					BookingAPI.getOnlineBooking().then((result) =>
+						setOnlineBooking({
 							status: true,
 							data: result.data.data,
 						}),
@@ -71,8 +66,8 @@ const OfflineBookingList = () => {
 	const filterItem = (workout_id) => {
 		setTimeout(
 			() =>
-				BookingAPI.filterOfflineBooking(workout_id).then((result) =>
-					setOfflineBooking({
+				BookingAPI.filterOnlineBooking(workout_id).then((result) =>
+					setOnlineBooking({
 						status: true,
 						data: result.data.data,
 					}),
@@ -84,10 +79,6 @@ const OfflineBookingList = () => {
 
 	const filterAll = () => {
 		setActive(0);
-	};
-
-	const handleModalCreateTrigger = () => {
-		setModalCreateTrigger(!modalCreateTrigger);
 	};
 
 	const handleSearchTrigger = () => {
@@ -128,14 +119,6 @@ const OfflineBookingList = () => {
 									<i className="fi fi-rr-search mt-1 text-sm"></i>
 								</button>
 							</div>
-							<button
-								type="button"
-								className={addButton}
-								onClick={handleModalCreateTrigger}
-							>
-								<i className="fi fi-rr-plus-small mr-1 mt-1 text-sm md:text-lg"></i>
-								<span className="text-xs">Add New</span>
-							</button>
 						</div>
 					</div>
 					<div className="grid grid-cols-1 gap-4 lg:col-span-3">
@@ -157,11 +140,11 @@ const OfflineBookingList = () => {
 													filterAll();
 													setTimeout(
 														() =>
-															BookingAPI.getOfflineBooking().then(
+															BookingAPI.getOnlineBooking().then(
 																(
 																	result,
 																) =>
-																	setOfflineBooking(
+																	setOnlineBooking(
 																		{
 																			status: true,
 																			data: result
@@ -177,7 +160,7 @@ const OfflineBookingList = () => {
 												All
 											</button>
 										</li>
-										{offlineBooking.status ? (
+										{onlineBooking.status ? (
 											workout.data.rows?.map(
 												(item) => {
 													return (
@@ -261,14 +244,14 @@ const OfflineBookingList = () => {
 						</div>
 					</div>
 				)}
-				{offlineBooking.status ? (
+				{onlineBooking.status ? (
 					<div>
-						{offlineBooking.data.rows?.length > 0 ? (
-							<div className="mb-6 grid gap-4 pt-36 md:grid-cols-2 md:gap-16">
-								{offlineBooking.data.rows?.map(
+						{onlineBooking.data.rows?.length > 0 ? (
+							<div className="mb-6 grid gap-3 pt-36 md:grid-cols-2 xl:grid-cols-2">
+								{onlineBooking.data.rows?.map(
 									(item) => {
 										return (
-											<OfflineBookingListItem
+											<OnlineBookingListItem
 												data={item}
 												key={item.book_id}
 											/>
@@ -277,7 +260,7 @@ const OfflineBookingList = () => {
 								)}
 							</div>
 						) : (
-							<div className="pt-40 pb-6">
+							<div className="pt-36 pb-6">
 								<div className={dataNotFound}>
 									<i className="fi fi-rr-info mr-3 text-sm"></i>
 									Data Offline Booking not found
@@ -291,19 +274,12 @@ const OfflineBookingList = () => {
 						<SkeletonLoadingBooking />
 						<SkeletonLoadingBooking />
 						<SkeletonLoadingBooking />
+						<SkeletonLoadingBooking />
 					</div>
-				)}
-
-				{modalCreateTrigger && (
-					<ModalCreateOfflineBooking
-						handleModalCreateTrigger={
-							handleModalCreateTrigger
-						}
-					/>
 				)}
 			</div>
 		</div>
 	);
 };
 
-export default OfflineBookingList;
+export default OnlineBookingList;
