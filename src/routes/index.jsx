@@ -14,6 +14,7 @@ import {
 	OnlineClassesPage,
 	WorkoutPage,
 	OfflineBookingPage,
+	OnlineBookingPage,
 } from "../pages";
 import PrivateRoute from "./PrivateRoute";
 import ProtectedRoute from "./ProtectedRoute";
@@ -65,6 +66,10 @@ const Router = () => {
 								<Route
 									path="offline"
 									element={<OfflineBookingPage />}
+								/>
+								<Route
+									path="online"
+									element={<OnlineBookingPage />}
 								/>
 							</Route>
 						</Route>
