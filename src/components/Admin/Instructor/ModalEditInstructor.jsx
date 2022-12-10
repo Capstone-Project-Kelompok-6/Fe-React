@@ -132,21 +132,29 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 		const phone_number = formData.get("phone_number");
 
 		if (!errors.instructor_name && !errors.image && !errors.email && !errors.phone_number) {
-			dispatch(editInstructor({ instructor_id, instructor_name, image, image_name, email, phone_number }));
-			handleModalEditTrigger();
-
-			setTimeout(
-				() =>
-					Swal.fire({
-						icon: "success",
-						title: "Updated",
-						text: "Instructor data successfully updated",
-						showConfirmButton: false,
-						timer: 2000,
-						background: "#fefefe",
-					}),
-				1000
-			);
+			try {
+				dispatch(editInstructor({ instructor_id, instructor_name, image, image_name, email, phone_number })).then((res) => {
+					if (!res.error) {
+						setTimeout(
+							() =>
+								Swal.fire({
+									icon: "success",
+									title: "Updated",
+									text: "Instructor data successfully updated",
+									showConfirmButton: false,
+									timer: 2000,
+									background: "#fefefe",
+								}),
+							1000
+						);
+						handleModalEditTrigger();
+					} else {
+						Swal.fire("Sorry", "Email or phone number already exists", "info");
+					}
+				});
+			} catch (error) {
+				Swal.fire("Sorry", error.message, "info");
+			}
 		} else {
 			setTimeout(
 				() =>
