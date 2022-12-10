@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import LayoutClasses from "../components/Admin/Classes/LayoutClasses";
 import MainLayout from "../components/Admin/MainLayout";
-import { DashboardPage, InstructorPage, LandingPage, LoginPage, MembershipPage, NotFoundPage } from "../pages";
+import { DashboardPage, InstructorPage, LandingPage, LoginPage, MembershipPage, NotFoundPage, OfflineClassesPage } from "../pages";
 import PrivateRoute from "./PrivateRoute";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -19,6 +20,9 @@ const Router = () => {
 							<Route path="dashboard" element={<DashboardPage />} />
 							<Route path="membership" element={<MembershipPage />} />
 							<Route path="instructor" element={<InstructorPage />} />
+							<Route path="classes" element={<LayoutClasses />}>
+								<Route path="offline" element={<OfflineClassesPage />} />
+							</Route>
 						</Route>
 					</Route>
 					<Route path="*" element={<NotFoundPage />} />
