@@ -33,7 +33,7 @@ const ModalEditMembership = ({ handleModalEditTrigger, handleActionDrowpdon, upd
 					handleModalEditTrigger();
 					handleActionDrowpdon();
 				} else {
-					Swal.fire("Sorry", res.error.message.split(":")[1], "error");
+					Swal.fire("Sorry", "Email is already exists", "error");
 				}
 			});
 		} catch (error) {
