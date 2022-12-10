@@ -103,7 +103,9 @@ const Drawer = ({ drawerTrigger, handledrawerTrigger }) => {
 							<div className="ml-2 flex px-2 py-2 text-base font-bold text-primary-violet">Manage Classes</div>
 							<li>
 								<NavLink to="/classes/offline">
-									<div className={active === "/classes/offline" || active === "/classes/online" ? sidebarActive : sidebarInActive}>
+									<div
+										className={active === "/classes/offline" || active === "/classes/online" ? sidebarActive : sidebarInActive}
+										onClick={handledrawerTrigger}>
 										{active === "/classes/offline" || active === "/classes/online" ? (
 											<i className="fi fi-sr-school ml-2 flex items-center justify-center text-base"></i>
 										) : (
@@ -116,7 +118,9 @@ const Drawer = ({ drawerTrigger, handledrawerTrigger }) => {
 
 							<li>
 								<NavLink to="/booking/offline">
-									<div className={active === "/booking/offline" || active === "/booking/online" ? sidebarActive : sidebarInActive}>
+									<div
+										className={active === "/booking/offline" || active === "/booking/online" ? sidebarActive : sidebarInActive}
+										onClick={handledrawerTrigger}>
 										{active === "/booking/offline" || active === "/booking/online" ? (
 											<i className="fi fi-sr-book-alt ml-2 flex items-center justify-center text-base"></i>
 										) : (
@@ -132,7 +136,7 @@ const Drawer = ({ drawerTrigger, handledrawerTrigger }) => {
 									<li key={idx}>
 										<NavLink to={item.path}>
 											{({ isActive }) => (
-												<div className={isActive ? sidebarActive : sidebarInActive}>
+												<div className={isActive ? sidebarActive : sidebarInActive} onClick={handledrawerTrigger}>
 													{isActive ? item.iconActive : item.iconInactive}
 													<span className="ml-3">{item.name}</span>
 												</div>
