@@ -2,27 +2,19 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 
-import { deleteInstructor } from "../../../stores/features/instructorSlice";
 import { formatLongDate } from "../../../utils/formatDate";
+import ModalEditWorkout from "./ModalEditWorkout";
+import { deleteWorkout } from "../../../stores/features/workoutSlice";
 import {
 	actionDeleteButton,
 	actionEditButton,
 	cancelButtonSwal,
 	confirmButtonSwal,
 } from "../../../utils/globalVariable";
-import ModalEditInstructor from "./ModalEditInstructor";
 
-const InstructorListItem = ({ data }) => {
-	const {
-		no,
-		instructor_id,
-		instructor_image,
-		image_name,
-		instructor_name,
-		phone_number,
-		email,
-		updated_at,
-	} = data;
+const WorkoutListItem = ({ data }) => {
+	const { no, workout_id, workout_image, image_name, workout, updated_at } =
+		data;
 	const [modalEditTrigger, setModalEditTrigger] = useState(false);
 	const dispatch = useDispatch();
 
@@ -49,13 +41,13 @@ const InstructorListItem = ({ data }) => {
 			.then((result) => {
 				if (result.isConfirmed) {
 					try {
-						dispatch(deleteInstructor(instructor_id));
+						dispatch(deleteWorkout(workout_id));
 						setTimeout(
 							() =>
 								Swal.fire({
 									icon: "success",
 									title: "Deleted",
-									text: "Instructor data successfully deleted",
+									text: "Workout data successfully deleted",
 									showConfirmButton: false,
 									timer: 2000,
 									background: "#ffffff",
@@ -68,7 +60,7 @@ const InstructorListItem = ({ data }) => {
 								Swal.fire({
 									icon: "error",
 									title: "Error",
-									text: "Instructor data cannot deleted",
+									text: "Workout data cannot deleted",
 									showConfirmButton: false,
 									timer: 2000,
 									background: "#ffffff",
@@ -86,29 +78,24 @@ const InstructorListItem = ({ data }) => {
 
 	return (
 		<tbody>
-			<tr className="whitespace-nowrap border-x border-b border-neutral-100-2 bg-white hover:bg-gray-50">
+			<tr className="whitespace-nowrap border-x border-b border-neutral-100-2 bg-white text-xs hover:bg-gray-50">
 				<td className="py-3 px-6 font-normal text-neutral-80">
 					{no}
 				</td>
-				<td className="relative flex items-center py-3 px-6">
+				<td className="flex items-center py-3 px-6">
 					<img
-						className="absolute inset-y-3 h-10 w-10 rounded-full object-cover object-center"
-						src={instructor_image}
+						className="h-16 w-24 rounded-xl object-cover object-center"
+						src={workout_image}
 						alt={image_name}
+						loading="lazy"
 					/>
-					<div className="pl-12">
+					<div className="pl-3">
 						<div className="text-sm font-normal text-neutral-80">
-							{instructor_name}
-						</div>
-						<div className="text-xs font-normal text-neutral-60">
-							{email}
+							{workout}
 						</div>
 					</div>
 				</td>
-				<td className="py-3 px-6 text-xs font-normal text-neutral-80 md:text-sm">
-					{phone_number}
-				</td>
-				<td className="py-3 px-6 text-xs font-normal text-neutral-80 md:text-sm">
+				<td className="py-3 px-10 text-xs font-normal text-neutral-80 md:text-sm">
 					{formatLongDate(updated_at)}
 				</td>
 				<td className="py-3 px-6">
@@ -129,7 +116,7 @@ const InstructorListItem = ({ data }) => {
 						</button>
 					</div>
 					{modalEditTrigger && (
-						<ModalEditInstructor
+						<ModalEditWorkout
 							handleModalEditTrigger={
 								handleModalEditTrigger
 							}
@@ -142,4 +129,4 @@ const InstructorListItem = ({ data }) => {
 	);
 };
 
-export default InstructorListItem;
+export default WorkoutListItem;

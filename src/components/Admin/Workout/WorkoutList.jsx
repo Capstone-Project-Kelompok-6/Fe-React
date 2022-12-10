@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { useSelector } from "react-redux";
 import { PulseLoader } from "react-spinners";
-import InstructorListItem from "./InstructorListItem";
-import ModalCreateInstructor from "./ModalCreateInstructor";
-import InstructorAPI from "../../../apis/instructor.api";
+import WorkoutAPI from "../../../apis/workout.api";
+import { useSelector } from "react-redux";
+import ModalCreateWorkout from "./ModalCreateWorkout";
+import WorkoutListItem from "./WorkoutListItem";
 import {
 	addButton,
 	nextButtonActive,
@@ -15,32 +15,31 @@ import {
 	searchInputForSmScreen,
 } from "../../../utils/globalVariable";
 
-const Initial_Instructor = {
+const Initial_Workout = {
 	data: [],
 	page: 0,
 	status: false,
 };
 
-const InstructorList = () => {
-	const [instructor, setInstructor] = useState(Initial_Instructor);
-	const [keyword, setKeyword] = useState("");
+const WorkoutList = () => {
+	const [workout, setWorkout] = useState(Initial_Workout);
 	const [modalCreateTrigger, setModalCreateTrigger] = useState(false);
+	const [keyword, setKeyword] = useState("");
+	const loading = useSelector((state) => state.workout.loading);
 	const [searchTrigger, setSearchTrigger] = useState(false);
 	const [debouncedKeyword] = useDebounce(keyword, 1300);
-	const loading = useSelector((state) => state.instructor.loading);
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			InstructorAPI.searchInstructor(
-				debouncedKeyword.toLowerCase(),
-			).then((result) =>
-				setInstructor({ status: true, data: result.data.data }),
+			WorkoutAPI.searchWorkout(debouncedKeyword.toLowerCase()).then(
+				(result) =>
+					setWorkout({ status: true, data: result.data.data }),
 			);
 		} else {
 			setTimeout(
 				() =>
-					InstructorAPI.getInstructor(10).then((result) =>
-						setInstructor({
+					WorkoutAPI.getWorkout(5).then((result) =>
+						setWorkout({
 							status: true,
 							data: result.data.data,
 							page: result.data.data.page
@@ -54,13 +53,13 @@ const InstructorList = () => {
 	}, [loading, debouncedKeyword]);
 
 	const handlePreviousPage = async (page) => {
-		const result = await InstructorAPI.getInstructor(10, page - 1);
-		setInstructor({ status: true, data: result.data.data });
+		const result = await WorkoutAPI.getWorkout(5, page - 1);
+		setWorkout({ status: true, data: result.data.data });
 	};
 
 	const handleNextPage = async (page) => {
-		const result = await InstructorAPI.getInstructor(10, page + 1);
-		setInstructor({ status: true, data: result.data.data });
+		const result = await WorkoutAPI.getWorkout(5, page + 1);
+		setWorkout({ status: true, data: result.data.data });
 	};
 
 	const handleModalCreateTrigger = () => {
@@ -78,7 +77,7 @@ const InstructorList = () => {
 					<div className="flex items-center space-x-4">
 						<div className="min-w-0 flex-1">
 							<h2 className="text-sm font-medium text-neutral-100-2 md:pl-52 md:text-lg">
-								Manage Instructor
+								Manage Workout
 							</h2>
 						</div>
 						<div className="inline-flex items-center text-sm font-medium text-neutral-100-2">
@@ -86,7 +85,7 @@ const InstructorList = () => {
 								<input
 									type="text"
 									className={searchInputForLgScreen}
-									placeholder="Search by instructor name"
+									placeholder="Search by workout name"
 									required
 									value={keyword}
 									onChange={(e) =>
@@ -134,7 +133,7 @@ const InstructorList = () => {
 								<input
 									type="text"
 									className={searchInputForSmScreen}
-									placeholder="Search by instructor name"
+									placeholder="Search by workout name"
 									required
 									value={keyword}
 									onChange={(e) =>
@@ -150,9 +149,9 @@ const InstructorList = () => {
 				)}
 				<div className="pt-14">
 					<div className="w-full rounded-xl bg-white py-6 px-6 shadow-4">
-						{instructor.status ? (
+						{workout.status ? (
 							<div>
-								{instructor.data.rows?.length > 0 ? (
+								{workout.data.rows?.length > 0 ? (
 									<div>
 										<div className="w-full overflow-x-auto rounded-xl scrollbar-hide md:scrollbar-default">
 											<table className="w-full text-left">
@@ -168,18 +167,11 @@ const InstructorList = () => {
 															scope="col"
 															className="py-3 px-6"
 														>
-															Fullname
+															Workout
 														</th>
 														<th
 															scope="col"
-															className="py-3 px-6"
-														>
-															Phone
-															Number
-														</th>
-														<th
-															scope="col"
-															className="py-3 px-6"
+															className="py-3 px-10"
 														>
 															Updated
 														</th>
@@ -191,17 +183,17 @@ const InstructorList = () => {
 														</th>
 													</tr>
 												</thead>
-												{instructor.data.rows?.map(
+												{workout.data.rows?.map(
 													(item, i) => {
 														return (
-															<InstructorListItem
+															<WorkoutListItem
 																key={
-																	item.instructor_id
+																	item.workout_id
 																}
 																data={{
 																	...item,
 																	no:
-																		instructor
+																		workout
 																			.data
 																			.page *
 																			10 -
@@ -215,7 +207,10 @@ const InstructorList = () => {
 												)}
 											</table>
 										</div>
-										<nav className="flex flex-col items-center justify-between pt-4 md:flex-row lg:flex-row xl:flex-row">
+										<nav
+											className="flex flex-col items-center justify-between pt-4 md:flex-row lg:flex-row xl:flex-row"
+											aria-label="Table navigation"
+										>
 											<span className="text-sm font-normal text-neutral-80">
 												<span>
 													Showing{" "}
@@ -223,7 +218,7 @@ const InstructorList = () => {
 												<span className="mr-1">
 													page{" "}
 													{
-														instructor
+														workout
 															.data
 															.page
 													}
@@ -232,7 +227,7 @@ const InstructorList = () => {
 												<span>
 													{" "}
 													{
-														instructor
+														workout
 															.data
 															.total_rows
 													}{" "}
@@ -244,7 +239,7 @@ const InstructorList = () => {
 													<button
 														type="button"
 														className={
-															instructor
+															workout
 																.data
 																.page ===
 															1
@@ -253,13 +248,13 @@ const InstructorList = () => {
 														}
 														onClick={() =>
 															handlePreviousPage(
-																instructor
+																workout
 																	.data
 																	.page,
 															)
 														}
 														disabled={
-															instructor
+															workout
 																.data
 																.page ===
 															1
@@ -270,15 +265,16 @@ const InstructorList = () => {
 														</span>
 													</button>
 												</li>
+
 												<li>
 													<button
 														type="button"
 														className={
-															instructor
+															workout
 																.data
 																.page +
 																1 >
-															instructor
+															workout
 																.data
 																.total_pages
 																? nextButtonDisabled
@@ -286,17 +282,17 @@ const InstructorList = () => {
 														}
 														onClick={() =>
 															handleNextPage(
-																instructor
+																workout
 																	.data
 																	.page,
 															)
 														}
 														disabled={
-															instructor
+															workout
 																.data
 																.page +
 																1 >
-															instructor
+															workout
 																.data
 																.total_pages
 														}
@@ -312,11 +308,12 @@ const InstructorList = () => {
 								) : (
 									<div className="flex flex-wrap items-center justify-center text-xs font-semibold leading-7 text-neutral-80">
 										<i className="fi fi-rr-info mr-3 text-sm"></i>
-										Data instructor not found
+										Data workout not found{" "}
 									</div>
 								)}
+
 								{modalCreateTrigger && (
-									<ModalCreateInstructor
+									<ModalCreateWorkout
 										handleModalCreateTrigger={
 											handleModalCreateTrigger
 										}
@@ -338,4 +335,4 @@ const InstructorList = () => {
 	);
 };
 
-export default InstructorList;
+export default WorkoutList;
