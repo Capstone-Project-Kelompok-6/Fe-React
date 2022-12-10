@@ -2,7 +2,7 @@ import React from "react";
 
 const SkeletonLoadingBooking = () => {
 	return (
-		<div className="relative rounded-20 border bg-white py-4 shadow-4 md:max-w-xl">
+		<div className="relative rounded-20 border bg-white py-4 shadow-4">
 			<div className="mb-2 flex items-center justify-between px-5">
 				<div className="w-36 animate-pulse rounded-lg bg-gray-300 py-3">
 					<p className="text-sm font-medium text-neutral-100-2 md:text-base"></p>
