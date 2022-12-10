@@ -101,9 +101,7 @@ const OfflineClassesList = () => {
 						<div className="relative">
 							<div className="relative">
 								<div className="sm:block">
-									<ul
-										className="-mb-px flex list-none overflow-x-scroll whitespace-nowrap text-center text-xs font-medium scrollbar-hide"
-										aria-label="Tabs">
+									<ul className="-mb-px flex list-none overflow-x-scroll whitespace-nowrap text-center text-xs font-medium scrollbar-hide">
 										<li className="mr-2">
 											<button
 												className={active === 0 ? activeTab : notActiveTab}

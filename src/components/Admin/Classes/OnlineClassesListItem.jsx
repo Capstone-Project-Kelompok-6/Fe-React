@@ -113,13 +113,13 @@ const OnlineClassesListItem = ({ data }) => {
 								<div className="absolute top-0 right-0 z-10 mr-5 mt-8 w-32 rounded-xl bg-white shadow-4 transition duration-300">
 									<ul className="list-reset">
 										<li>
-											<button type="button" className={actionDropdownEdit} onClick={handleModalEditTrigger}>
+											<button type="button" className={`rounded-t-xl hover:rounded-t-xl ${actionDropdownEdit}`} onClick={handleModalEditTrigger}>
 												<i className="fi fi-sr-pencil mr-2 -ml-1 mt-1 text-sm text-secondary-yellow"></i>
 												Edit
 											</button>
 										</li>
 										<li>
-											<button type="button" className={actionDropdownDelete} onClick={handleDelete}>
+											<button type="button" className={`rounded-b-xl hover:rounded-b-xl ${actionDropdownDelete}`} onClick={handleDelete}>
 												<i className="fi fi-sr-trash mr-2 -ml-1 mt-1 text-sm text-secondary-red"></i>
 												Delete
 											</button>
@@ -132,8 +132,18 @@ const OnlineClassesListItem = ({ data }) => {
 				</div>
 
 				<div className="px-5 py-4">
-					<div className="mb-1">
-						<h5 className="text-base font-medium tracking-tight text-neutral-100-2">{truncate(video_title, 30)}</h5>
+					<div className="mb-1 flex items-center">
+						<div className="min-w-0 flex-1">
+							<div className="group relative">
+								<h5 className="text-base font-medium tracking-tight text-neutral-100-2">{truncate(video_title, 30)}</h5>
+
+								<div className="absolute top-0 left-0 mt-5 mr-1 hidden flex-col items-center group-hover:flex md:mt-6">
+									<span className="whitespace-no-wrap relative z-10 rounded-lg bg-neutral-100-2 p-2 text-xs leading-none text-white shadow-4">
+										{video_title}
+									</span>
+								</div>
+							</div>
+						</div>
 					</div>
 
 					<div className="mb-1 flex items-center space-x-3 text-sm">

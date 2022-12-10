@@ -105,13 +105,13 @@ const OfflineClassesListItem = ({ data }) => {
 							<div className="absolute top-0 right-0 z-10 mr-5 mt-8 w-32 rounded-xl bg-white shadow-4 transition duration-300">
 								<ul className="list-reset">
 									<li>
-										<button type="button" className={actionDropdownEdit} onClick={handleModalEditTrigger}>
+										<button type="button" className={`rounded-t-xl hover:rounded-t-xl ${actionDropdownEdit}`} onClick={handleModalEditTrigger}>
 											<i className="fi fi-sr-pencil mr-2 -ml-1 mt-1 text-sm text-secondary-yellow"></i>
 											Edit
 										</button>
 									</li>
 									<li>
-										<button type="button" className={actionDropdownDelete} onClick={handleDelete}>
+										<button type="button" className={`rounded-b-xl hover:rounded-b-xl ${actionDropdownDelete}`} onClick={handleDelete}>
 											<i className="fi fi-sr-trash mr-2 -ml-1 mt-1 text-sm text-secondary-red"></i>
 											Delete
 										</button>
