@@ -33,6 +33,12 @@ export const activeTab = "inline-block rounded-full border border-primary-violet
 
 export const notActiveTab = "inline-block rounded-full border border-primary-violet px-3 py-1 text-xs text-tertiary-3 hover:bg-neutral-background";
 
+export const activeLinkTab =
+	"text-secondary inline-block rounded-t-lg border-b-2 border-secondary-navy p-4 text-sm font-medium text-secondary-navy transition-all duration-300 ease-in-out";
+
+export const inActiveLinkTab =
+	"inline-block rounded-t-lg border-b-2 border-transparent p-4 text-sm font-normal text-neutral-60 transition-all duration-300 ease-in-out hover:border-gray-300 hover:text-neutral-80";
+
 // Button
 export const cancelButton =
 	"w-full rounded-10 border border-secondary-navy bg-white px-5 py-2.5 text-sm font-normal text-primary-violet hover:bg-gray-100 hover:text-violet-900 focus:z-10 focus:outline-none focus:ring-4 focus:ring-blue-300";
@@ -62,7 +68,7 @@ export const actionDeleteButton =
 	"rounded-lg bg-secondary-red px-2 py-1 text-center font-medium text-white focus:outline-none focus:ring-4 focus:ring-red-300";
 
 export const actionDropdownEdit =
-	"mr-2 inline-flex w-full items-center rounded-xl px-5 py-2.5 text-center text-sm font-normal text-neutral-100-2 transition duration-300 ease-in-out hover:rounded-xl hover:bg-yellow-50 focus:outline-none";
+	"mr-2 inline-flex w-full items-center px-5 py-2.5 text-center text-sm font-normal text-neutral-100-2 transition duration-300 ease-in-out hover:bg-yellow-50 focus:outline-none";
 
 export const confirmButtonSwal =
 	"focus:outline-none text-white bg-secondary-red hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2";
@@ -71,7 +77,7 @@ export const cancelButtonSwal =
 	"text-secondary-red hover:text-secondary-red border border-secondary-red hover:bg-red-200 focus:ring-1 focus:outline-none focus:ring-secondary-red font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2";
 
 export const actionDropdownDelete =
-	"mr-2 inline-flex w-full items-center rounded-b-xl px-5 py-2.5 text-center text-sm font-normal text-neutral-100-2 transition duration-300 ease-in-out hover:rounded-b-xl hover:bg-red-50 focus:outline-none";
+	"mr-2 inline-flex w-full items-center px-5 py-2.5 text-center text-sm font-normal text-neutral-100-2 transition duration-300 ease-in-out hover:bg-red-50 focus:outline-none";
 
 // Sidebar
 export const sidebarActive =
