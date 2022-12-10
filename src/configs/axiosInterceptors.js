@@ -4,7 +4,16 @@ import CONST from "../utils/constants";
 
 const exceptionApiUrlforRT = (config) => {
 	if (!config) return null;
-	const arr = [config.url.includes("/auth/login")];
+	const arr = [
+		config.url.includes("/auth/login"),
+		config.url.includes("/users"),
+		config.url.includes("/instructors"),
+		config.url.includes("/workous"),
+		config.url.includes("/classes/offline"),
+		config.url.includes("/classes/online"),
+		config.url.includes("/books/offline"),
+		config.url.includes("/books/online"),
+	];
 	return arr.includes(true);
 };
 
@@ -41,7 +50,7 @@ export const successHandler = (response) => {
 
 export const errorHandler = (error) => {
 	if (error.response && error.response.status === 401) {
-		Auth.signOut();
+		// Auth.signOut();
 	}
 	return Promise.reject({ ...error });
 };
