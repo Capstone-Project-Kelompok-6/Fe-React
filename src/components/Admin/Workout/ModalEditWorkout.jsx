@@ -2,15 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { editWorkout } from "../../../stores/features/workoutSlice";
-import {
-	cancelButton,
-	inputError,
-	inputNotError,
-	labelError,
-	labelNotError,
-	regexNameValidation,
-	saveButton,
-} from "../../../utils/globalVariable";
+import { cancelButton, inputError, inputNotError, labelError, labelNotError, regexNameValidation, saveButton } from "../../../utils/globalVariable";
 
 const baseValues = {
 	workout: "",
@@ -23,8 +15,7 @@ const baseErrors = {
 };
 
 const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
-	const { workout_id, workout_image, image_name, workout, description } =
-		update;
+	const { workout_id, workout_image, image_name, workout, description } = update;
 	const dispatch = useDispatch();
 	const [file, setFile] = useState(null);
 	const [fileDataURL, setFileDataURL] = useState(null);
@@ -49,7 +40,7 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 						image_name,
 						workout,
 						description,
-					}),
+					})
 				).then((res) => {
 					if (!res.error) {
 						setTimeout(
@@ -62,15 +53,11 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 									timer: 2000,
 									background: "#ffffff",
 								}),
-							1000,
+							1000
 						);
 						handleModalEditTrigger();
 					} else {
-						Swal.fire(
-							"Sorry",
-							"Workout already exists",
-							"info",
-						);
+						Swal.fire("Sorry", "Workout already exists", "info");
 					}
 				});
 			} catch (error) {
@@ -85,7 +72,7 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 						text: "Please, check your inputed data",
 						background: "#ffffff",
 					}),
-				1000,
+				1000
 			);
 		}
 	};
@@ -165,14 +152,9 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 			<div className="fixed inset-0 z-50 items-center justify-center overflow-y-auto">
 				<div className="flex w-full items-end justify-center px-4 py-16 sm:h-full sm:items-center sm:p-0 md:h-full">
 					<div className="relative h-full w-full max-w-sm sm:max-w-sm md:h-auto md:max-w-md lg:max-w-lg xl:max-w-xl">
-						<form
-							onSubmit={handleUpdate}
-							className="rounded-xl bg-white shadow"
-						>
+						<form onSubmit={handleUpdate} className="rounded-xl bg-white shadow">
 							<div className="flex items-center justify-between rounded-t p-4">
-								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">
-									Edit Workout
-								</h3>
+								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">Edit Workout</h3>
 							</div>
 							<div className="h-[65vh] overflow-y-auto p-6">
 								<div className="h-[90&] space-y-6">
@@ -182,40 +164,20 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 												type="text"
 												id="workout"
 												name="workout"
-												className={
-													errors.workout
-														? inputError
-														: inputNotError
-												}
+												className={errors.workout ? inputError : inputNotError}
 												placeholder=" "
-												defaultValue={
-													workout
-												}
-												onChange={
-													handleChange
-												}
+												defaultValue={workout}
+												onChange={handleChange}
 												required
 											/>
-											<label
-												htmlFor="workout"
-												className={
-													errors.workout
-														? labelError
-														: labelNotError
-												}
-											>
-												<span className="block after:ml-1 after:text-red-500 after:content-['*']">
-													Workout Name
-												</span>
+											<label htmlFor="workout" className={errors.workout ? labelError : labelNotError}>
+												<span className="block after:ml-1 after:text-red-500 after:content-['*']">Workout Name</span>
 											</label>
 										</div>
 										<div className="mt-1">
 											{errors.workout && (
 												<span className="text-xs font-light text-secondary-red md:text-sm">
-													<i className="fi fi-rr-info"></i>{" "}
-													{
-														errors.workout
-													}
+													<i className="fi fi-rr-info"></i> {errors.workout}
 												</span>
 											)}
 										</div>
@@ -225,9 +187,7 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 											<div className="my-5 flex w-full items-center justify-center">
 												<div className="flex flex-col items-center justify-center">
 													<img
-														src={
-															fileDataURL
-														}
+														src={fileDataURL}
 														alt=""
 														className="h-52 w-80 rounded-lg border-2 border-dashed border-neutral-80 object-cover object-center"
 													/>
@@ -237,12 +197,8 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 											<div className="my-5 flex w-full items-center justify-center">
 												<div className="flex flex-col items-center justify-center">
 													<img
-														src={
-															workout_image
-														}
-														alt={
-															image_name
-														}
+														src={workout_image}
+														alt={image_name}
 														className="h-52 w-80 rounded-lg border-2 border-dashed border-neutral-80 object-cover object-center"
 													/>
 												</div>
@@ -254,21 +210,16 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 											id="image"
 											type="file"
 											accept="image/*"
-											onChange={
-												handleUploadImage
-											}
+											onChange={handleUploadImage}
 										/>
 										<div className="mb-2 flex items-center space-x-4">
 											{errors.image && (
 												<span className="text-xs font-light text-secondary-red md:text-sm">
-													<i className="fi fi-rr-info"></i>{" "}
-													{errors.image}
+													<i className="fi fi-rr-info"></i> {errors.image}
 												</span>
 											)}
 											<div className="min-w-0 flex-1">
-												<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">
-													Max size: 1MB
-												</p>
+												<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">Max size: 1MB</p>
 											</div>
 										</div>
 									</div>
@@ -277,36 +228,21 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 											id="description"
 											name="description"
 											type="text"
-											defaultValue={
-												description
-											}
+											defaultValue={description}
 											rows="5"
 											className={inputNotError}
-											placeholder=" "
-										></textarea>
-										<label
-											htmlFor="description"
-											className={labelNotError}
-										>
-											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
-												Information
-											</span>
+											placeholder=" "></textarea>
+										<label htmlFor="description" className={labelNotError}>
+											<span className="block after:ml-1 after:text-red-500 after:content-['*']">Information</span>
 										</label>
 									</div>
 								</div>
 							</div>
 							<div className="flex items-center justify-center space-x-2 p-6">
-								<button
-									type="button"
-									className={cancelButton}
-									onClick={handleModalEditTrigger}
-								>
+								<button type="button" className={cancelButton} onClick={handleModalEditTrigger}>
 									Cancel
 								</button>
-								<button
-									type="submit"
-									className={saveButton}
-								>
+								<button type="submit" className={saveButton}>
 									Save
 								</button>
 							</div>

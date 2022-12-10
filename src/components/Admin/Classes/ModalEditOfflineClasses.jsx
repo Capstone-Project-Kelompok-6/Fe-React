@@ -50,7 +50,7 @@ const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown,
 								text: "Offline classes data successfully updated",
 								showConfirmButton: false,
 								timer: 2000,
-								background: "#fefefe",
+								background: "#ffffff",
 							}),
 						1000
 					);
