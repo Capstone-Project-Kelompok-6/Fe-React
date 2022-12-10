@@ -7,7 +7,6 @@ import ModalCreateInstructor from "./ModalCreateInstructor";
 import InstructorAPI from "../../../apis/instructor.api";
 import {
 	addButton,
-	dataNotFound,
 	nextButtonActive,
 	nextButtonDisabled,
 	previousButtonActive,
@@ -186,7 +185,7 @@ const InstructorList = () => {
 										</nav>
 									</div>
 								) : (
-									<div className={dataNotFound}>
+									<div className="flex flex-wrap items-center justify-center text-xs font-semibold leading-7 text-neutral-80">
 										<i className="fi fi-rr-info mr-3 text-sm"></i>
 										Data instructor not found
 									</div>
