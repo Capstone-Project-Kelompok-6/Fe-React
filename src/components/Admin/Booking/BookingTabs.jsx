@@ -1,22 +1,18 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { bookingSidebarCollections } from "../../../mocks/sidebarCollections";
+import { activeLinkTab, inActiveLinkTab } from "../../../utils/globalVariable";
 
 const BookingTabs = () => {
 	return (
-		<ul className="-mb-px flex flex-wrap text-center text-sm font-medium" role="tablist">
+		<ul className="-mb-px flex flex-wrap text-center" role="tablist">
 			{bookingSidebarCollections.map((item, idx) => {
 				return (
 					<li key={idx}>
 						<NavLink to={item.path}>
 							{({ isActive }) => (
-								<div
-									className={
-										isActive
-											? "text-secondary inline-block rounded-t-lg border-b-2 border-secondary-navy p-4 text-secondary-navy transition-all duration-300 ease-in-out"
-											: "inline-block rounded-t-lg border-b-2 border-transparent p-4 text-neutral-60 transition-all duration-300 ease-in-out hover:border-gray-300 hover:text-neutral-80"
-									}>
-									<span className="font-medium">{item.name}</span>
+								<div className={isActive ? activeLinkTab : inActiveLinkTab}>
+									<span>{item.name}</span>
 								</div>
 							)}
 						</NavLink>

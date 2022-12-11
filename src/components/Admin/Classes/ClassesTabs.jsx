@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { classesSidebarCollections } from "../../../mocks/sidebarCollections";
+import { activeLinkTab, inActiveLinkTab } from "../../../utils/globalVariable";
 
 const ClassesTabs = () => {
 	return (
@@ -10,12 +11,7 @@ const ClassesTabs = () => {
 					<li key={idx}>
 						<NavLink to={item.path}>
 							{({ isActive }) => (
-								<div
-									className={
-										isActive
-											? "text-secondary inline-block rounded-t-lg border-b-2 border-secondary-navy p-4 text-sm font-medium text-secondary-navy transition-all duration-300 ease-in-out"
-											: "inline-block rounded-t-lg border-b-2 border-transparent p-4 text-sm font-normal text-neutral-60 transition-all duration-300 ease-in-out hover:border-gray-300 hover:text-neutral-80"
-									}>
+								<div className={isActive ? activeLinkTab : inActiveLinkTab}>
 									<span>{item.name}</span>
 								</div>
 							)}

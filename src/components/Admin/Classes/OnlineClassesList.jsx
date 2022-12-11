@@ -102,9 +102,7 @@ const OnlineClassesList = () => {
 						<div className="relative">
 							<div className="relative">
 								<div className="sm:block">
-									<ul
-										className="-mb-px flex list-none overflow-x-scroll whitespace-nowrap text-center text-xs font-medium scrollbar-hide"
-										aria-label="Tabs">
+									<ul className="-mb-px flex list-none overflow-x-scroll whitespace-nowrap text-center text-xs font-medium scrollbar-hide">
 										<li className="mr-2">
 											<button
 												className={active === 0 ? activeTab : notActiveTab}
@@ -193,7 +191,7 @@ const OnlineClassesList = () => {
 							<div className="pt-36 pb-6">
 								<div className={dataNotFound}>
 									<i className="fi fi-rr-info mr-3 text-sm"></i>
-									Data Online Booking not found
+									Data Online Classes not found
 								</div>
 							</div>
 						)}

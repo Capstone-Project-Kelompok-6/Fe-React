@@ -1,5 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
+import articleSlice from "./articleSlice";
 import workoutSlice from "./workoutSlice";
 import instructorSlice from "./instructorSlice";
 import offlineClassesSlice from "./offlineClassesSlice";
@@ -9,6 +10,7 @@ import membershipSlice from "./membershipSlice";
 import onlineBookingSlice from "./onlineBookingSlice";
 
 export const rootReducer = combineReducers({
+	article: articleSlice,
 	workout: workoutSlice,
 	instructor: instructorSlice,
 	offlineClasses: offlineClassesSlice,

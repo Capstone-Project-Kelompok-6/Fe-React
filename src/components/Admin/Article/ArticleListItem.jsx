@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
-import { deleteOfflineClasses } from "../../../stores/features/offlineClassesSlice";
-import { formatPrice } from "../../../utils/formatPrice";
+import { deleteArticle } from "../../../stores/features/articleSlice";
 import { actionDropdownDelete, actionDropdownEdit, cancelButtonSwal, confirmButtonSwal } from "../../../utils/globalVariable";
-import ModalEditOfflineClasses from "./ModalEditOfflineClasses";
+import ModalEditArticle from "./ModalEditArticle";
 
-const OfflineClassesListItem = ({ data }) => {
-	const { class_id, instructor_name, workout, instructor_image, workout_image, class_dates, price } = data;
-	const dispatch = useDispatch();
+const ArticleListItem = ({ data }) => {
+	const { article_id, title, article_image, image_name, description } = data;
+
 	const [modalEditTrigger, setModalEditTrigger] = useState(false);
 	const [actionDropdown, setActionDropdown] = useState(false);
+	const dispatch = useDispatch();
 
 	const handleDelete = () => {
 		const swalWithBootstrapButtons = Swal.mixin({
@@ -34,14 +34,14 @@ const OfflineClassesListItem = ({ data }) => {
 			})
 			.then((result) => {
 				if (result.isConfirmed) {
-					dispatch(deleteOfflineClasses(class_id));
 					try {
+						dispatch(deleteArticle(article_id));
 						setTimeout(
 							() =>
 								Swal.fire({
 									icon: "success",
 									title: "Deleted",
-									text: "Offline classes data successfully deleted",
+									text: "Article data successfully deleted",
 									showConfirmButton: false,
 									timer: 2000,
 									background: "#ffffff",
@@ -54,7 +54,7 @@ const OfflineClassesListItem = ({ data }) => {
 								Swal.fire({
 									icon: "error",
 									title: "Error",
-									text: "Offline classes data cannot deleted",
+									text: "Article data cannot be deleted",
 									showConfirmButton: false,
 									timer: 2000,
 									background: "#ffffff",
@@ -66,12 +66,12 @@ const OfflineClassesListItem = ({ data }) => {
 			});
 	};
 
-	const handleActionDropdown = () => {
-		setActionDropdown(!actionDropdown);
-	};
-
 	const handleModalEditTrigger = () => {
 		setModalEditTrigger(!modalEditTrigger);
+	};
+
+	const handleActionDropdown = () => {
+		setActionDropdown(!actionDropdown);
 	};
 
 	const truncate = (string, n) => {
@@ -79,12 +79,12 @@ const OfflineClassesListItem = ({ data }) => {
 	};
 
 	return (
-		<div className="rounded-20 bg-white shadow-4">
-			<div className="relative overflow-hidden rounded-20 pb-40">
+		<div className="h-full rounded-xl bg-white shadow-4">
+			<div className="relative overflow-hidden rounded-xl pb-40">
 				<img
-					className="absolute inset-0 h-full w-full rounded-t-20 object-cover object-center transition duration-300 ease-in-out hover:scale-105 hover:rounded-20"
-					src={workout_image}
-					alt="workout-image"
+					className="absolute inset-0 h-full w-full rounded-t-xl object-cover object-center transition duration-300 ease-in-out hover:scale-105"
+					src={article_image}
+					alt={image_name}
 					loading="lazy"
 				/>
 				<div className="group relative">
@@ -124,45 +124,28 @@ const OfflineClassesListItem = ({ data }) => {
 			</div>
 
 			<div className="p-5">
-				<div className="mb-4 flex items-center space-x-4">
+				<div className="mb-4 flex items-center">
 					<div className="min-w-0 flex-1">
-						<p className="truncate text-base font-medium text-neutral-100-2">{workout}</p>
-					</div>
-					<div className="inline-flex items-center text-sm font-semibold text-neutral-100-2">{formatPrice(price)}</div>
-				</div>
+						<div className="group relative">
+							<p className="text-base font-semibold text-neutral-100-2">{truncate(title, 30)}</p>
 
-				<div className="relative mb-28 space-x-2 text-sm">
-					<div className="absolute flex">
-						<div className="mr-3 mt-0.5 flex-shrink-0">
-							<span className="text-secondary-navy">
-								<i className="fi fi-sr-clock"></i>
-							</span>
-						</div>
-						<div className="flex-1 text-sm leading-relaxed">
-							{class_dates &&
-								class_dates.map((date) => {
-									return (
-										<h5 className="font-normal tracking-tight text-neutral-100-2" key={date}>
-											{date}
-										</h5>
-									);
-								})}
+							<div className="absolute top-0 right-0 mt-5 mr-1 hidden flex-col items-center group-hover:flex md:mt-10">
+								<span className="whitespace-no-wrap relative z-10 rounded-lg bg-neutral-100-2 p-2 text-xs leading-none text-white shadow-4">
+									{title}
+								</span>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div className="flex items-center space-x-3">
-					<img className="h-8 w-8 rounded-full object-cover object-center" src={instructor_image} alt="image instructor" />
-
-					<div className="min-w-0 flex-1">
-						<p className="text-base font-medium text-neutral-100-2">{truncate(instructor_name, 20)}</p>
-					</div>
+				<div className="min-w-0 flex-1">
+					<p className="whitespace-pre-line break-all text-sm font-normal text-neutral-80">{truncate(description, 100)}</p>
 				</div>
 			</div>
 			{modalEditTrigger && (
-				<ModalEditOfflineClasses handleModalEditTrigger={handleModalEditTrigger} update={data} handleActionDropdown={handleActionDropdown} />
+				<ModalEditArticle handleModalEditTrigger={handleModalEditTrigger} update={data} handleActionDropdown={handleActionDropdown} />
 			)}
 		</div>
 	);
 };
 
-export default OfflineClassesListItem;
+export default ArticleListItem;
