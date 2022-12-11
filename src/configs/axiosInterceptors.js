@@ -4,17 +4,8 @@ import CONST from "../utils/constants";
 
 const exceptionApiUrlforRT = (config) => {
 	if (!config) return null;
-	const arr = [
-		config.url.includes("/auth/login"),
-		config.url.includes("/users"),
-		config.url.includes("/instructors"),
-		config.url.includes("/workous"),
-		config.url.includes("/classes/offline"),
-		config.url.includes("/classes/online"),
-		config.url.includes("/books/offline"),
-		config.url.includes("/books/online"),
-	];
-	return arr.includes(true);
+	const arr = [config.url.includes("/auth/login")];
+	return !arr.includes(true);
 };
 
 export const isHandlerEnabled = (config) => {
@@ -27,7 +18,7 @@ export const requestHandler = async (config) => {
 		const token = Auth.getAccessToken();
 		if (token) {
 			config.headers["Authorization"] = `Bearer ${token}`;
-		} else if (!exceptionApiUrlforRT(config)) {
+		} else if (exceptionApiUrlforRT(config)) {
 			const newToken = await axios.patch(`${CONST.BASE_URL_API}/auth/refresh`, {
 				refresh_token: Auth.getRefreshToken(),
 			});
@@ -48,11 +39,19 @@ export const successHandler = (response) => {
 	return response;
 };
 
-export const errorHandler = (error) => {
-	if (error.response.status === 401) {
-		Auth.signOut();
-	} else {
-		return Promise.reject({ ...error });
+export const errorHandler = async (error) => {
+	const err = error.response;
+	if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+		return await axios
+			.patch(`${CONST.BASE_URL_API}/auth/refresh`, {
+				refresh_token: Auth.getRefreshToken(),
+			})
+			.then((res) => {
+				err.config.__isRetryRequest = true;
+				Auth.storeUserInfoToCookie(res.data.data);
+				err.config.config.headers["Authorization"] = `Bearer ${res.data.data.access_token}`;
+				return err.config;
+			});
 	}
 	return Promise.reject({ ...error });
 };
