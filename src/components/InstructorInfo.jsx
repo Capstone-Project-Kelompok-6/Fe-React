@@ -1,32 +1,44 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchInstructor } from "../stores/features/instructorSlice";
+import React from "react";
+import instructor1 from "../assets/img/png/instructor1.png";
+import instructor2 from "../assets/img/png/instructor2.png";
+import instructor3 from "../assets/img/png/instructor3.png";
 
 const InstructorInfo = () => {
-	const dispatch = useDispatch();
-	const instructor = useSelector((state) => state.instructor.data);
-
-	useEffect(() => {
-		dispatch(fetchInstructor(3));
-	}, [dispatch]);
-
 	return (
 		<div className="container lg:mt-10">
 			<h1 className="text-center text-xl lg:text-4xl lg:font-medium">Our Best Instructor</h1>
-			<div className="mx-auto px-5 py-2 pt-10 lg:px-32 lg:pt-12">
-				<div className="-m-1 flex flex-wrap md:-m-2">
-					{instructor.rows?.map((item) => {
-						return (
-							<div className="flex w-1/3 flex-wrap" key={item.instructor_id}>
-								<div className="w-full p-1 md:p-2">
-									<img alt={item.image_name} className="block h-80 w-full rounded-lg object-cover object-center" src={item.instructor_image} />
-									<div className="p-5 text-center">
-										<h5 className="mb-2 text-lg font-bold tracking-tight text-gray-900 lg:text-2xl">{item.instructor_name}</h5>
-									</div>
-								</div>
+			<div className="my-6 flex items-center justify-center lg:px-60">
+				<div className="mb-6 grid grid-cols-3 gap-3 md:grid-cols-3">
+					<div className="py-2 lg:py-10">
+						<div className="max-w-sm">
+							<div>
+								<img className="rounded-xl object-cover" src={instructor1} alt="" />
 							</div>
-						);
-					})}
+							<div className="p-5">
+								<h5 className="mb-2 text-center text-lg font-bold tracking-tight text-gray-900 lg:text-2xl">Alan Ramirez</h5>
+							</div>
+						</div>
+					</div>
+					<div className="relative py-2 lg:-mt-4 lg:py-10">
+						<div className="absolute max-w-sm">
+							<div>
+								<img className="h-48 rounded-xl object-cover md:h-96" src={instructor2} alt="" />
+							</div>
+							<div className="p-5">
+								<h5 className="mb-2 text-center text-lg font-bold tracking-tight text-gray-900 lg:text-2xl">Natalia Baruna</h5>
+							</div>
+						</div>
+					</div>
+					<div className="py-2 lg:py-10">
+						<div className="max-w-sm">
+							<div>
+								<img className="rounded-xl object-cover" src={instructor3} alt="" />
+							</div>
+							<div className="p-5">
+								<h5 className="mb-2 text-center text-lg font-bold tracking-tight text-gray-900 lg:text-2xl">Alex Perez</h5>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

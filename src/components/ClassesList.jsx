@@ -1,24 +1,15 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchOfflineClasses } from "../stores/features/offlineClassesSlice";
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import SwiperCore, { Pagination, Autoplay } from "swiper";
+import yogaClass from "../assets/img/png/yogaClass.png";
+import fitness from "../assets/img/png/fitness.png";
+import muscle from "../assets/img/png/muscle.png";
 
 const ClassesList = () => {
 	SwiperCore.use([Autoplay]);
-	const dispatch = useDispatch();
-	const offlineClasses = useSelector((state) => state.offlineClasses.data);
-
-	useEffect(() => {
-		dispatch(fetchOfflineClasses(5));
-	}, [dispatch]);
-
-	const truncate = (string, n) => {
-		return string?.length > n ? string.substr(0, n - 1) + "..." : string;
-	};
 
 	return (
 		<div className="bg-secondary-navy pt-24 pb-16 lg:px-20">
@@ -47,27 +38,81 @@ const ClassesList = () => {
 					pauseOnMouseEnter: true,
 					disableOnInteraction: false,
 				}}>
-				{offlineClasses.rows?.map((item) => {
-					return (
-						<SwiperSlide key={item.class_id}>
-							<div className="mx-auto mt-8 h-full max-w-xs rounded-lg bg-[#252525] bg-opacity-40 shadow-md lg:mt-14">
-								<div>
-									<img
-										className="inset-0 mx-auto h-44 w-full rounded-t-lg object-cover object-center lg:p-4 lg:pb-0"
-										src={item.workout_image}
-										alt={item.image_name}
-									/>
-								</div>
-								<div className="p-5">
-									<div>
-										<h5 className="mb-2 text-lg font-medium tracking-tight text-white lg:text-3xl lg:font-semibold">{item.workout}</h5>
-									</div>
-									<p className="mb-3 text-sm font-light text-white lg:text-lg lg:font-normal">{truncate(item.description, 50)}</p>
-								</div>
+				<SwiperSlide className="bg-secondary-navy">
+					<div className="mx-auto mt-8 max-w-xs rounded-lg bg-[#252525] bg-opacity-40 shadow-md lg:mt-14">
+						<div>
+							<img className="mx-auto rounded-t-lg lg:p-4 lg:pb-0" src={yogaClass} alt="" />
+						</div>
+						<div className="p-5">
+							<div>
+								<h5 className="mb-2 text-lg font-medium tracking-tight text-white lg:text-3xl lg:font-semibold">Yoga</h5>
 							</div>
-						</SwiperSlide>
-					);
-				})}
+							<p className="mb-3 text-sm font-light text-white lg:text-lg lg:font-normal">
+								Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
+							</p>
+						</div>
+					</div>
+				</SwiperSlide>
+				<SwiperSlide className="bg-secondary-navy">
+					<div className="mx-auto mt-8 max-w-xs rounded-lg bg-[#252525] bg-opacity-40 shadow-md lg:mt-14">
+						<div>
+							<img className="mx-auto rounded-t-lg lg:p-4 lg:pb-0" src={fitness} alt="" />
+						</div>
+						<div className="p-5">
+							<div>
+								<h5 className="mb-2 text-lg font-medium tracking-tight text-white lg:text-3xl lg:font-semibold">Yoga</h5>
+							</div>
+							<p className="mb-3 text-sm font-light text-white lg:text-lg lg:font-normal">
+								Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
+							</p>
+						</div>
+					</div>
+				</SwiperSlide>
+				<SwiperSlide className="bg-secondary-navy">
+					<div className="mx-auto mt-8 max-w-xs rounded-lg bg-[#252525] bg-opacity-40 shadow-md lg:mt-14">
+						<div>
+							<img className="mx-auto rounded-t-lg lg:p-4 lg:pb-0" src={muscle} alt="" />
+						</div>
+						<div className="p-5">
+							<div>
+								<h5 className="mb-2 text-lg font-medium tracking-tight text-white lg:text-3xl lg:font-semibold">Yoga</h5>
+							</div>
+							<p className="mb-3 text-sm font-light text-white lg:text-lg lg:font-normal">
+								Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
+							</p>
+						</div>
+					</div>
+				</SwiperSlide>
+				<SwiperSlide className="bg-secondary-navy">
+					<div className="mx-auto mt-8 max-w-xs rounded-lg bg-[#252525] bg-opacity-40 shadow-md lg:mt-14">
+						<div>
+							<img className="mx-auto rounded-t-lg lg:p-4 lg:pb-0" src={yogaClass} alt="" />
+						</div>
+						<div className="p-5">
+							<div>
+								<h5 className="mb-2 text-lg font-medium tracking-tight text-white lg:text-3xl lg:font-semibold">Yoga</h5>
+							</div>
+							<p className="mb-3 text-sm font-light text-white lg:text-lg lg:font-normal">
+								Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
+							</p>
+						</div>
+					</div>
+				</SwiperSlide>
+				<SwiperSlide className="bg-secondary-navy">
+					<div className="mx-auto mt-8 max-w-xs rounded-lg bg-[#252525] bg-opacity-40 shadow-md lg:mt-14">
+						<div>
+							<img className="mx-auto rounded-t-lg lg:p-4 lg:pb-0" src={yogaClass} alt="" />
+						</div>
+						<div className="p-5">
+							<div>
+								<h5 className="mb-2 text-lg font-medium tracking-tight text-white lg:text-3xl lg:font-semibold">Yoga</h5>
+							</div>
+							<p className="mb-3 text-sm font-light text-white lg:text-lg lg:font-normal">
+								Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
+							</p>
+						</div>
+					</div>
+				</SwiperSlide>
 			</Swiper>
 		</div>
 	);
