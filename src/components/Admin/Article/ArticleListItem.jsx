@@ -79,7 +79,7 @@ const ArticleListItem = ({ data }) => {
 	};
 
 	return (
-		<div className="rounded-xl bg-white shadow-4">
+		<div className="h-full rounded-xl bg-white shadow-4">
 			<div className="relative overflow-hidden rounded-xl pb-40">
 				<img
 					className="absolute inset-0 h-full w-full rounded-t-xl object-cover object-center transition duration-300 ease-in-out hover:scale-105"

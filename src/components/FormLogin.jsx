@@ -78,10 +78,11 @@ const FormLogin = () => {
 		<div
 			style={{
 				backgroundImage: `url(${loginBG})`,
+				position: "fixed",
 			}}
-			className="login-container relative z-[3] h-screen w-full bg-cover bg-no-repeat">
+			className="relative z-[3] h-screen w-full bg-cover bg-no-repeat">
 			<div className="container z-[1]">
-				<div className="fixed inset-x-5 top-6 mx-auto">
+				<div className="inset-x-5 my-6 mx-auto">
 					<div className="lg:m-auto">
 						<div className="border-1 bg-neutral rounded-20 border-gray-200 bg-neutral-background bg-opacity-80 p-4 shadow-7 backdrop-blur-sm md:rounded-100 md:bg-opacity-90 md:p-3 lg:mx-auto lg:w-2/4">
 							<div className="text-center">

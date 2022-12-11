@@ -191,7 +191,7 @@ const OnlineClassesList = () => {
 							<div className="pt-36 pb-6">
 								<div className={dataNotFound}>
 									<i className="fi fi-rr-info mr-3 text-sm"></i>
-									Data Online Booking not found
+									Data Online Classes not found
 								</div>
 							</div>
 						)}
