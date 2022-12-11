@@ -32,7 +32,7 @@ const Auth = {
 		const expireRefreshToken = new Date(data.exp_refresh);
 		Cookies.set("token", data.access_token, { expires: expireAccessToken });
 		Cookies.set("rt", data.refresh_token, { expires: expireRefreshToken });
-		Cookies.set("sub", decodedAccessToken);
+		Cookies.set("sub", decodedAccessToken, { expires: expireAccessToken });
 		return data;
 	},
 };
