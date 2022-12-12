@@ -10,6 +10,7 @@ import OnlineClassesPage from "./Admin/OnlineClassesPage";
 import WorkoutPage from "./Admin/WorkoutPage";
 import OfflineBookingPage from "./Admin/OfflineBookingPage";
 import OnlineBookingPage from "./Admin/OnlineBookingPage";
+import VideoPage from "./Admin/VideoPage";
 
 export {
 	ArticlePage,
@@ -24,4 +25,5 @@ export {
 	WorkoutPage,
 	OfflineBookingPage,
 	OnlineBookingPage,
+	VideoPage,
 };
