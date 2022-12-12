@@ -13,6 +13,7 @@ import { fetchOfflineBookingList } from "../../stores/features/offlineBookingSli
 import { fetchWorkoutList } from "../../stores/features/workoutSlice";
 import { fetchOnlineBookingList } from "../../stores/features/onlineBookingSlice";
 import { PulseLoader } from "react-spinners";
+import { fetchVideo } from "../../stores/features/videoSlice";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels, Title);
 
@@ -24,12 +25,14 @@ const Overview = () => {
 	const onlineClassesList = useSelector((state) => state.onlineClasses.data);
 	const bookingOfflineList = useSelector((state) => state.offlineBooking.data);
 	const bookingOnlineList = useSelector((state) => state.onlineBooking.data);
+	const videoList = useSelector((state) => state.video.data);
 	const statusInstructor = useSelector((state) => state.instructor.status);
 	const statusMembership = useSelector((state) => state.membership.status);
 	const statusOfflineClasses = useSelector((state) => state.offlineClasses.status);
 	const statusOnlineClasses = useSelector((state) => state.onlineClasses.status);
 	const statusBookingOffline = useSelector((state) => state.offlineBooking.status);
 	const statusBookingOnline = useSelector((state) => state.onlineBooking.status);
+	const statusVideo = useSelector((state) => state.video.status);
 
 	useEffect(() => {
 		dispatch(fetchInstructor(4));
@@ -39,6 +42,7 @@ const Overview = () => {
 		dispatch(fetchOfflineBookingList(1000));
 		dispatch(fetchWorkoutList());
 		dispatch(fetchOnlineBookingList(1000));
+		dispatch(fetchVideo());
 	}, [dispatch]);
 
 	const bookingOffline = new Set();
@@ -86,7 +90,9 @@ const Overview = () => {
 			},
 			datalabels: {
 				formatter: (ctx, value) => {
-					let percentage = ((ctx * 100) / value.dataset.data.reduce((sum, data) => sum + data, 0)).toFixed(0) + "%";
+					let percentage =
+						((ctx * 100) / value.dataset.data.reduce((sum, data) => sum + data, 0)).toFixed(0) +
+						"%";
 					return percentage;
 				},
 				color: "#fff",
@@ -100,7 +106,18 @@ const Overview = () => {
 			{
 				label: "Total Booking",
 				data: dataBookingOfflineClass(),
-				backgroundColor: ["#4793EB", "#135DB3", "#fb923c", "#facc15", "#4793EB", "#135DB3", "#1e293b", "#B00020", "#135DB3", "#4957CC"],
+				backgroundColor: [
+					"#4793EB",
+					"#135DB3",
+					"#fb923c",
+					"#facc15",
+					"#4793EB",
+					"#135DB3",
+					"#1e293b",
+					"#B00020",
+					"#135DB3",
+					"#4957CC",
+				],
 				borderColor: ["#FFFFFF", "#FFFFFF"],
 				borderWidth: 1,
 				fillColor: "rgba(151,187,205,0.2)",
@@ -117,7 +134,9 @@ const Overview = () => {
 			},
 			datalabels: {
 				formatter: (ctx, value) => {
-					let percentage = ((ctx * 100) / value.dataset.data.reduce((sum, data) => sum + data, 0)).toFixed(0) + "%";
+					let percentage =
+						((ctx * 100) / value.dataset.data.reduce((sum, data) => sum + data, 0)).toFixed(0) +
+						"%";
 					return percentage;
 				},
 				color: "#fff",
@@ -131,7 +150,18 @@ const Overview = () => {
 			{
 				label: "Total Booking",
 				data: dataBookingOnlineClass(),
-				backgroundColor: ["#4793EB", "#135DB3", "#fb923c", "#facc15", "#4793EB", "#135DB3", "#1e293b", "#B00020", "#135DB3", "#4957CC"],
+				backgroundColor: [
+					"#4793EB",
+					"#135DB3",
+					"#fb923c",
+					"#facc15",
+					"#4793EB",
+					"#135DB3",
+					"#1e293b",
+					"#B00020",
+					"#135DB3",
+					"#4957CC",
+				],
 				borderColor: ["#FFFFFF", "#FFFFFF"],
 				borderWidth: 1,
 				fillColor: "rgba(151,187,205,0.2)",
@@ -178,7 +208,8 @@ const Overview = () => {
 			statusOfflineClasses &&
 			statusOnlineClasses &&
 			statusBookingOffline &&
-			statusBookingOnline === "loading" ? (
+			statusBookingOnline &&
+			statusVideo === "loading" ? (
 				<div className="my-0 mx-auto flex items-center justify-center pt-5">
 					<PulseLoader size={10} color="#2563eb" />
 				</div>
@@ -195,7 +226,9 @@ const Overview = () => {
 								<div className="min-w-0 flex-1">
 									<p className="text-base font-medium text-neutral-80">Total Member</p>
 
-									<p className="text-xl font-semibold text-secondary-navy">{membershipList.total_rows}</p>
+									<p className="text-xl font-semibold text-secondary-navy">
+										{membershipList.total_rows}
+									</p>
 								</div>
 							</div>
 						</div>
@@ -209,7 +242,9 @@ const Overview = () => {
 								<div className="min-w-0 flex-1">
 									<p className="text-base font-medium text-neutral-80">Total Instructure</p>
 
-									<p className="text-xl font-semibold text-secondary-navy">{instructorList.total_rows}</p>
+									<p className="text-xl font-semibold text-secondary-navy">
+										{instructorList.total_rows}
+									</p>
 								</div>
 							</div>
 						</div>
@@ -223,7 +258,9 @@ const Overview = () => {
 								<div className="min-w-0 flex-1">
 									<p className="text-base font-medium text-neutral-80">Total Video</p>
 
-									<p className="text-xl font-semibold text-secondary-navy">154</p>
+									<p className="text-xl font-semibold text-secondary-navy">
+										{videoList.total_rows}
+									</p>
 								</div>
 							</div>
 						</div>
@@ -232,7 +269,9 @@ const Overview = () => {
 						<div className="rounded-xl bg-white p-4 shadow-4 lg:col-span-8">
 							<div className="flex flex-col items-center space-x-4 md:flex-row">
 								<div className="mb-4 min-w-0 flex-1 md:mb-0">
-									<p className="text-sm font-medium text-neutral-80 md:text-base">Booking Offline Class</p>
+									<p className="text-sm font-medium text-neutral-80 md:text-base">
+										Booking Offline Class
+									</p>
 									<div className="flex items-center justify-center">
 										<div className="h-72 w-72 text-white">
 											<Doughnut data={dataBookingOffline} options={optionsBookingOffline} />
@@ -240,7 +279,9 @@ const Overview = () => {
 									</div>
 								</div>
 								<div className="min-w-0 flex-1">
-									<p className="text-sm font-medium text-neutral-80 md:text-base">Booking Online Class</p>
+									<p className="text-sm font-medium text-neutral-80 md:text-base">
+										Booking Online Class
+									</p>
 									<div className="flex items-center justify-center">
 										<div className="h-72 w-72 text-white">
 											<Doughnut data={dataBookingOnline} options={optionsBookingOnline} />
@@ -267,7 +308,8 @@ const Overview = () => {
 										<p className="text-base font-medium text-neutral-80">Instructors</p>
 										<Link
 											to="/instructor"
-											className="inline-flex items-center justify-center text-sm font-normal text-primary-violet hover:text-blue-600">
+											className="inline-flex items-center justify-center text-sm font-normal text-primary-violet hover:text-blue-600"
+										>
 											View all
 											<i className="fi fi-rr-angle-small-right ml-2 mt-1"></i>
 										</Link>
@@ -281,11 +323,17 @@ const Overview = () => {
 															<div className="flex items-center space-x-4">
 																<div className="inline-flex flex-shrink-0 items-center justify-center">
 																	<span className="text-sm font-semibold text-white">
-																		<img className="h-8 w-8 rounded-full object-cover" src={item.instructor_image} alt={item.image_name} />
+																		<img
+																			className="h-8 w-8 rounded-full object-cover"
+																			src={item.instructor_image}
+																			alt={item.image_name}
+																		/>
 																	</span>
 																</div>
 																<div className="min-w-0 flex-1">
-																	<p className="text-sm font-medium text-neutral-80">{item.instructor_name}</p>
+																	<p className="text-sm font-medium text-neutral-80">
+																		{item.instructor_name}
+																	</p>
 																</div>
 															</div>
 														</li>
@@ -309,7 +357,8 @@ const Overview = () => {
 										<p className="text-base font-medium text-neutral-80">Members</p>
 										<Link
 											to="/membership"
-											className="inline-flex items-center justify-center text-sm font-normal text-primary-violet hover:text-blue-600">
+											className="inline-flex items-center justify-center text-sm font-normal text-primary-violet hover:text-blue-600"
+										>
 											View all
 											<i className="fi fi-rr-angle-small-right ml-2 mt-1"></i>
 										</Link>
@@ -323,11 +372,17 @@ const Overview = () => {
 															<div className="flex items-center space-x-4">
 																<div className="inline-flex flex-shrink-0 items-center justify-center">
 																	<span className="text-sm font-semibold text-white">
-																		<img className="h-8 w-8 rounded-full object-cover" src={item.image} alt={item.image_name} />
+																		<img
+																			className="h-8 w-8 rounded-full object-cover"
+																			src={item.image}
+																			alt={item.image_name}
+																		/>
 																	</span>
 																</div>
 																<div className="min-w-0 flex-1">
-																	<p className="text-sm font-medium text-neutral-80">{item.full_name}</p>
+																	<p className="text-sm font-medium text-neutral-80">
+																		{item.full_name}
+																	</p>
 																</div>
 															</div>
 														</li>
