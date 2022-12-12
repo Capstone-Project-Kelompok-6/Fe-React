@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useSelector } from "react-redux";
-import { activeTab, addButton, dataNotFound, notActiveTab, searchInputForLgScreen, searchInputForSmScreen } from "../../../utils/globalVariable";
+import {
+	activeTab,
+	addButton,
+	dataNotFound,
+	notActiveTab,
+	searchInputForLgScreen,
+	searchInputForSmScreen,
+} from "../../../utils/globalVariable";
 import ClassesHeader from "./ClassesHeader";
 import OfflineClassesListItem from "./OfflineClassesListItem";
 import ModalCreateOfflineClasses from "./ModalCreateOfflineClasses";
@@ -30,12 +37,18 @@ const OfflineClassesList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			ClassesAPI.serchOfflineClasses(debouncedKeyword.toLowerCase()).then((result) => setOfflineClasses({ status: true, data: result.data.data }));
+			ClassesAPI.serchOfflineClasses(debouncedKeyword.toLowerCase()).then((result) =>
+				setOfflineClasses({ status: true, data: result.data.data })
+			);
 		} else {
 			setTimeout(
 				() =>
 					ClassesAPI.getOfflineClasses().then((result) =>
-						setOfflineClasses({ status: true, data: result.data.data, page: result.data.data.page ? 1 : result.data.data.page })
+						setOfflineClasses({
+							status: true,
+							data: result.data.data,
+							page: result.data.data.page ? 1 : result.data.data.page,
+						})
 					),
 				1300
 			);
@@ -43,11 +56,23 @@ const OfflineClassesList = () => {
 	}, [loading, debouncedKeyword]);
 
 	useEffect(() => {
-		setTimeout(() => WorkoutAPI.getWorkout().then((result) => setWorkout({ status: true, data: result.data.data })), 1300);
+		setTimeout(
+			() =>
+				WorkoutAPI.getWorkout().then((result) =>
+					setWorkout({ status: true, data: result.data.data })
+				),
+			1300
+		);
 	}, [loadingWorkout]);
 
 	const filterItem = (workout_id) => {
-		setTimeout(() => ClassesAPI.filterOfflineClasses(workout_id).then((result) => setOfflineClasses({ status: true, data: result.data.data })), 500);
+		setTimeout(
+			() =>
+				ClassesAPI.filterOfflineClasses(workout_id).then((result) =>
+					setOfflineClasses({ status: true, data: result.data.data })
+				),
+			500
+		);
 		setActive(workout_id);
 	};
 
@@ -87,7 +112,10 @@ const OfflineClassesList = () => {
 								</div>
 							</div>
 							<div className="mt-1 mr-5 md:hidden">
-								<button type="button" className="inset-y-0 flex items-center" onClick={handleSearchTrigger}>
+								<button
+									type="button"
+									className="inset-y-0 flex items-center"
+									onClick={handleSearchTrigger}>
 									<i className="fi fi-rr-search mt-1 text-lg"></i>
 								</button>
 							</div>
@@ -122,7 +150,9 @@ const OfflineClassesList = () => {
 											workout.data.rows?.map((item) => {
 												return (
 													<li className="mr-2" key={item.workout_id}>
-														<button className={active === item.workout_id ? activeTab : notActiveTab} onClick={() => filterItem(item.workout_id)}>
+														<button
+															className={active === item.workout_id ? activeTab : notActiveTab}
+															onClick={() => filterItem(item.workout_id)}>
 															{item.workout}
 														</button>
 													</li>
@@ -204,7 +234,9 @@ const OfflineClassesList = () => {
 					</div>
 				)}
 
-				{modalCreateTrigger && <ModalCreateOfflineClasses handleModalCreateTrigger={handleModalCreateTrigger} />}
+				{modalCreateTrigger && (
+					<ModalCreateOfflineClasses handleModalCreateTrigger={handleModalCreateTrigger} />
+				)}
 			</div>
 		</div>
 	);
