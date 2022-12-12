@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { editVideo, editVideoTitle } from "../../../stores/features/videoSlice";
-import { cancelButton, inputNotError, labelNotError, saveButton } from "../../../utils/globalVariable";
+import {
+	cancelButton,
+	inputNotError,
+	labelNotError,
+	saveButton,
+} from "../../../utils/globalVariable";
+import { PulseLoader } from "react-spinners";
 
 const baseErrors = {
 	video: "",
@@ -15,9 +21,10 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 	const [fileDataURL, setFileDataURL] = useState(null);
 	const [videoTitle, setVideoTitle] = useState("");
 	const [errors, setErrors] = useState(baseErrors);
+	const [load, setLoad] = useState(false);
 
 	const maxTitle = 100;
-	const MAX_FILE_SIZE = 51200;
+	const MAX_FILE_SIZE = 5120;
 
 	const handleUploadVideo = (e) => {
 		e.preventDefault();
@@ -59,6 +66,7 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 
 	const handleUpdate = (e) => {
 		e.preventDefault();
+		setLoad(true);
 		const formData = new FormData(e.target);
 		const title = formData.get("title");
 
@@ -66,23 +74,41 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 			dispatch(editVideoTitle({ video_content_id, title })).then(() => {
 				const video = formData.get("video");
 				if (video.name !== "") {
-					dispatch(editVideo({ video_content_id, video, video_name }));
+					dispatch(editVideo({ video_content_id, video, video_name })).then((result) => {
+						if (result) {
+							handleModalEditTrigger();
+							handleActionDropdown();
+							setTimeout(
+								() =>
+									Swal.fire({
+										icon: "success",
+										title: "Updated",
+										text: "Video successfully updated",
+										showConfirmButton: false,
+										timer: 2000,
+										background: "#ffffff",
+									}),
+								1000
+							);
+							setLoad(false);
+						}
+					});
+				} else {
+					handleModalEditTrigger();
+					handleActionDropdown();
+					setTimeout(
+						() =>
+							Swal.fire({
+								icon: "success",
+								title: "Updated",
+								text: "Video successfully updated",
+								showConfirmButton: false,
+								timer: 2000,
+								background: "#ffffff",
+							}),
+						1000
+					);
 				}
-
-				handleModalEditTrigger();
-				handleActionDropdown();
-				setTimeout(
-					() =>
-						Swal.fire({
-							icon: "success",
-							title: "Updated",
-							text: "Video successfully updated",
-							showConfirmButton: false,
-							timer: 2000,
-							background: "#ffffff",
-						}),
-					1000
-				);
 			});
 		} else {
 			setTimeout(
@@ -95,6 +121,7 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 					}),
 				1000
 			);
+			setLoad(false);
 		}
 	};
 
@@ -113,7 +140,9 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 					<div className="relative h-full w-full max-w-sm sm:max-w-sm md:h-auto md:max-w-md lg:max-w-lg xl:max-w-xl">
 						<form onSubmit={handleUpdate} className="rounded-20 bg-white shadow">
 							<div className="flex items-center justify-between rounded-t p-4">
-								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">Edit Video</h3>
+								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">
+									Edit Video
+								</h3>
 							</div>
 							<div className="space-y-6 p-6">
 								<div>
@@ -132,7 +161,9 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 										/>
 
 										<label htmlFor="title" className={labelNotError}>
-											<span className="block after:ml-1 after:text-red-500 after:content-['*']">Title</span>
+											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+												Title
+											</span>
 										</label>
 									</div>
 									{title ? (
@@ -177,9 +208,13 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 										onChange={handleUploadVideo}
 									/>
 									<div className="mb-2 flex items-center space-x-4">
-										{errors.video && <span className="text-sm text-secondary-red">{errors.video}</span>}
+										{errors.video && (
+											<span className="text-sm text-secondary-red">{errors.video}</span>
+										)}
 										<div className="min-w-0 flex-1">
-											<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">Max size: 50MB</p>
+											<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">
+												Max size: 5MB
+											</p>
 										</div>
 									</div>
 								</div>
@@ -188,9 +223,15 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 								<button type="button" className={cancelButton} onClick={handleModalEditTrigger}>
 									Cancel
 								</button>
-								<button type="submit" className={saveButton}>
-									Save Changes
-								</button>
+								{load ? (
+									<button className={saveButton}>
+										<PulseLoader size={5} color={"#ffffff"} />
+									</button>
+								) : (
+									<button type="submit" className={saveButton}>
+										Save Changes
+									</button>
+								)}
 							</div>
 						</form>
 					</div>

@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { PulseLoader } from "react-spinners";
 import Swal from "sweetalert2";
 import { createVideo, createVideoTitle } from "../../../stores/features/videoSlice";
-import { cancelButton, inputNotError, labelNotError, saveButton } from "../../../utils/globalVariable";
+import {
+	cancelButton,
+	inputNotError,
+	labelNotError,
+	saveButton,
+} from "../../../utils/globalVariable";
 
 const baseErrors = {
 	video: "",
@@ -14,9 +20,10 @@ const ModalCreateVideo = ({ handleModalCreateTrigger }) => {
 	const [errors, setErrors] = useState(baseErrors);
 	const [title, setTitle] = useState("");
 	const dispatch = useDispatch();
+	const [load, setLoad] = useState(false);
 
 	const maxTitle = 100;
-	const MAX_FILE_SIZE = 51200;
+	const MAX_FILE_SIZE = 5120;
 
 	const handleUploadVideo = (e) => {
 		e.preventDefault();
@@ -58,32 +65,47 @@ const ModalCreateVideo = ({ handleModalCreateTrigger }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		setLoad(true);
 		const formData = new FormData(e.target);
 		const title = formData.get("title");
 
 		if (!errors.video) {
-			const response = dispatch(createVideoTitle({ title })).then((result) => {
+			dispatch(createVideoTitle({ title })).then((result) => {
 				const video_content_id = result.payload.video_content_id;
 				const video = formData.get("video");
 				const video_name = result.payload.video_name;
-				dispatch(createVideo({ video_content_id, video, video_name }));
+				dispatch(createVideo({ video_content_id, video, video_name })).then((res) => {
+					if (res) {
+						handleModalCreateTrigger();
+						setTimeout(
+							() =>
+								Swal.fire({
+									icon: "success",
+									title: "Saved",
+									text: "Video successfully saved",
+									showConfirmButton: false,
+									timer: 2000,
+									background: "#ffffff",
+								}),
+							1000
+						);
+					} else {
+						handleModalCreateTrigger();
+						setTimeout(
+							() =>
+								Swal.fire({
+									icon: "success",
+									title: "Saved",
+									text: "Video successfully saved",
+									showConfirmButton: false,
+									timer: 2000,
+									background: "#ffffff",
+								}),
+							1000
+						);
+					}
+				});
 			});
-
-			if (response) {
-				handleModalCreateTrigger();
-				setTimeout(
-					() =>
-						Swal.fire({
-							icon: "success",
-							title: "Saved",
-							text: "Video successfully saved",
-							showConfirmButton: false,
-							timer: 2000,
-							background: "#ffffff",
-						}),
-					1000
-				);
-			}
 		} else {
 			setTimeout(
 				() =>
@@ -95,6 +117,7 @@ const ModalCreateVideo = ({ handleModalCreateTrigger }) => {
 					}),
 				1000
 			);
+			setLoad(false);
 		}
 	};
 
@@ -113,7 +136,9 @@ const ModalCreateVideo = ({ handleModalCreateTrigger }) => {
 					<div className="relative h-full w-full max-w-sm sm:max-w-sm md:h-auto md:max-w-md lg:max-w-lg xl:max-w-xl">
 						<form onSubmit={handleSubmit} className="rounded-20 bg-white shadow">
 							<div className="flex items-center justify-between rounded-t p-4">
-								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">Add New Video</h3>
+								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">
+									Add New Video
+								</h3>
 							</div>
 							<div className="space-y-6 p-6">
 								<div>
@@ -131,7 +156,9 @@ const ModalCreateVideo = ({ handleModalCreateTrigger }) => {
 										/>
 
 										<label htmlFor="title" className={labelNotError}>
-											<span className="block after:ml-1 after:text-red-500 after:content-['*']">Title</span>
+											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+												Title
+											</span>
 										</label>
 									</div>
 									<h1 className="mt-2 text-end text-xs font-normal text-dark-4 md:text-sm">
@@ -168,9 +195,13 @@ const ModalCreateVideo = ({ handleModalCreateTrigger }) => {
 										required
 									/>
 									<div className="mb-2 flex items-center space-x-4">
-										{errors.video && <span className="text-sm text-secondary-red">{errors.video}</span>}
+										{errors.video && (
+											<span className="text-sm text-secondary-red">{errors.video}</span>
+										)}
 										<div className="min-w-0 flex-1">
-											<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">Max size: 50MB</p>
+											<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">
+												Max size: 5MB
+											</p>
 										</div>
 									</div>
 								</div>
@@ -179,9 +210,15 @@ const ModalCreateVideo = ({ handleModalCreateTrigger }) => {
 								<button type="button" className={cancelButton} onClick={handleModalCreateTrigger}>
 									Cancel
 								</button>
-								<button type="submit" className={saveButton}>
-									Save
-								</button>
+								{load ? (
+									<button className={saveButton}>
+										<PulseLoader size={5} color={"#ffffff"} />
+									</button>
+								) : (
+									<button type="submit" className={saveButton}>
+										Save
+									</button>
+								)}
 							</div>
 						</form>
 					</div>
