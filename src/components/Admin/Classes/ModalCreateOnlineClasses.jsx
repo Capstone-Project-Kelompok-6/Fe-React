@@ -2,9 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import Swal from "sweetalert2";
-import { createOnlineClasses, createOnlineVideoClasses } from "../../../stores/features/onlineClassesSlice";
+import { PulseLoader } from "react-spinners";
+import {
+	createOnlineClasses,
+	createOnlineVideoClasses,
+} from "../../../stores/features/onlineClassesSlice";
 import { fetchWorkoutList } from "../../../stores/features/workoutSlice";
-import { cancelButton, inputNotError, labelNotError, saveButton, select } from "../../../utils/globalVariable";
+import {
+	cancelButton,
+	inputNotError,
+	labelNotError,
+	saveButton,
+	select,
+} from "../../../utils/globalVariable";
 
 const baseErrors = {
 	video: "",
@@ -17,6 +27,7 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 	const [title, setTitle] = useState("");
 	const workoutList = useSelector((state) => state.workout.data);
 	const dispatch = useDispatch();
+	const [load, setLoad] = useState(false);
 
 	const maxTitle = 100;
 	const MAX_FILE_SIZE = 5120;
@@ -65,6 +76,8 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		setLoad(true);
+
 		const formData = new FormData(e.target);
 		const video_title = formData.get("video_title");
 		const workout_id = formData.get("workout_id");
@@ -73,27 +86,45 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 		console.log({ video_title, workout_id, price, description });
 
 		if (!errors.video) {
-			const response = dispatch(createOnlineClasses({ video_title, workout_id, price, description })).then((result) => {
-				const class_id = result.payload.class_id;
-				const video = formData.get("video");
-				dispatch(createOnlineVideoClasses({ class_id, video }));
-			});
-
-			if (response) {
-				handleModalCreateTrigger();
-				setTimeout(
-					() =>
-						Swal.fire({
-							icon: "success",
-							title: "Saved",
-							text: "Online classes data successfully saved",
-							showConfirmButton: false,
-							timer: 2000,
-							background: "#ffffff",
-						}),
-					1000
-				);
-			}
+			dispatch(createOnlineClasses({ video_title, workout_id, price, description })).then(
+				(result) => {
+					const class_id = result.payload.class_id;
+					const video = formData.get("video");
+					dispatch(createOnlineVideoClasses({ class_id, video })).then((res) => {
+						if (res) {
+							handleModalCreateTrigger();
+							setTimeout(
+								() =>
+									Swal.fire({
+										icon: "success",
+										title: "Saved",
+										text: "Online classes data successfully saved",
+										showConfirmButton: false,
+										timer: 2000,
+										background: "#ffffff",
+									}),
+								1000
+							);
+							setLoad(false);
+						} else {
+							handleModalCreateTrigger();
+							setTimeout(
+								() =>
+									Swal.fire({
+										icon: "success",
+										title: "Saved",
+										text: "Online classes data successfully saved",
+										showConfirmButton: false,
+										timer: 2000,
+										background: "#ffffff",
+									}),
+								1000
+							);
+							setLoad(false);
+						}
+					});
+				}
+			);
 		} else {
 			setTimeout(
 				() =>
@@ -105,6 +136,7 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 					}),
 				1000
 			);
+			setLoad(false);
 		}
 	};
 
@@ -123,7 +155,9 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 					<div className="relative h-full w-full max-w-sm sm:max-w-sm md:h-auto md:max-w-md lg:max-w-lg xl:max-w-xl">
 						<form onSubmit={handleSubmit} className="rounded-20 bg-white shadow">
 							<div className="flex items-center justify-between rounded-t p-4">
-								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">Add New Online Classes</h3>
+								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">
+									Add New Online Classes
+								</h3>
 							</div>
 							<div className="h-[65vh] overflow-y-auto p-6">
 								<div className="h-[90&] space-y-6">
@@ -142,7 +176,9 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 											/>
 
 											<label htmlFor="video_title" className={labelNotError}>
-												<span className="block after:ml-1 after:text-red-500 after:content-['*']">Video title</span>
+												<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+													Video title
+												</span>
 											</label>
 										</div>
 										<h1 className="mt-2 text-end text-xs font-normal text-dark-4 md:text-sm">
@@ -194,22 +230,45 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 											required
 										/>
 										<div className="mb-2 flex items-center space-x-4">
-											{errors.video && <span className="text-sm text-secondary-red">{errors.video}</span>}
+											{errors.video && (
+												<span className="text-sm text-secondary-red">{errors.video}</span>
+											)}
 											<div className="min-w-0 flex-1">
-												<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">Max size: 5MB</p>
+												<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">
+													Max size: 5MB
+												</p>
 											</div>
 										</div>
 									</div>
 									<div className="relative">
-										<input type="number" min="1" id="price" name="price" className={inputNotError} placeholder=" " required />
+										<input
+											type="number"
+											min="1"
+											id="price"
+											name="price"
+											className={inputNotError}
+											placeholder=" "
+											required
+										/>
 										<label htmlFor="price" className={labelNotError}>
-											<span className="block after:ml-1 after:text-red-500 after:content-['*']">Price</span>
+											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+												Price
+											</span>
 										</label>
 									</div>
 									<div className="relative">
-										<textarea id="description" name="description" rows="5" className={inputNotError} placeholder=" " required></textarea>
+										<textarea
+											id="description"
+											name="description"
+											rows="5"
+											className={inputNotError}
+											placeholder=" "
+											required></textarea>
 										<label htmlFor="description" className={labelNotError}>
-											<span className="block after:ml-1 after:text-red-500 after:content-['*']"> Information</span>
+											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+												{" "}
+												Information
+											</span>
 										</label>
 									</div>
 								</div>
@@ -218,9 +277,15 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 								<button type="button" className={cancelButton} onClick={handleModalCreateTrigger}>
 									Cancel
 								</button>
-								<button type="submit" className={saveButton}>
-									Save
-								</button>
+								{load ? (
+									<button className={saveButton}>
+										<PulseLoader size={5} color={"#ffffff"} />
+									</button>
+								) : (
+									<button type="submit" className={saveButton}>
+										Save
+									</button>
+								)}
 							</div>
 						</form>
 					</div>

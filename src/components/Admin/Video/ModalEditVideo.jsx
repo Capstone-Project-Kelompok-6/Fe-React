@@ -108,6 +108,7 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 							}),
 						1000
 					);
+					setLoad(false);
 				}
 			});
 		} else {

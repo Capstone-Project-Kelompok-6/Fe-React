@@ -89,6 +89,7 @@ const ModalCreateVideo = ({ handleModalCreateTrigger }) => {
 								}),
 							1000
 						);
+						setLoad(false);
 					} else {
 						handleModalCreateTrigger();
 						setTimeout(
@@ -103,6 +104,7 @@ const ModalCreateVideo = ({ handleModalCreateTrigger }) => {
 								}),
 							1000
 						);
+						setLoad(false);
 					}
 				});
 			});
