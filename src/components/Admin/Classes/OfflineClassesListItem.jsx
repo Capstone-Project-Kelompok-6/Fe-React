@@ -3,11 +3,24 @@ import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { deleteOfflineClasses } from "../../../stores/features/offlineClassesSlice";
 import { formatPrice } from "../../../utils/formatPrice";
-import { actionDropdownDelete, actionDropdownEdit, cancelButtonSwal, confirmButtonSwal } from "../../../utils/globalVariable";
+import {
+	actionDropdownDelete,
+	actionDropdownEdit,
+	cancelButtonSwal,
+	confirmButtonSwal,
+} from "../../../utils/globalVariable";
 import ModalEditOfflineClasses from "./ModalEditOfflineClasses";
 
 const OfflineClassesListItem = ({ data }) => {
-	const { class_id, instructor_name, workout, instructor_image, workout_image, class_dates, price } = data;
+	const {
+		class_id,
+		instructor_name,
+		workout,
+		instructor_image,
+		workout_image,
+		class_dates,
+		price,
+	} = data;
 	const dispatch = useDispatch();
 	const [modalEditTrigger, setModalEditTrigger] = useState(false);
 	const [actionDropdown, setActionDropdown] = useState(false);
@@ -41,7 +54,7 @@ const OfflineClassesListItem = ({ data }) => {
 								Swal.fire({
 									icon: "success",
 									title: "Deleted",
-									text: "Offline classes data successfully deleted",
+									text: "Offline classes data has been deleted",
 									showConfirmButton: false,
 									timer: 2000,
 									background: "#ffffff",
@@ -105,13 +118,19 @@ const OfflineClassesListItem = ({ data }) => {
 							<div className="absolute top-0 right-0 z-10 mr-5 mt-8 w-32 rounded-xl bg-white shadow-4 transition duration-300">
 								<ul className="list-reset">
 									<li>
-										<button type="button" className={`rounded-t-xl hover:rounded-t-xl ${actionDropdownEdit}`} onClick={handleModalEditTrigger}>
+										<button
+											type="button"
+											className={`rounded-t-xl hover:rounded-t-xl ${actionDropdownEdit}`}
+											onClick={handleModalEditTrigger}>
 											<i className="fi fi-sr-pencil mr-2 -ml-1 mt-1 text-sm text-secondary-yellow"></i>
 											Edit
 										</button>
 									</li>
 									<li>
-										<button type="button" className={`rounded-b-xl hover:rounded-b-xl ${actionDropdownDelete}`} onClick={handleDelete}>
+										<button
+											type="button"
+											className={`rounded-b-xl hover:rounded-b-xl ${actionDropdownDelete}`}
+											onClick={handleDelete}>
 											<i className="fi fi-sr-trash mr-2 -ml-1 mt-1 text-sm text-secondary-red"></i>
 											Delete
 										</button>
@@ -128,7 +147,9 @@ const OfflineClassesListItem = ({ data }) => {
 					<div className="min-w-0 flex-1">
 						<p className="truncate text-base font-medium text-neutral-100-2">{workout}</p>
 					</div>
-					<div className="inline-flex items-center text-sm font-semibold text-neutral-100-2">{formatPrice(price)}</div>
+					<div className="inline-flex items-center text-sm font-semibold text-neutral-100-2">
+						{formatPrice(price)}
+					</div>
 				</div>
 
 				<div className="relative mb-28 space-x-2 text-sm">
@@ -151,15 +172,25 @@ const OfflineClassesListItem = ({ data }) => {
 					</div>
 				</div>
 				<div className="flex items-center space-x-3">
-					<img className="h-8 w-8 rounded-full object-cover object-center" src={instructor_image} alt="image instructor" />
+					<img
+						className="h-8 w-8 rounded-full object-cover object-center"
+						src={instructor_image}
+						alt="image instructor"
+					/>
 
 					<div className="min-w-0 flex-1">
-						<p className="text-base font-medium text-neutral-100-2">{truncate(instructor_name, 20)}</p>
+						<p className="text-base font-medium text-neutral-100-2">
+							{truncate(instructor_name, 20)}
+						</p>
 					</div>
 				</div>
 			</div>
 			{modalEditTrigger && (
-				<ModalEditOfflineClasses handleModalEditTrigger={handleModalEditTrigger} update={data} handleActionDropdown={handleActionDropdown} />
+				<ModalEditOfflineClasses
+					handleModalEditTrigger={handleModalEditTrigger}
+					update={data}
+					handleActionDropdown={handleActionDropdown}
+				/>
 			)}
 		</div>
 	);

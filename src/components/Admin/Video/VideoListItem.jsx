@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { deleteVideo } from "../../../stores/features/videoSlice";
-import { actionDropdownDelete, actionDropdownEdit, cancelButtonSwal, confirmButtonSwal } from "../../../utils/globalVariable";
+import {
+	actionDropdownDelete,
+	actionDropdownEdit,
+	cancelButtonSwal,
+	confirmButtonSwal,
+} from "../../../utils/globalVariable";
 import ModalEditVideo from "./ModalEditVideo";
 
 const VideoListItem = ({ data }) => {
@@ -115,13 +120,19 @@ const VideoListItem = ({ data }) => {
 								<div className="absolute top-0 right-0 z-10 mr-5 mt-8 w-32 rounded-xl bg-white shadow-4 transition duration-300">
 									<ul className="list-reset">
 										<li>
-											<button type="button" className={`rounded-t-xl hover:rounded-t-xl ${actionDropdownEdit}`} onClick={handleModalEditTrigger}>
+											<button
+												type="button"
+												className={`rounded-t-xl hover:rounded-t-xl ${actionDropdownEdit}`}
+												onClick={handleModalEditTrigger}>
 												<i className="fi fi-sr-pencil mr-2 -ml-1 mt-1 text-sm text-secondary-yellow"></i>
 												Edit
 											</button>
 										</li>
 										<li>
-											<button type="button" className={`rounded-b-xl hover:rounded-b-xl ${actionDropdownDelete}`} onClick={handleDelete}>
+											<button
+												type="button"
+												className={`rounded-b-xl hover:rounded-b-xl ${actionDropdownDelete}`}
+												onClick={handleDelete}>
 												<i className="fi fi-sr-trash mr-2 -ml-1 mt-1 text-sm text-secondary-red"></i>
 												Delete
 											</button>
@@ -137,7 +148,9 @@ const VideoListItem = ({ data }) => {
 					<div className="mb-1 flex items-center">
 						<div className="min-w-0 flex-1">
 							<div className="group relative">
-								<h5 className="text-sm font-medium tracking-tight text-neutral-100-2 md:text-base">{truncate(title, 30)}</h5>
+								<h5 className="text-sm font-medium tracking-tight text-neutral-100-2 md:text-base">
+									{truncate(title, 30)}
+								</h5>
 
 								<div className="absolute top-0 left-0 mt-5 mr-1 hidden flex-col items-center group-hover:flex md:-top-4 md:mt-10">
 									<span className="whitespace-no-wrap relative z-10 rounded-lg bg-neutral-100-2 p-2 text-[10px] leading-none text-white shadow-4">
@@ -149,7 +162,11 @@ const VideoListItem = ({ data }) => {
 					</div>
 				</div>
 				{modalEditTrigger && (
-					<ModalEditVideo handleModalEditTrigger={handleModalEditTrigger} update={data} handleActionDropdown={handleActionDrowpdon} />
+					<ModalEditVideo
+						handleModalEditTrigger={handleModalEditTrigger}
+						update={data}
+						handleActionDropdown={handleActionDrowpdon}
+					/>
 				)}
 			</div>
 		</div>

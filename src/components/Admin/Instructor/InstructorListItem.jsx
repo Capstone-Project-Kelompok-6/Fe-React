@@ -55,12 +55,12 @@ const InstructorListItem = ({ data }) => {
 								Swal.fire({
 									icon: "success",
 									title: "Deleted",
-									text: "Instructor data successfully deleted",
+									text: "Instructor data has been deleted",
 									showConfirmButton: false,
 									timer: 2000,
 									background: "#ffffff",
 								}),
-							1000,
+							1000
 						);
 					} catch (error) {
 						setTimeout(
@@ -73,7 +73,7 @@ const InstructorListItem = ({ data }) => {
 									timer: 2000,
 									background: "#ffffff",
 								}),
-							1000,
+							1000
 						);
 					}
 				}
@@ -87,9 +87,7 @@ const InstructorListItem = ({ data }) => {
 	return (
 		<tbody>
 			<tr className="whitespace-nowrap border-x border-b border-neutral-100-2 bg-white hover:bg-gray-50">
-				<td className="py-3 px-6 font-normal text-neutral-80">
-					{no}
-				</td>
+				<td className="py-3 px-6 font-normal text-neutral-80">{no}</td>
 				<td className="relative flex items-center py-3 px-6">
 					<img
 						className="absolute inset-y-3 h-10 w-10 rounded-full object-cover object-center"
@@ -97,44 +95,25 @@ const InstructorListItem = ({ data }) => {
 						alt={image_name}
 					/>
 					<div className="pl-12">
-						<div className="text-sm font-normal text-neutral-80">
-							{instructor_name}
-						</div>
-						<div className="text-xs font-normal text-neutral-60">
-							{email}
-						</div>
+						<div className="text-sm font-normal text-neutral-80">{instructor_name}</div>
+						<div className="text-xs font-normal text-neutral-60">{email}</div>
 					</div>
 				</td>
-				<td className="py-3 px-6 text-xs font-normal text-neutral-80 md:text-sm">
-					{phone_number}
-				</td>
+				<td className="py-3 px-6 text-xs font-normal text-neutral-80 md:text-sm">{phone_number}</td>
 				<td className="py-3 px-6 text-xs font-normal text-neutral-80 md:text-sm">
 					{formatLongDate(updated_at)}
 				</td>
 				<td className="py-3 px-6">
 					<div className="flex items-center space-x-4 text-lg">
-						<button
-							type="button"
-							className={actionEditButton}
-							onClick={handleModalEditTrigger}
-						>
+						<button type="button" className={actionEditButton} onClick={handleModalEditTrigger}>
 							<i className="fi fi-sr-pencil text-sm"></i>
 						</button>
-						<button
-							type="button"
-							className={actionDeleteButton}
-							onClick={handleDelete}
-						>
+						<button type="button" className={actionDeleteButton} onClick={handleDelete}>
 							<i className="fi fi-sr-trash text-sm"></i>
 						</button>
 					</div>
 					{modalEditTrigger && (
-						<ModalEditInstructor
-							handleModalEditTrigger={
-								handleModalEditTrigger
-							}
-							update={data}
-						/>
+						<ModalEditInstructor handleModalEditTrigger={handleModalEditTrigger} update={data} />
 					)}
 				</td>
 			</tr>
