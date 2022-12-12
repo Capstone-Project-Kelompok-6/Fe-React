@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { deleteArticle } from "../../../stores/features/articleSlice";
-import { actionDropdownDelete, actionDropdownEdit, cancelButtonSwal, confirmButtonSwal } from "../../../utils/globalVariable";
+import {
+	actionDropdownDelete,
+	actionDropdownEdit,
+	cancelButtonSwal,
+	confirmButtonSwal,
+} from "../../../utils/globalVariable";
 import ModalEditArticle from "./ModalEditArticle";
 
 const ArticleListItem = ({ data }) => {
@@ -41,7 +46,7 @@ const ArticleListItem = ({ data }) => {
 								Swal.fire({
 									icon: "success",
 									title: "Deleted",
-									text: "Article data successfully deleted",
+									text: "Article data has been deleted",
 									showConfirmButton: false,
 									timer: 2000,
 									background: "#ffffff",
@@ -105,13 +110,19 @@ const ArticleListItem = ({ data }) => {
 							<div className="absolute top-0 right-0 z-10 mr-5 mt-8 w-32 rounded-xl bg-white shadow-4 transition duration-300">
 								<ul className="list-reset">
 									<li>
-										<button type="button" className={`rounded-t-xl hover:rounded-t-xl ${actionDropdownEdit}`} onClick={handleModalEditTrigger}>
+										<button
+											type="button"
+											className={`rounded-t-xl hover:rounded-t-xl ${actionDropdownEdit}`}
+											onClick={handleModalEditTrigger}>
 											<i className="fi fi-sr-pencil mr-2 -ml-1 mt-1 text-sm text-secondary-yellow"></i>
 											Edit
 										</button>
 									</li>
 									<li>
-										<button type="button" className={`rounded-b-xl hover:rounded-b-xl ${actionDropdownDelete}`} onClick={handleDelete}>
+										<button
+											type="button"
+											className={`rounded-b-xl hover:rounded-b-xl ${actionDropdownDelete}`}
+											onClick={handleDelete}>
 											<i className="fi fi-sr-trash mr-2 -ml-1 mt-1 text-sm text-secondary-red"></i>
 											Delete
 										</button>
@@ -129,8 +140,8 @@ const ArticleListItem = ({ data }) => {
 						<div className="group relative">
 							<p className="text-base font-semibold text-neutral-100-2">{truncate(title, 30)}</p>
 
-							<div className="absolute top-0 right-0 mt-5 mr-1 hidden flex-col items-center group-hover:flex md:mt-10">
-								<span className="whitespace-no-wrap relative z-10 rounded-lg bg-neutral-100-2 p-2 text-xs leading-none text-white shadow-4">
+							<div className="absolute top-0 left-0 mt-5 mr-1 hidden flex-col items-center group-hover:flex md:-top-4 md:mt-10">
+								<span className="whitespace-no-wrap relative z-10 rounded-lg bg-neutral-100-2 p-2 text-[10px] leading-none text-white shadow-4">
 									{title}
 								</span>
 							</div>
@@ -138,11 +149,17 @@ const ArticleListItem = ({ data }) => {
 					</div>
 				</div>
 				<div className="min-w-0 flex-1">
-					<p className="whitespace-pre-line break-all text-sm font-normal text-neutral-80">{truncate(description, 100)}</p>
+					<p className="whitespace-pre-line break-all text-sm font-normal text-neutral-80">
+						{truncate(description, 100)}
+					</p>
 				</div>
 			</div>
 			{modalEditTrigger && (
-				<ModalEditArticle handleModalEditTrigger={handleModalEditTrigger} update={data} handleActionDropdown={handleActionDropdown} />
+				<ModalEditArticle
+					handleModalEditTrigger={handleModalEditTrigger}
+					update={data}
+					handleActionDropdown={handleActionDropdown}
+				/>
 			)}
 		</div>
 	);

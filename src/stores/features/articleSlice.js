@@ -13,7 +13,7 @@ export const fetchArticle = createAsyncThunk("fetch/article", async () => {
 		const response = await ArticleAPI.getArticle();
 		return response.data.data;
 	} catch (error) {
-		console.log(error.response);
+		throw Error(error);
 	}
 });
 
@@ -31,7 +31,7 @@ export const editArticle = createAsyncThunk("edit/article", async (data) => {
 		const response = await ArticleAPI.editArticle(data);
 		return response.data.data;
 	} catch (error) {
-		console.log(error.response);
+		throw Error(error);
 	}
 });
 
@@ -40,7 +40,7 @@ export const deleteArticle = createAsyncThunk("delete/article", async (article_i
 		const response = await ArticleAPI.deleteArticle(article_id);
 		return response.data.data;
 	} catch (error) {
-		console.log(error.response);
+		throw Error(error);
 	}
 });
 

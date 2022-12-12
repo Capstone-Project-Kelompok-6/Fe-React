@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { editArticle } from "../../../stores/features/articleSlice";
-import { cancelButton, inputNotError, labelNotError, saveButton } from "../../../utils/globalVariable";
+import {
+	cancelButton,
+	inputNotError,
+	labelNotError,
+	saveButton,
+} from "../../../utils/globalVariable";
 
 const baseErrors = {
 	image: "",
@@ -15,7 +20,7 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 	const [errors, setErrors] = useState(baseErrors);
 	const dispatch = useDispatch();
 
-	const MAX_FILE_SIZE = 1024;
+	const MAX_FILE_SIZE = 3072;
 
 	const handleUploadImage = (e) => {
 		e.preventDefault();
@@ -68,8 +73,8 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 
 		if (!errors.image) {
 			try {
-				dispatch(editArticle({ article_id, title, image, description })).then((res) => {
-					if (res) {
+				dispatch(editArticle({ article_id, title, image, image_name, description })).then((res) => {
+					if (!res.error) {
 						setTimeout(
 							() =>
 								Swal.fire({
@@ -84,6 +89,8 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 						);
 						handleModalEditTrigger();
 						handleActionDropdown();
+					} else {
+						Swal.fire("Sorry", "One article just have one image", "info");
 					}
 				});
 			} catch (error) {
@@ -112,15 +119,27 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 					<div className="relative h-full w-full max-w-sm sm:max-w-sm md:h-auto md:max-w-md lg:max-w-lg xl:max-w-xl">
 						<form onSubmit={handleUpdate} className="rounded-xl bg-white shadow">
 							<div className="flex items-center justify-between rounded-t p-4">
-								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">Edit Article</h3>
+								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">
+									Edit Article
+								</h3>
 							</div>
 							<div className="h-[65vh] overflow-y-auto p-6">
 								<div className="h-[90&] space-y-6">
 									<div className="relative">
 										<div className="relative">
-											<input type="text" id="title" name="title" className={inputNotError} placeholder=" " required defaultValue={title} />
+											<input
+												type="text"
+												id="title"
+												name="title"
+												className={inputNotError}
+												placeholder=" "
+												required
+												defaultValue={title}
+											/>
 											<label htmlFor="workout" className={labelNotError}>
-												<span className="block after:ml-1 after:text-red-500 after:content-['*']">Title</span>
+												<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+													Title
+												</span>
 											</label>
 										</div>
 									</div>
@@ -161,7 +180,9 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 												</span>
 											)}
 											<div className="min-w-0 flex-1">
-												<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">Max size: 1MB</p>
+												<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">
+													Max size: 3MB
+												</p>
 											</div>
 										</div>
 									</div>
@@ -176,7 +197,9 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 											required
 											defaultValue={description}></textarea>
 										<label htmlFor="description" className={labelNotError}>
-											<span className="block after:ml-1 after:text-red-500 after:content-['*']">Description</span>
+											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+												Description
+											</span>
 										</label>
 									</div>
 								</div>

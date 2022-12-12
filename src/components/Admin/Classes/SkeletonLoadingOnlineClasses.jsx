@@ -26,11 +26,11 @@ const SkeletonLoadingOnlineClasses = () => {
 							<i className="fi fi-rr-film"></i>
 						</span>
 					</div>
-					<div className="flex-1 animate-pulse rounded-xl bg-gray-300 py-2">
+					<div className="w-20 animate-pulse rounded-xl bg-gray-300 py-2">
 						<p className="font-medium tracking-tight text-neutral-100-2"></p>
 					</div>
 				</div>
-				<div className="mb-4 animate-pulse rounded-xl bg-gray-300 py-2">
+				<div className="mb-4 w-24 animate-pulse rounded-xl bg-gray-300 py-2">
 					<h5 className="text-sm font-medium tracking-tight text-neutral-100-2"></h5>
 				</div>
 				<div className="flex items-center space-x-3">

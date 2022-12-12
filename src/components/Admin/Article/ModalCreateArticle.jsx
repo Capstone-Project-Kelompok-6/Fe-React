@@ -2,7 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { createArticle } from "../../../stores/features/articleSlice";
-import { cancelButton, inputNotError, labelNotError, saveButton } from "../../../utils/globalVariable";
+import {
+	cancelButton,
+	inputNotError,
+	labelNotError,
+	saveButton,
+} from "../../../utils/globalVariable";
 
 const baseErrors = {
 	image: "",
@@ -15,7 +20,7 @@ const ModalCreateArticle = ({ handleModalCreateTrigger }) => {
 	const imageWorkout = useRef(null);
 	const dispatch = useDispatch();
 
-	const MAX_FILE_SIZE = 1024;
+	const MAX_FILE_SIZE = 3072;
 
 	const handleUploadImage = (e) => {
 		e.preventDefault();
@@ -118,15 +123,26 @@ const ModalCreateArticle = ({ handleModalCreateTrigger }) => {
 					<div className="relative h-full w-full max-w-sm sm:max-w-sm md:h-auto md:max-w-md lg:max-w-lg xl:max-w-xl">
 						<form onSubmit={handleSubmit} className="rounded-xl bg-white shadow">
 							<div className="flex items-center justify-between rounded-t p-4">
-								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">Add New Article</h3>
+								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">
+									Add New Article
+								</h3>
 							</div>
 							<div className="h-[65vh] overflow-y-auto p-6">
 								<div className="h-[90&] space-y-6">
 									<div className="relative">
 										<div className="relative">
-											<input type="text" id="title" name="title" className={inputNotError} placeholder=" " required />
+											<input
+												type="text"
+												id="title"
+												name="title"
+												className={inputNotError}
+												placeholder=" "
+												required
+											/>
 											<label htmlFor="workout" className={labelNotError}>
-												<span className="block after:ml-1 after:text-red-500 after:content-['*']">Title</span>
+												<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+													Title
+												</span>
 											</label>
 										</div>
 									</div>
@@ -173,14 +189,25 @@ const ModalCreateArticle = ({ handleModalCreateTrigger }) => {
 												</span>
 											)}
 											<div className="min-w-0 flex-1">
-												<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">Max size: 1MB</p>
+												<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">
+													Max size: 3MB
+												</p>
 											</div>
 										</div>
 									</div>
 									<div className="relative">
-										<textarea id="description" name="description" type="text" rows="8" className={inputNotError} placeholder=" " required></textarea>
+										<textarea
+											id="description"
+											name="description"
+											type="text"
+											rows="8"
+											className={inputNotError}
+											placeholder=" "
+											required></textarea>
 										<label htmlFor="description" className={labelNotError}>
-											<span className="block after:ml-1 after:text-red-500 after:content-['*']">Description</span>
+											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+												Description
+											</span>
 										</label>
 									</div>
 								</div>

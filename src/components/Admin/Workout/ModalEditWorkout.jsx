@@ -2,7 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { editWorkout } from "../../../stores/features/workoutSlice";
-import { cancelButton, inputError, inputNotError, labelError, labelNotError, regexNameValidation, saveButton } from "../../../utils/globalVariable";
+import {
+	cancelButton,
+	inputError,
+	inputNotError,
+	labelError,
+	labelNotError,
+	regexNameValidation,
+	saveButton,
+} from "../../../utils/globalVariable";
 
 const baseValues = {
 	workout: "",
@@ -22,7 +30,7 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 	const [errors, setErrors] = useState(baseErrors);
 	const [values, setValues] = useState(baseValues);
 
-	const MAX_FILE_SIZE = 1024;
+	const MAX_FILE_SIZE = 3072;
 
 	const handleUpdate = (e) => {
 		e.preventDefault();
@@ -154,7 +162,9 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 					<div className="relative h-full w-full max-w-sm sm:max-w-sm md:h-auto md:max-w-md lg:max-w-lg xl:max-w-xl">
 						<form onSubmit={handleUpdate} className="rounded-xl bg-white shadow">
 							<div className="flex items-center justify-between rounded-t p-4">
-								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">Edit Workout</h3>
+								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">
+									Edit Workout
+								</h3>
 							</div>
 							<div className="h-[65vh] overflow-y-auto p-6">
 								<div className="h-[90&] space-y-6">
@@ -170,8 +180,12 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 												onChange={handleChange}
 												required
 											/>
-											<label htmlFor="workout" className={errors.workout ? labelError : labelNotError}>
-												<span className="block after:ml-1 after:text-red-500 after:content-['*']">Workout Name</span>
+											<label
+												htmlFor="workout"
+												className={errors.workout ? labelError : labelNotError}>
+												<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+													Workout Name
+												</span>
 											</label>
 										</div>
 										<div className="mt-1">
@@ -219,7 +233,9 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 												</span>
 											)}
 											<div className="min-w-0 flex-1">
-												<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">Max size: 1MB</p>
+												<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">
+													Max size: 3MB
+												</p>
 											</div>
 										</div>
 									</div>
@@ -233,7 +249,9 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 											className={inputNotError}
 											placeholder=" "></textarea>
 										<label htmlFor="description" className={labelNotError}>
-											<span className="block after:ml-1 after:text-red-500 after:content-['*']">Information</span>
+											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+												Information
+											</span>
 										</label>
 									</div>
 								</div>
