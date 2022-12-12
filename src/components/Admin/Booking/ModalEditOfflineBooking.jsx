@@ -5,7 +5,12 @@ import Swal from "sweetalert2";
 import { editOfflineBooking } from "../../../stores/features/offlineBookingSlice";
 import { cancelButton, saveButton, select } from "../../../utils/globalVariable";
 
-const ModalEditOfflineBooking = ({ handleModalEditTrigger, handleActionDropdown, offlineClassesList, update }) => {
+const ModalEditOfflineBooking = ({
+	handleModalEditTrigger,
+	handleActionDropdown,
+	offlineClassesList,
+	update,
+}) => {
 	const { book_id, class_id, workout, instructor_name } = update;
 	const dispatch = useDispatch();
 
@@ -13,36 +18,26 @@ const ModalEditOfflineBooking = ({ handleModalEditTrigger, handleActionDropdown,
 		e.preventDefault();
 		const formData = new FormData(e.target);
 		const class_id = formData.get("class_id");
-		const result = dispatch(editOfflineBooking({ book_id, class_id }));
-		if (result) {
-			handleModalEditTrigger();
-			handleActionDropdown();
-			setTimeout(
-				() =>
-					Swal.fire({
-						icon: "success",
-						title: "Updated",
-						text: "Offline booking data successfully updated",
-						showConfirmButton: false,
-						timer: 2000,
-						background: "#ffffff",
-					}),
-				1000
-			);
-		} else {
-			setTimeout(
-				() =>
-					Swal.fire({
-						icon: "error",
-						title: "Error",
-						text: "Offline booking data cannot be updated",
-						showConfirmButton: false,
-						timer: 2000,
-						background: "#ffffff",
-					}),
-				1000
-			);
-		}
+		dispatch(editOfflineBooking({ book_id, class_id })).then((result) => {
+			if (!result.error) {
+				handleModalEditTrigger();
+				handleActionDropdown();
+				setTimeout(
+					() =>
+						Swal.fire({
+							icon: "success",
+							title: "Updated",
+							text: "Offline booking data successfully updated",
+							showConfirmButton: false,
+							timer: 2000,
+							background: "#ffffff",
+						}),
+					1000
+				);
+			} else {
+				Swal.fire("Sorry", result.error.message.split(":")[1], "info");
+			}
+		});
 	};
 
 	return (
@@ -54,7 +49,9 @@ const ModalEditOfflineBooking = ({ handleModalEditTrigger, handleActionDropdown,
 					<div className="relative h-full w-full max-w-sm sm:max-w-sm md:h-auto md:max-w-md lg:max-w-lg xl:max-w-xl">
 						<form onSubmit={handleUpdate} className="rounded-xl bg-white shadow">
 							<div className="flex items-center justify-between rounded-t p-4">
-								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">Edit Offline Booking</h3>
+								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">
+									Edit Offline Booking
+								</h3>
 							</div>
 							<div className="space-y-6 p-6">
 								<div className="relative">
