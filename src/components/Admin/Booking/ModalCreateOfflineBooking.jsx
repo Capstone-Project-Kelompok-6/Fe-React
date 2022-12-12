@@ -57,7 +57,9 @@ const ModalCreateOfflineBooking = ({ handleModalCreateTrigger }) => {
 					<div className="relative h-full w-full max-w-sm sm:max-w-sm md:h-auto md:max-w-md lg:max-w-lg xl:max-w-xl">
 						<form onSubmit={handleSubmit} className="rounded-xl bg-white shadow">
 							<div className="flex items-center justify-between rounded-t p-4">
-								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">Add New Offline Booking</h3>
+								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">
+									Add New Offline Booking
+								</h3>
 							</div>
 							<div className="space-y-6 p-6">
 								<div className="relative">
