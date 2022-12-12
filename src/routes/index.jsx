@@ -16,6 +16,7 @@ import {
 	OfflineBookingPage,
 	OnlineBookingPage,
 	ArticlePage,
+	VideoPage,
 } from "../pages";
 import PrivateRoute from "./PrivateRoute";
 import ProtectedRoute from "./ProtectedRoute";
@@ -44,6 +45,7 @@ const Router = () => {
 								<Route path="online" element={<OnlineBookingPage />} />
 							</Route>
 							<Route path="article" element={<ArticlePage />} />
+							<Route path="video" element={<VideoPage />} />
 						</Route>
 					</Route>
 					<Route path="*" element={<NotFoundPage />} />
