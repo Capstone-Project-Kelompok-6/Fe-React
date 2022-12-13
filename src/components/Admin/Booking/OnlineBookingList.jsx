@@ -2,8 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDebounce } from "use-debounce";
 import BookingAPI from "../../../apis/booking.api";
-import WorkoutAPI from "../../../apis/workout.api";
-import { activeTab, dataNotFound, notActiveTab, searchInputForLgScreen, searchInputForSmScreen } from "../../../utils/globalVariable";
+import {
+	activeTab,
+	dataNotFound,
+	notActiveTab,
+	searchInputForLgScreen,
+	searchInputForSmScreen,
+} from "../../../utils/globalVariable";
 import SkeletonLoadingTabs from "../SkeletonLoadingTabs";
 import BookingTabs from "./BookingTabs";
 import BookingHeader from "./BookingHeader";
@@ -18,17 +23,23 @@ const Initial_Online_Booking = {
 
 const OnlineBookingList = () => {
 	const [onlineBooking, setOnlineBooking] = useState(Initial_Online_Booking);
-	const [workout, setWorkout] = useState(Initial_Online_Booking);
 	const [searchTrigger, setSearchTrigger] = useState(false);
 	const [keyword, setKeyword] = useState("");
 	const loading = useSelector((state) => state.onlineBooking.loading);
 	const [debouncedKeyword] = useDebounce(keyword, 3000);
-	const loadingWorkout = useSelector((state) => state.workout.loading);
 	const [active, setActive] = useState(0);
+
+	const bookingOnline = new Set();
+
+	onlineBooking.data.rows?.forEach((value) => {
+		bookingOnline.add(value.workout);
+	});
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			BookingAPI.searchOnlineBooking(debouncedKeyword.toLowerCase()).then((result) => setOnlineBooking({ status: true, data: result.data.data }));
+			BookingAPI.searchOnlineBooking(debouncedKeyword.toLowerCase()).then((result) =>
+				setOnlineBooking({ status: true, data: result.data.data })
+			);
 		} else {
 			setTimeout(
 				() =>
@@ -42,10 +53,6 @@ const OnlineBookingList = () => {
 			);
 		}
 	}, [loading, debouncedKeyword]);
-
-	useEffect(() => {
-		setTimeout(() => WorkoutAPI.getWorkout().then((result) => setWorkout({ status: true, data: result.data.data })), 1300);
-	}, [loadingWorkout]);
 
 	const filterItem = (workout_id) => {
 		setTimeout(
@@ -93,7 +100,10 @@ const OnlineBookingList = () => {
 								</div>
 							</div>
 							<div className="mt-1 mr-5 md:hidden">
-								<button type="button" className="inset-y-0 flex items-center" onClick={handleSearchTrigger}>
+								<button
+									type="button"
+									className="inset-y-0 flex items-center"
+									onClick={handleSearchTrigger}>
 									<i className="fi fi-rr-search mt-1 text-lg"></i>
 								</button>
 							</div>
@@ -101,56 +111,56 @@ const OnlineBookingList = () => {
 					</div>
 					<div className="grid grid-cols-1 gap-4 lg:col-span-3">
 						<div className="relative">
-							<div className="relative">
-								<div className="sm:block">
-									<ul className="-mb-px flex list-none overflow-x-scroll whitespace-nowrap text-center text-xs font-medium scrollbar-hide">
-										<li className="mr-2">
-											<button
-												className={active === 0 ? activeTab : notActiveTab}
-												onClick={() => {
-													filterAll();
-													setTimeout(
-														() =>
-															BookingAPI.getOnlineBooking().then((result) =>
-																setOnlineBooking({
-																	status: true,
-																	data: result.data.data,
-																})
-															),
-														500
-													);
-												}}>
-												All
-											</button>
-										</li>
-										{onlineBooking.status ? (
-											workout.data.rows?.map((item) => {
-												return (
-													<li className="mr-2" key={item.workout_id}>
-														<button className={active === item.workout_id ? activeTab : notActiveTab} onClick={() => filterItem(item.workout_id)}>
-															{item.workout}
-														</button>
-													</li>
+							<div className="sm:block">
+								<ul className="-mb-px flex list-none overflow-x-scroll whitespace-nowrap text-center text-xs font-medium scrollbar-hide">
+									<li className="mr-2">
+										<button
+											className={active === 0 ? activeTab : notActiveTab}
+											onClick={() => {
+												filterAll();
+												setTimeout(
+													() =>
+														BookingAPI.getOnlineBooking().then((result) =>
+															setOnlineBooking({
+																status: true,
+																data: result.data.data,
+															})
+														),
+													500
 												);
-											})
-										) : (
-											<ul className="-mb-px flex list-none text-center">
-												<li className="mr-2">
-													<SkeletonLoadingTabs />
+											}}>
+											All
+										</button>
+									</li>
+									{onlineBooking.status ? (
+										Array.from(bookingOnline).map((workout) => {
+											return (
+												<li className="mr-2" key={workout}>
+													<button
+														className={active === workout ? activeTab : notActiveTab}
+														onClick={() => filterItem(workout)}>
+														{workout}
+													</button>
 												</li>
-												<li className="mr-2">
-													<SkeletonLoadingTabs />
-												</li>
-												<li className="mr-2">
-													<SkeletonLoadingTabs />
-												</li>
-												<li className="mr-2">
-													<SkeletonLoadingTabs />
-												</li>
-											</ul>
-										)}
-									</ul>
-								</div>
+											);
+										})
+									) : (
+										<ul className="-mb-px flex list-none text-center">
+											<li className="mr-2">
+												<SkeletonLoadingTabs />
+											</li>
+											<li className="mr-2">
+												<SkeletonLoadingTabs />
+											</li>
+											<li className="mr-2">
+												<SkeletonLoadingTabs />
+											</li>
+											<li className="mr-2">
+												<SkeletonLoadingTabs />
+											</li>
+										</ul>
+									)}
+								</ul>
 							</div>
 						</div>
 					</div>
