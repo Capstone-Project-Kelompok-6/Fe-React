@@ -14,6 +14,7 @@ import { fetchWorkoutList } from "../../stores/features/workoutSlice";
 import { fetchOnlineBookingList } from "../../stores/features/onlineBookingSlice";
 import { PulseLoader } from "react-spinners";
 import { fetchVideo } from "../../stores/features/videoSlice";
+import randomColor from "randomcolor";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels, Title);
 
@@ -106,18 +107,12 @@ const Overview = () => {
 			{
 				label: "Total Booking",
 				data: dataBookingOfflineClass(),
-				backgroundColor: [
-					"#4793EB",
-					"#135DB3",
-					"#fb923c",
-					"#facc15",
-					"#4793EB",
-					"#135DB3",
-					"#1e293b",
-					"#B00020",
-					"#135DB3",
-					"#4957CC",
-				],
+				backgroundColor: dataBookingOfflineClass().map(() =>
+					randomColor({
+						luminosity: "random",
+						hue: "blue",
+					})
+				),
 				borderColor: ["#FFFFFF", "#FFFFFF"],
 				borderWidth: 1,
 				fillColor: "rgba(151,187,205,0.2)",
@@ -150,18 +145,12 @@ const Overview = () => {
 			{
 				label: "Total Booking",
 				data: dataBookingOnlineClass(),
-				backgroundColor: [
-					"#4793EB",
-					"#135DB3",
-					"#fb923c",
-					"#facc15",
-					"#4793EB",
-					"#135DB3",
-					"#1e293b",
-					"#B00020",
-					"#135DB3",
-					"#4957CC",
-				],
+				backgroundColor: dataBookingOnlineClass().map(() =>
+					randomColor({
+						luminosity: "random",
+						hue: "blue",
+					})
+				),
 				borderColor: ["#FFFFFF", "#FFFFFF"],
 				borderWidth: 1,
 				fillColor: "rgba(151,187,205,0.2)",
@@ -308,8 +297,7 @@ const Overview = () => {
 										<p className="text-base font-medium text-neutral-80">Instructors</p>
 										<Link
 											to="/instructor"
-											className="inline-flex items-center justify-center text-sm font-normal text-primary-violet hover:text-blue-600"
-										>
+											className="inline-flex items-center justify-center text-sm font-normal text-primary-violet hover:text-blue-600">
 											View all
 											<i className="fi fi-rr-angle-small-right ml-2 mt-1"></i>
 										</Link>
@@ -357,8 +345,7 @@ const Overview = () => {
 										<p className="text-base font-medium text-neutral-80">Members</p>
 										<Link
 											to="/membership"
-											className="inline-flex items-center justify-center text-sm font-normal text-primary-violet hover:text-blue-600"
-										>
+											className="inline-flex items-center justify-center text-sm font-normal text-primary-violet hover:text-blue-600">
 											View all
 											<i className="fi fi-rr-angle-small-right ml-2 mt-1"></i>
 										</Link>

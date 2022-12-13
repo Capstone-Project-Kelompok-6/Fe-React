@@ -32,9 +32,12 @@ module.exports = {
 				"tertiary-4": "#4ADD7C",
 				"tertiary-5": "#374957",
 				"tertiary-6": "#171717",
+				skeleton: "#E6E6E6",
 				"tertiary-background-1": "#D7DAF4",
 				dark: "#404040",
 				"dark-4": "#737373",
+				"red-1": "#800017",
+				"red-2": "#B00020",
 			},
 			boxShadow: {
 				1: "0px 1px 2px rgba(0, 0, 0, 0.05), 0px 1px 3px 1px rgba(0, 0, 0, 0.03)",

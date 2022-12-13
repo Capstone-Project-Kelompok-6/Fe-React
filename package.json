@@ -18,6 +18,7 @@
 		"jwt-decode": "^3.1.2",
 		"moment": "^2.29.4",
 		"moment-timezone": "^0.5.39",
+		"randomcolor": "^0.6.2",
 		"react": "^18.2.0",
 		"react-calendar": "^4.0.0",
 		"react-chartjs-2": "^5.0.1",
