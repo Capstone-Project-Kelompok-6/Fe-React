@@ -109,7 +109,6 @@ const Overview = () => {
 				data: dataBookingOfflineClass(),
 				backgroundColor: dataBookingOfflineClass().map(() =>
 					randomColor({
-						luminosity: "random",
 						hue: "blue",
 					})
 				),
@@ -147,7 +146,6 @@ const Overview = () => {
 				data: dataBookingOnlineClass(),
 				backgroundColor: dataBookingOnlineClass().map(() =>
 					randomColor({
-						luminosity: "random",
 						hue: "blue",
 					})
 				),
@@ -297,7 +295,8 @@ const Overview = () => {
 										<p className="text-base font-medium text-neutral-80">Instructors</p>
 										<Link
 											to="/instructor"
-											className="inline-flex items-center justify-center text-sm font-normal text-primary-violet hover:text-blue-600">
+											className="inline-flex items-center justify-center text-sm font-normal text-primary-violet hover:text-blue-600"
+										>
 											View all
 											<i className="fi fi-rr-angle-small-right ml-2 mt-1"></i>
 										</Link>
@@ -345,7 +344,8 @@ const Overview = () => {
 										<p className="text-base font-medium text-neutral-80">Members</p>
 										<Link
 											to="/membership"
-											className="inline-flex items-center justify-center text-sm font-normal text-primary-violet hover:text-blue-600">
+											className="inline-flex items-center justify-center text-sm font-normal text-primary-violet hover:text-blue-600"
+										>
 											View all
 											<i className="fi fi-rr-angle-small-right ml-2 mt-1"></i>
 										</Link>

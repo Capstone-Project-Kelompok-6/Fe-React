@@ -62,9 +62,13 @@ const FormLogin = () => {
 
 	const handleChange = (e) => {
 		if (!isValidEmail(e.target.value)) {
-			setError(<i className="fi fi-rr-cross absolute right-1 -bottom-0.5 p-2.5 text-sm text-red-700 lg:right-1 lg:-bottom-0.5"></i>);
+			setError(
+				<i className="fi fi-rr-cross absolute right-1 -bottom-0.5 p-2.5 text-sm text-red-700 lg:right-1 lg:-bottom-0.5"></i>
+			);
 		} else {
-			setError(<i className="fi fi-rr-check absolute right-1 -bottom-0.5 p-2.5 text-green-700 lg:right-1 lg:-bottom-0.5 lg:text-sm"></i>);
+			setError(
+				<i className="fi fi-rr-check absolute right-1 -bottom-0.5 p-2.5 text-green-700 lg:right-1 lg:-bottom-0.5 lg:text-sm"></i>
+			);
 		}
 
 		setMessage(e.target.value);
@@ -79,17 +83,20 @@ const FormLogin = () => {
 			style={{
 				backgroundImage: `url(${loginBG})`,
 			}}
-			className="z-[3] max-h-full w-full bg-cover bg-no-repeat md:fixed md:h-screen">
+			className="z-[3] max-h-full w-full bg-cover bg-no-repeat md:fixed md:h-screen"
+		>
 			<div className="container z-[1] overflow-y-auto py-5">
 				<div className="inset-x-5 mx-auto">
 					<div className="lg:m-auto">
-						<div className="border-1 bg-neutral rounded-20 border-gray-200 bg-neutral-background bg-opacity-80 p-4 shadow-7 backdrop-blur-sm md:rounded-100 md:bg-opacity-90 md:p-3 lg:mx-auto lg:w-2/4">
+						<div className="border-1 bg-neutral rounded-20 border-gray-200 bg-neutral-background bg-opacity-80 p-4 shadow-6 backdrop-blur-sm md:rounded-100 md:bg-opacity-90 md:p-3 lg:mx-auto lg:w-2/4">
 							<div className="text-center">
 								<Link to="/" className="text-3xl font-semibold lg:text-5xl">
 									<span className="text-neutral-100-2">Work</span>
 									<span className="text-primary-violet">Fit.</span>
 								</Link>
-								<p className="my-1 text-sm font-normal text-neutral-100-2 lg:text-base">Lets”s Start A New Life Today</p>
+								<p className="my-1 text-sm font-normal text-neutral-100-2 lg:text-base">
+									Lets”s Start A New Life Today
+								</p>
 								<img src={loginImg} alt="Login" className="mx-auto" />
 								<h1 className="my-1 text-2xl font-semibold lg:text-3xl">Welcome Back Admin!</h1>
 							</div>
@@ -112,14 +119,18 @@ const FormLogin = () => {
 										{message === "" ? (
 											<i
 												title="Input with email type ('yourEmail'@mail.com)"
-												className="fi fi-rr-info absolute right-0.5 -bottom-0.5 p-2.5 text-gray-300 hover:text-black hover:transition lg:-bottom-1.5 lg:text-lg"></i>
+												className="fi fi-rr-info absolute right-0.5 -bottom-0.5 p-2.5 text-gray-300 hover:text-black hover:transition lg:-bottom-1.5 lg:text-lg"
+											></i>
 										) : (
 											error && <div className="relative">{error}</div>
 										)}
 									</div>
 								</div>
 								<div className="mb-3 lg:mb-4">
-									<label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-900">
+									<label
+										htmlFor="password"
+										className="mb-2 block text-sm font-medium text-gray-900"
+									>
 										Password
 									</label>
 									<div className="relative grid grid-flow-col grid-cols-2 gap-0">
@@ -147,7 +158,8 @@ const FormLogin = () => {
 								) : (
 									<button
 										type="submit"
-										className="w-full rounded-16 bg-secondary-navy px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300">
+										className="w-full rounded-16 bg-secondary-navy px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
+									>
 										Sign In
 									</button>
 								)}
