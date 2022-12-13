@@ -1,21 +1,14 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Swal from "sweetalert2";
-import { deleteOfflineBooking } from "../../../stores/features/offlineBookingSlice";
 import { fetchOfflineClassesByPrice } from "../../../stores/features/offlineClassesSlice";
 import { formatDateTime } from "../../../utils/formatDate";
 import { formatPrice } from "../../../utils/formatPrice";
-import {
-	actionDropdownDelete,
-	actionDropdownEdit,
-	cancelButtonSwal,
-	confirmButtonSwal,
-} from "../../../utils/globalVariable";
+import { actionDropdownEdit } from "../../../utils/globalVariable";
+import { truncate } from "../../../utils/truncate";
 import ModalEditOfflineBooking from "./ModalEditOfflineBooking";
 
 const OfflineBookingListItem = ({ data }) => {
 	const {
-		book_id,
 		class_dates,
 		email,
 		full_name,
@@ -25,65 +18,12 @@ const OfflineBookingListItem = ({ data }) => {
 		workout,
 		workout_image,
 		created_at,
+		status,
 	} = data;
 	const dispatch = useDispatch();
 	const offlineClassesList = useSelector((state) => state.offlineClasses.data);
 	const [actionDropdown, setActionDropdown] = useState(false);
 	const [modalEditTrigger, setModalEditTrigger] = useState(false);
-
-	const handleDelete = () => {
-		const swalWithBootstrapButtons = Swal.mixin({
-			customClass: {
-				confirmButton: confirmButtonSwal,
-				cancelButton: cancelButtonSwal,
-				icon: "text-secondary-yellow",
-			},
-			buttonsStyling: false,
-		});
-
-		swalWithBootstrapButtons
-			.fire({
-				title: "Are you sure",
-				text: "You can't undo this action.",
-				icon: "warning",
-				showCancelButton: true,
-				confirmButtonText: "Yes, Delete it!",
-				cancelButtonText: "No, Cancel",
-				reverseButtons: true,
-			})
-			.then((result) => {
-				if (result.isConfirmed) {
-					try {
-						dispatch(deleteOfflineBooking(book_id));
-						setTimeout(
-							() =>
-								Swal.fire({
-									icon: "success",
-									title: "Deleted",
-									text: "Offline booking data has been deleted",
-									showConfirmButton: false,
-									timer: 2000,
-									background: "#ffffff",
-								}),
-							1000
-						);
-					} catch (error) {
-						setTimeout(
-							() =>
-								Swal.fire({
-									icon: "error",
-									title: "Error",
-									text: "Offline booking data cannot be deleted",
-									showConfirmButton: false,
-									timer: 2000,
-									background: "#ffffff",
-								}),
-							1000
-						);
-					}
-				}
-			});
-	};
 
 	const handleActionDropdown = () => {
 		setActionDropdown(!actionDropdown);
@@ -104,10 +44,18 @@ const OfflineBookingListItem = ({ data }) => {
 						</p>
 					</div>
 					<div className="mr-4 inline-flex items-center">
-						<p className="rounded-full border border-secondary-green bg-tertiary-4 bg-opacity-25 px-2 py-1 font-medium text-secondary-green md:px-3">
-							<i className="fi fi-sr-rec mr-1 mt-1 text-[10px]"></i>
-							<span className="text-xs">Paid</span>
-						</p>
+						{status === "PAID" && (
+							<p className="rounded-full border border-secondary-green bg-tertiary-4 bg-opacity-25 px-2 py-1 font-medium text-secondary-green md:px-3">
+								<i className="fi fi-sr-rec mr-1 mt-1 text-[10px]"></i>
+								<span className="text-xs">{status}</span>
+							</p>
+						)}
+						{status === "PENDING" && (
+							<p className="rounded-full border border-secondary-orange bg-secondary-orange bg-opacity-25 px-2 py-1 font-medium text-secondary-orange md:px-3">
+								<i className="fi fi-sr-rec mr-1 mt-1 text-[10px]"></i>
+								<span className="text-xs">{status}</span>
+							</p>
+						)}
 					</div>
 					<div className="inline-flex items-center pt-2">
 						<button
@@ -134,15 +82,6 @@ const OfflineBookingListItem = ({ data }) => {
 												onClick={handleModalEditTrigger}>
 												<i className="fi fi-sr-pencil mr-2 -ml-1 mt-1 text-sm text-secondary-yellow"></i>
 												Edit
-											</button>
-										</li>
-										<li>
-											<button
-												type="submit"
-												className={`rounded-b-xl hover:rounded-b-xl ${actionDropdownDelete}`}
-												onClick={handleDelete}>
-												<i className="fi fi-sr-trash mr-2 -ml-1 mt-1 text-sm text-secondary-red"></i>
-												Delete
 											</button>
 										</li>
 									</ul>
@@ -191,7 +130,7 @@ const OfflineBookingListItem = ({ data }) => {
 									<p className="text-sm font-medium tracking-tight text-neutral-100-2">
 										{full_name}
 									</p>
-									<p className="text-xs font-normal text-neutral-60">{email}</p>
+									<p className="text-xs font-normal text-neutral-60">{truncate(email, 20)}</p>
 								</div>
 							</div>
 							<div className="text-sm font-medium">

@@ -3,7 +3,14 @@ import { useSelector } from "react-redux";
 import { useDebounce } from "use-debounce";
 import ClassesAPI from "../../../apis/classes.api";
 import WorkoutAPI from "../../../apis/workout.api";
-import { activeTab, addButton, dataNotFound, notActiveTab, searchInputForLgScreen, searchInputForSmScreen } from "../../../utils/globalVariable";
+import {
+	activeTab,
+	addButton,
+	dataNotFound,
+	notActiveTab,
+	searchInputForLgScreen,
+	searchInputForSmScreen,
+} from "../../../utils/globalVariable";
 
 import ClassesTabs from "./ClassesTabs";
 import ClassesHeader from "./ClassesHeader";
@@ -31,12 +38,18 @@ const OnlineClassesList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			ClassesAPI.serchOnlineClasses(debouncedKeyword.toLowerCase()).then((result) => setOnlineClasses({ status: true, data: result.data.data }));
+			ClassesAPI.serchOnlineClasses(debouncedKeyword.toLowerCase()).then((result) =>
+				setOnlineClasses({ status: true, data: result.data.data })
+			);
 		} else {
 			setTimeout(
 				() =>
 					ClassesAPI.getOnlineClasses(10).then((result) =>
-						setOnlineClasses({ status: true, data: result.data.data, page: result.data.data.page ? 1 : result.data.data.page })
+						setOnlineClasses({
+							status: true,
+							data: result.data.data,
+							page: result.data.data.page ? 1 : result.data.data.page,
+						})
 					),
 				1300
 			);
@@ -44,11 +57,23 @@ const OnlineClassesList = () => {
 	}, [loading, debouncedKeyword]);
 
 	useEffect(() => {
-		setTimeout(() => WorkoutAPI.getWorkout().then((result) => setWorkout({ status: true, data: result.data.data })), 1300);
+		setTimeout(
+			() =>
+				WorkoutAPI.getWorkout().then((result) =>
+					setWorkout({ status: true, data: result.data.data })
+				),
+			1300
+		);
 	}, [loadingWorkout]);
 
 	const filterItem = (workout_id) => {
-		setTimeout(() => ClassesAPI.filterOnlineClasses(workout_id).then((result) => setOnlineClasses({ status: true, data: result.data.data })), 500);
+		setTimeout(
+			() =>
+				ClassesAPI.filterOnlineClasses(workout_id).then((result) =>
+					setOnlineClasses({ status: true, data: result.data.data })
+				),
+			500
+		);
 		setActive(workout_id);
 	};
 
@@ -88,7 +113,10 @@ const OnlineClassesList = () => {
 								</div>
 							</div>
 							<div className="mt-1 mr-5 md:hidden">
-								<button type="button" className="inset-y-0 flex items-center" onClick={handleSearchTrigger}>
+								<button
+									type="button"
+									className="inset-y-0 flex items-center"
+									onClick={handleSearchTrigger}>
 									<i className="fi fi-rr-search mt-1 text-lg"></i>
 								</button>
 							</div>
@@ -119,11 +147,15 @@ const OnlineClassesList = () => {
 												All
 											</button>
 										</li>
-										{onlineClasses.status ? (
+										{onlineClasses.data.total_rows === 0 ? (
+											""
+										) : onlineClasses.status ? (
 											workout.data.rows?.map((item) => {
 												return (
 													<li className="mr-2" key={item.workout_id}>
-														<button className={active === item.workout_id ? activeTab : notActiveTab} onClick={() => filterItem(item.workout_id)}>
+														<button
+															className={active === item.workout_id ? activeTab : notActiveTab}
+															onClick={() => filterItem(item.workout_id)}>
 															{item.workout}
 														</button>
 													</li>
@@ -182,7 +214,7 @@ const OnlineClassesList = () => {
 				{onlineClasses.status ? (
 					<div>
 						{onlineClasses.data.rows?.length > 0 ? (
-							<div className="mb-6 grid gap-3 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+							<div className="mb-6 grid gap-6 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 								{onlineClasses.data.rows?.map((item) => {
 									return <OnlineClassesListItem data={item} key={item.class_id} />;
 								})}
@@ -197,14 +229,16 @@ const OnlineClassesList = () => {
 						)}
 					</div>
 				) : (
-					<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+					<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 						<SkeletonLoadingOnlineClasses />
 						<SkeletonLoadingOnlineClasses />
 						<SkeletonLoadingOnlineClasses />
 					</div>
 				)}
 
-				{modalCreateTrigger && <ModalCreateOnlineClasses handleModalCreateTrigger={handleModalCreateTrigger} />}
+				{modalCreateTrigger && (
+					<ModalCreateOnlineClasses handleModalCreateTrigger={handleModalCreateTrigger} />
+				)}
 			</div>
 		</div>
 	);

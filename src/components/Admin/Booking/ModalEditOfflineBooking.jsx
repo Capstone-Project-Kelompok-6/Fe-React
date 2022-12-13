@@ -11,14 +11,14 @@ const ModalEditOfflineBooking = ({
 	offlineClassesList,
 	update,
 }) => {
-	const { book_id, class_id, workout, instructor_name } = update;
+	const { book_id, class_id, user_id, workout, instructor_name } = update;
 	const dispatch = useDispatch();
 
 	const handleUpdate = (e) => {
 		e.preventDefault();
 		const formData = new FormData(e.target);
 		const class_id = formData.get("class_id");
-		dispatch(editOfflineBooking({ book_id, class_id })).then((result) => {
+		dispatch(editOfflineBooking({ book_id, user_id, class_id })).then((result) => {
 			if (!result.error) {
 				handleModalEditTrigger();
 				handleActionDropdown();
