@@ -29,9 +29,11 @@ export const regexEmailValidation =
 export const regexPasswordValidation = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
 
 // Tabs
-export const activeTab = "inline-block rounded-full border border-primary-violet bg-tertiary-background-1 px-3 py-1 text-xs text-tertiary-3";
+export const activeTab =
+	"inline-block rounded-full border border-primary-violet bg-tertiary-background-1 px-3 py-1 text-xs text-tertiary-3";
 
-export const notActiveTab = "inline-block rounded-full border border-primary-violet px-3 py-1 text-xs text-tertiary-3 hover:bg-neutral-background";
+export const notActiveTab =
+	"inline-block rounded-full border border-primary-violet px-3 py-1 text-xs text-tertiary-3 hover:bg-neutral-background";
 
 export const activeLinkTab =
 	"text-secondary inline-block rounded-t-lg border-b-2 border-secondary-navy p-4 text-sm font-medium text-secondary-navy transition-all duration-300 ease-in-out";
