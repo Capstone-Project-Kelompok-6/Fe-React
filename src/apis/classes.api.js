@@ -36,9 +36,9 @@ const ClassesAPI = {
             throw new Error(message);
         }
     },
-    async filterOfflineClasses(workout_id) {
+    async filterOfflineClasses(workout) {
         try {
-            const response = await axiosInstance.get(`/classes/offline?workout=${workout_id}`);
+            const response = await axiosInstance.get(`/classes/offline?workout=${workout}`);
             return response;
         } catch (error) {
             const { message } = error.response.data;
@@ -102,9 +102,9 @@ const ClassesAPI = {
             throw new Error(message);
         }
     },
-    async filterOnlineClasses(workout_id) {
+    async filterOnlineClasses(workout) {
         try {
-            const response = await axiosInstance.get(`/classes/online?workout=${workout_id}`);
+            const response = await axiosInstance.get(`/classes/online?workout=${workout}`);
             return response;
         } catch (error) {
             const { message } = error.response.data;
