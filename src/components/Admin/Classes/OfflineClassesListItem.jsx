@@ -9,6 +9,7 @@ import {
 	cancelButtonSwal,
 	confirmButtonSwal,
 } from "../../../utils/globalVariable";
+import { truncate } from "../../../utils/truncate";
 import ModalEditOfflineClasses from "./ModalEditOfflineClasses";
 
 const OfflineClassesListItem = ({ data }) => {
@@ -87,22 +88,18 @@ const OfflineClassesListItem = ({ data }) => {
 		setModalEditTrigger(!modalEditTrigger);
 	};
 
-	const truncate = (string, n) => {
-		return string?.length > n ? string.substr(0, n - 1) + "..." : string;
-	};
-
 	return (
-		<div className="rounded-20 bg-white shadow-4">
-			<div className="relative overflow-hidden rounded-20 pb-40">
+		<div className="rounded-20 bg-white shadow-3">
+			<div className="relative overflow-hidden rounded-t-20 pb-40">
 				<img
-					className="absolute inset-0 h-full w-full rounded-t-20 object-cover object-center transition duration-300 ease-in-out hover:scale-105 hover:rounded-20"
+					className="absolute inset-0 h-full w-full rounded-t-20 object-cover object-center transition duration-300 ease-in-out hover:scale-105 hover:rounded-t-20"
 					src={workout_image}
 					alt="workout-image"
 					loading="lazy"
 				/>
 				<div className="group relative">
 					<button
-						className="absolute right-0 top-0 cursor-pointer rounded-bl-xl bg-neutral-80 bg-opacity-50 px-4 py-2 text-blue-100 shadow-4"
+						className="absolute right-0 top-0 cursor-pointer rounded-bl-xl rounded-tr-20 bg-neutral-80 bg-opacity-50 px-4 py-2 text-blue-100 shadow-4 hover:rounded-tr-20"
 						onClick={handleActionDropdown}>
 						<i className="fi fi-br-menu-dots-vertical"></i>
 					</button>

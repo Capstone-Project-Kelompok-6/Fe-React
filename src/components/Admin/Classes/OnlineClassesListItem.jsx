@@ -9,6 +9,7 @@ import {
 	cancelButtonSwal,
 	confirmButtonSwal,
 } from "../../../utils/globalVariable";
+import { truncate } from "../../../utils/truncate";
 import ModalEditOnlineClasses from "./ModalEditOnlineClasses";
 
 const OnlineClassesListItem = ({ data }) => {
@@ -79,14 +80,10 @@ const OnlineClassesListItem = ({ data }) => {
 		setActionDropdown(!actionDropdown);
 	};
 
-	const truncate = (string, n) => {
-		return string?.length > n ? string.substr(0, n - 1) + "..." : string;
-	};
-
 	return (
 		<div>
 			<div className="h-full rounded-20 bg-white shadow-4">
-				<div className="relative overflow-hidden rounded-20 pb-48">
+				<div className="relative overflow-hidden pb-48">
 					{!video_name ? (
 						<div
 							role="status"

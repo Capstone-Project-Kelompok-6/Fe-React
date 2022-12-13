@@ -146,7 +146,9 @@ const OfflineClassesList = () => {
 												All
 											</button>
 										</li>
-										{offlineClasses.status ? (
+										{offlineClasses.data.total_rows === 0 ? (
+											""
+										) : offlineClasses.status ? (
 											workout.data.rows?.map((item) => {
 												return (
 													<li className="mr-2" key={item.workout_id}>
@@ -211,7 +213,7 @@ const OfflineClassesList = () => {
 				{offlineClasses.status ? (
 					<div>
 						{offlineClasses.data.rows?.length > 0 ? (
-							<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5">
+							<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 								{offlineClasses.data.rows?.map((item) => {
 									return <OfflineClassesListItem data={item} key={item.class_id} />;
 								})}
@@ -226,8 +228,7 @@ const OfflineClassesList = () => {
 						)}
 					</div>
 				) : (
-					<div className="mb-6 grid gap-3 pt-36 md:grid-cols-2 xl:grid-cols-4">
-						<SkeletonLoadingOfflineClasses />
+					<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 						<SkeletonLoadingOfflineClasses />
 						<SkeletonLoadingOfflineClasses />
 						<SkeletonLoadingOfflineClasses />
