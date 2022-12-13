@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDebounce } from "use-debounce";
 import VideoAPI from "../../../apis/video.api";
-import { addButton, dataNotFound, searchInputForLgScreen, searchInputForSmScreen } from "../../../utils/globalVariable";
+import {
+	addButton,
+	dataNotFound,
+	searchInputForLgScreen,
+	searchInputForSmScreen,
+} from "../../../utils/globalVariable";
 import ModalCreateVideo from "./ModalCreateVideo";
 import SkeletonLoadingVideo from "./SkeletonLoadingVideo";
 import VideoListItem from "./VideoListItem";
@@ -23,9 +28,11 @@ const VideoList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			VideoAPI.searchVideo(debouncedKeyword.toLowerCase()).then((result) => setVideo({ status: true, data: result.data.data }));
+			VideoAPI.searchVideo(debouncedKeyword.toLowerCase()).then((result) =>
+				setVideo({ status: true, data: result.data.data })
+			);
 		} else {
-			setTimeout(() => VideoAPI.getVideo().then((result) => setVideo({ status: true, data: result.data.data })), 1300);
+			VideoAPI.getVideo().then((result) => setVideo({ status: true, data: result.data.data }));
 		}
 	}, [loading, debouncedKeyword]);
 
@@ -42,7 +49,9 @@ const VideoList = () => {
 			<div className="fixed left-0 right-0 z-20 w-full bg-white bg-opacity-90 px-6 py-2 shadow-3 backdrop-blur-sm">
 				<div className="flex items-center space-x-4">
 					<div className="min-w-0 flex-1">
-						<h2 className="text-sm font-medium text-neutral-100-2 md:pl-52 md:text-lg">Manage Video</h2>
+						<h2 className="text-sm font-medium text-neutral-100-2 md:pl-52 md:text-lg">
+							Manage Video
+						</h2>
 					</div>
 					<div className="inline-flex items-center text-sm font-medium text-neutral-100-2">
 						<div className="relative mt-1 mr-3 mb-1 hidden w-full md:block md:w-48 lg:w-80">
@@ -59,7 +68,11 @@ const VideoList = () => {
 							</div>
 						</div>
 						<div className="mt-1 mr-5 md:hidden">
-							<button type="button" className="inset-y-0 flex items-center" onClick={handleSearchTrigger}>
+							<button
+								type="button"
+								className="inset-y-0 flex items-center"
+								onClick={handleSearchTrigger}
+							>
 								<i className="fi fi-rr-search mt-1 text-lg"></i>
 							</button>
 						</div>
@@ -79,7 +92,8 @@ const VideoList = () => {
 									? "pointer-events-auto fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 									: "pointer-events-none fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 							}
-							onClick={handleSearchTrigger}></div>
+							onClick={handleSearchTrigger}
+						></div>
 						<div className="fixed top-0 right-0 z-40 mr-32 mt-24 w-48 rounded-xl bg-white shadow-4 transition-all duration-300 md:hidden">
 							<div className="relative">
 								<input
@@ -122,7 +136,9 @@ const VideoList = () => {
 						<SkeletonLoadingVideo />
 					</div>
 				)}
-				{modalCreateTrigger && <ModalCreateVideo handleModalCreateTrigger={handleModalCreateTrigger} />}
+				{modalCreateTrigger && (
+					<ModalCreateVideo handleModalCreateTrigger={handleModalCreateTrigger} />
+				)}
 			</div>
 		</div>
 	);

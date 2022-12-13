@@ -26,9 +26,9 @@ const BookingAPI = {
             throw new Error(message);
         }
     },
-    async filterOfflineBooking(workout_id) {
+    async filterOfflineBooking(workout) {
         try {
-            const response = await axiosInstance.get(`/books/offline?workout=${workout_id}`);
+            const response = await axiosInstance.get(`/books/offline?workout=${workout}`);
             return response;
         } catch (error) {
             const { message } = error.response.data;
@@ -89,9 +89,9 @@ const BookingAPI = {
             throw new Error(message);
         }
     },
-    async filterOnlineBooking(workout_id) {
+    async filterOnlineBooking(workout) {
         try {
-            const response = await axiosInstance.get(`/books/online?workout=${workout_id}`);
+            const response = await axiosInstance.get(`/books/online?workout=${workout}`);
             return response;
         } catch (error) {
             const { message } = error.response.data;

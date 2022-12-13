@@ -35,16 +35,12 @@ const WorkoutList = () => {
 				setWorkout({ status: true, data: result.data.data })
 			);
 		} else {
-			setTimeout(
-				() =>
-					WorkoutAPI.getWorkout(5).then((result) =>
-						setWorkout({
-							status: true,
-							data: result.data.data,
-							page: result.data.data.page ? 1 : result.data.data.page,
-						})
-					),
-				1300
+			WorkoutAPI.getWorkout(5).then((result) =>
+				setWorkout({
+					status: true,
+					data: result.data.data,
+					page: result.data.data.page ? 1 : result.data.data.page,
+				})
 			);
 		}
 	}, [loading, debouncedKeyword]);
@@ -95,7 +91,8 @@ const WorkoutList = () => {
 								<button
 									type="button"
 									className="inset-y-0 flex items-center"
-									onClick={handleSearchTrigger}>
+									onClick={handleSearchTrigger}
+								>
 									<i className="fi fi-rr-search mt-1 text-lg"></i>
 								</button>
 							</div>
@@ -116,7 +113,8 @@ const WorkoutList = () => {
 									? "pointer-events-auto fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 									: "pointer-events-none fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 							}
-							onClick={handleSearchTrigger}></div>
+							onClick={handleSearchTrigger}
+						></div>
 						<div className="fixed top-0 right-0 z-40 mr-32 mt-24 w-48 rounded-xl bg-white shadow-4 transition-all duration-300 md:hidden">
 							<div className="relative">
 								<input
@@ -173,7 +171,8 @@ const WorkoutList = () => {
 										</div>
 										<nav
 											className="flex flex-col items-center justify-between pt-4 md:flex-row lg:flex-row xl:flex-row"
-											aria-label="Table navigation">
+											aria-label="Table navigation"
+										>
 											<span className="text-sm font-normal text-neutral-80">
 												<span>Showing </span>
 												<span className="mr-1">page {workout.data.page}</span>
@@ -190,7 +189,8 @@ const WorkoutList = () => {
 																: previousButtonActive
 														}
 														onClick={() => handlePreviousPage(workout.data.page)}
-														disabled={workout.data.page === 1}>
+														disabled={workout.data.page === 1}
+													>
 														<span>Previous</span>
 													</button>
 												</li>
@@ -204,7 +204,8 @@ const WorkoutList = () => {
 																: nextButtonActive
 														}
 														onClick={() => handleNextPage(workout.data.page)}
-														disabled={workout.data.page + 1 > workout.data.total_pages}>
+														disabled={workout.data.page + 1 > workout.data.total_pages}
+													>
 														<span>Next</span>
 													</button>
 												</li>
