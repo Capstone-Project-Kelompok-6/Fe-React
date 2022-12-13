@@ -9,15 +9,17 @@ import offlineBookingSlice from "./offlineBookingSlice";
 import membershipSlice from "./membershipSlice";
 import onlineBookingSlice from "./onlineBookingSlice";
 import videoSlice from "./videoSlice";
+import paymentSlice from "./paymentSlice";
 
 export const rootReducer = combineReducers({
-    article: articleSlice,
-    workout: workoutSlice,
-    instructor: instructorSlice,
-    offlineClasses: offlineClassesSlice,
-    onlineClasses: onlineClassesSlice,
-    offlineBooking: offlineBookingSlice,
-    onlineBooking: onlineBookingSlice,
-    membership: membershipSlice,
-    video: videoSlice,
+	article: articleSlice,
+	workout: workoutSlice,
+	instructor: instructorSlice,
+	offlineClasses: offlineClassesSlice,
+	onlineClasses: onlineClassesSlice,
+	offlineBooking: offlineBookingSlice,
+	onlineBooking: onlineBookingSlice,
+	membership: membershipSlice,
+	payment: paymentSlice,
+	video: videoSlice,
 });
