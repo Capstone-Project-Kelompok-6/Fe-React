@@ -8,6 +8,7 @@ import {
 	cancelButtonSwal,
 	confirmButtonSwal,
 } from "../../../utils/globalVariable";
+import { truncate } from "../../../utils/truncate";
 import ModalEditVideo from "./ModalEditVideo";
 
 const VideoListItem = ({ data }) => {
@@ -78,9 +79,6 @@ const VideoListItem = ({ data }) => {
 		setActionDropdown(!actionDropdown);
 	};
 
-	const truncate = (string, n) => {
-		return string?.length > n ? string.substr(0, n - 1) + "..." : string;
-	};
 	return (
 		<div>
 			<div className="h-full rounded-xl bg-white shadow-4">

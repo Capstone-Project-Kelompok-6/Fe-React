@@ -8,6 +8,7 @@ import {
 	cancelButtonSwal,
 	confirmButtonSwal,
 } from "../../../utils/globalVariable";
+import { truncate } from "../../../utils/truncate";
 import ModalEditArticle from "./ModalEditArticle";
 
 const ArticleListItem = ({ data }) => {
@@ -77,10 +78,6 @@ const ArticleListItem = ({ data }) => {
 
 	const handleActionDropdown = () => {
 		setActionDropdown(!actionDropdown);
-	};
-
-	const truncate = (string, n) => {
-		return string?.length > n ? string.substr(0, n - 1) + "..." : string;
 	};
 
 	return (
