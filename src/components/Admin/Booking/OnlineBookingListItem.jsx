@@ -24,7 +24,7 @@ const OnlineBookingListItem = ({ data }) => {
 							</p>
 						)}
 						{status === "PENDING" && (
-							<p className="rounded-full border border-secondary-navy bg-secondary-soft-blue bg-opacity-25 px-2 py-1 font-medium text-secondary-navy md:px-3">
+							<p className="rounded-full border border-secondary-orange bg-secondary-orange bg-opacity-25 px-2 py-1 font-medium text-secondary-orange md:px-3">
 								<i className="fi fi-sr-rec mr-1 mt-1 text-[10px]"></i>
 								<span className="text-xs">{status}</span>
 							</p>

@@ -8,9 +8,9 @@ const initialState = {
 	loading: false,
 };
 
-export const fetchArticle = createAsyncThunk("fetch/article", async () => {
+export const fetchArticle = createAsyncThunk("fetch/article", async (limit) => {
 	try {
-		const response = await ArticleAPI.getArticle();
+		const response = await ArticleAPI.getArticle(limit);
 		return response.data.data;
 	} catch (error) {
 		throw Error(error);

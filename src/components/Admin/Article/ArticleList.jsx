@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useDebounce } from "use-debounce";
 import ArticleAPI from "../../../apis/article.api";
+import useHook from "../../../hooks/useHook";
 import {
 	addButton,
 	dataNotFound,
@@ -20,11 +20,17 @@ const Initial_Article = {
 
 const ArticleList = () => {
 	const [article, setArticle] = useState(Initial_Article);
-	const [modalCreateTrigger, setModalCreateTrigger] = useState(false);
-	const [searchTrigger, setSearchTrigger] = useState(false);
-	const [keyword, setKeyword] = useState("");
+	const {
+		modalCreateTrigger,
+		setModalCreateTrigger,
+		keyword,
+		setKeyword,
+		debouncedKeyword,
+		searchTrigger,
+		setSearchTrigger,
+	} = useHook();
+
 	const loading = useSelector((state) => state.article.loading);
-	const [debouncedKeyword] = useDebounce(keyword, 1300);
 
 	useEffect(() => {
 		if (debouncedKeyword) {

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useDebounce } from "use-debounce";
 import BookingAPI from "../../../apis/booking.api";
 import {
 	activeTab,
@@ -15,6 +14,7 @@ import BookingHeader from "./BookingHeader";
 import OnlineBookingListItem from "./OnlineBookingListItem";
 import SkeletonLoadingBooking from "./SkeletonLoadingBooking";
 import { setLoaderFetchData } from "../../../stores/features/loaderFetchDataSlice";
+import useHook from "../../../hooks/useHook";
 
 const Initial_Online_Booking = {
 	data: [],
@@ -23,13 +23,11 @@ const Initial_Online_Booking = {
 const OnlineBookingList = () => {
 	const [onlineBooking, setOnlineBooking] = useState(Initial_Online_Booking);
 	const [filterOnlineBooking, setFilterOnlineBooking] = useState(Initial_Online_Booking);
-	const [searchTrigger, setSearchTrigger] = useState(false);
-	const [keyword, setKeyword] = useState("");
+	const [active, setActive] = useState(0);
+	const { keyword, setKeyword, debouncedKeyword, searchTrigger, setSearchTrigger } = useHook();
 
 	const dispatch = useDispatch();
 	const loading = useSelector((state) => state.onlineBooking.loading);
-	const [debouncedKeyword] = useDebounce(keyword, 1300);
-	const [active, setActive] = useState(0);
 	const loaderFetchData = useSelector((state) => state.loaderFetchData);
 
 	const bookingOnline = new Set();
@@ -50,6 +48,7 @@ const OnlineBookingList = () => {
 				setActive(result.data.data.rows[0].workout);
 			});
 		} else {
+			dispatch(setLoaderFetchData(true));
 			BookingAPI.getOnlineBooking(1000).then((result) => {
 				setOnlineBooking({
 					data: result.data.data,
@@ -119,8 +118,7 @@ const OnlineBookingList = () => {
 								<button
 									type="button"
 									className="inset-y-0 flex items-center"
-									onClick={handleSearchTrigger}
-								>
+									onClick={handleSearchTrigger}>
 									<i className="fi fi-rr-search mt-1 text-lg"></i>
 								</button>
 							</div>
@@ -135,8 +133,7 @@ const OnlineBookingList = () => {
 											className={active === 0 ? activeTab : notActiveTab}
 											onClick={() => {
 												filterAll();
-											}}
-										>
+											}}>
 											All
 										</button>
 									</li>
@@ -161,8 +158,7 @@ const OnlineBookingList = () => {
 												<li className="mr-2" key={workout}>
 													<button
 														className={active === workout ? activeTab : notActiveTab}
-														onClick={() => filterItem(workout)}
-													>
+														onClick={() => filterItem(workout)}>
 														{workout}
 													</button>
 												</li>
@@ -184,8 +180,7 @@ const OnlineBookingList = () => {
 								? "pointer-events-auto fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 								: "pointer-events-none fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 						}
-						onClick={handleSearchTrigger}
-					></div>
+						onClick={handleSearchTrigger}></div>
 					<div className="fixed top-10 right-0 z-40 mr-10 mt-24 w-52 rounded-xl bg-white shadow-4 transition-all duration-300 md:hidden">
 						<div className="relative">
 							<input

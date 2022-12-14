@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 
@@ -11,10 +11,11 @@ import {
 	cancelButtonSwal,
 	confirmButtonSwal,
 } from "../../../utils/globalVariable";
+import useHook from "../../../hooks/useHook";
 
 const WorkoutListItem = ({ data }) => {
 	const { no, workout_id, workout_image, image_name, workout, updated_at } = data;
-	const [modalEditTrigger, setModalEditTrigger] = useState(false);
+	const { modalEditTrigger, setModalEditTrigger } = useHook();
 	const dispatch = useDispatch();
 
 	const handleDelete = () => {

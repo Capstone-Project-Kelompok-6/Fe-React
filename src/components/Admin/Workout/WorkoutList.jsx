@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useDebounce } from "use-debounce";
 import { PulseLoader } from "react-spinners";
 import WorkoutAPI from "../../../apis/workout.api";
 import { useSelector } from "react-redux";
@@ -14,6 +13,7 @@ import {
 	searchInputForLgScreen,
 	searchInputForSmScreen,
 } from "../../../utils/globalVariable";
+import useHook from "../../../hooks/useHook";
 
 const Initial_Workout = {
 	data: [],
@@ -23,11 +23,16 @@ const Initial_Workout = {
 
 const WorkoutList = () => {
 	const [workout, setWorkout] = useState(Initial_Workout);
-	const [modalCreateTrigger, setModalCreateTrigger] = useState(false);
-	const [keyword, setKeyword] = useState("");
+	const {
+		modalCreateTrigger,
+		setModalCreateTrigger,
+		keyword,
+		setKeyword,
+		debouncedKeyword,
+		searchTrigger,
+		setSearchTrigger,
+	} = useHook();
 	const loading = useSelector((state) => state.workout.loading);
-	const [searchTrigger, setSearchTrigger] = useState(false);
-	const [debouncedKeyword] = useDebounce(keyword, 1300);
 
 	useEffect(() => {
 		if (debouncedKeyword) {
@@ -91,8 +96,7 @@ const WorkoutList = () => {
 								<button
 									type="button"
 									className="inset-y-0 flex items-center"
-									onClick={handleSearchTrigger}
-								>
+									onClick={handleSearchTrigger}>
 									<i className="fi fi-rr-search mt-1 text-lg"></i>
 								</button>
 							</div>
@@ -113,8 +117,7 @@ const WorkoutList = () => {
 									? "pointer-events-auto fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 									: "pointer-events-none fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 							}
-							onClick={handleSearchTrigger}
-						></div>
+							onClick={handleSearchTrigger}></div>
 						<div className="fixed top-0 right-0 z-40 mr-32 mt-24 w-48 rounded-xl bg-white shadow-4 transition-all duration-300 md:hidden">
 							<div className="relative">
 								<input
@@ -162,7 +165,7 @@ const WorkoutList = () => {
 															key={item.workout_id}
 															data={{
 																...item,
-																no: workout.data.page * 10 - 10 + 1 + i,
+																no: workout.data.page * 5 - 5 + 1 + i,
 															}}
 														/>
 													);
@@ -171,8 +174,7 @@ const WorkoutList = () => {
 										</div>
 										<nav
 											className="flex flex-col items-center justify-between pt-4 md:flex-row lg:flex-row xl:flex-row"
-											aria-label="Table navigation"
-										>
+											aria-label="Table navigation">
 											<span className="text-sm font-normal text-neutral-80">
 												<span>Showing </span>
 												<span className="mr-1">page {workout.data.page}</span>
@@ -189,8 +191,7 @@ const WorkoutList = () => {
 																: previousButtonActive
 														}
 														onClick={() => handlePreviousPage(workout.data.page)}
-														disabled={workout.data.page === 1}
-													>
+														disabled={workout.data.page === 1}>
 														<span>Previous</span>
 													</button>
 												</li>
@@ -204,8 +205,7 @@ const WorkoutList = () => {
 																: nextButtonActive
 														}
 														onClick={() => handleNextPage(workout.data.page)}
-														disabled={workout.data.page + 1 > workout.data.total_pages}
-													>
+														disabled={workout.data.page + 1 > workout.data.total_pages}>
 														<span>Next</span>
 													</button>
 												</li>

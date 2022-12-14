@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useDebounce } from "use-debounce";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	activeTab,
@@ -17,6 +16,7 @@ import SkeletonLoadingBooking from "./SkeletonLoadingBooking";
 import ModalCreateOfflineBooking from "./ModalCreateOfflineBooking";
 import SkeletonLoadingTabs from "../SkeletonLoadingTabs";
 import { setLoaderFetchData } from "../../../stores/features/loaderFetchDataSlice";
+import useHook from "../../../hooks/useHook";
 
 const Initial_Offline_Booking = {
 	data: [],
@@ -25,14 +25,19 @@ const Initial_Offline_Booking = {
 const OfflineBookingList = () => {
 	const [offlineBooking, setOfflineBooking] = useState(Initial_Offline_Booking);
 	const [filterOfflineBooking, setFilterOfflineBooking] = useState(Initial_Offline_Booking);
-	const [modalCreateTrigger, setModalCreateTrigger] = useState(false);
-	const [searchTrigger, setSearchTrigger] = useState(false);
+	const {
+		modalCreateTrigger,
+		setModalCreateTrigger,
+		keyword,
+		setKeyword,
+		debouncedKeyword,
+		searchTrigger,
+		setSearchTrigger,
+	} = useHook();
 	const [active, setActive] = useState(0);
-	const [keyword, setKeyword] = useState("");
 
 	const dispatch = useDispatch();
 	const loading = useSelector((state) => state.offlineBooking.loading);
-	const [debouncedKeyword] = useDebounce(keyword, 1300);
 	const loaderFetchData = useSelector((state) => state.loaderFetchData);
 
 	const bookingOffline = new Set();
@@ -53,6 +58,7 @@ const OfflineBookingList = () => {
 				setActive(result.data.data.rows[0].workout);
 			});
 		} else {
+			dispatch(setLoaderFetchData(true));
 			BookingAPI.getOfflineBooking(1000).then((result) => {
 				setOfflineBooking({
 					data: result.data.data,
@@ -126,8 +132,7 @@ const OfflineBookingList = () => {
 								<button
 									type="button"
 									className="inset-y-0 flex items-center"
-									onClick={handleSearchTrigger}
-								>
+									onClick={handleSearchTrigger}>
 									<i className="fi fi-rr-search mt-1 text-lg"></i>
 								</button>
 							</div>
@@ -146,8 +151,7 @@ const OfflineBookingList = () => {
 											className={active === 0 ? activeTab : notActiveTab}
 											onClick={() => {
 												filterAll();
-											}}
-										>
+											}}>
 											All
 										</button>
 									</li>
@@ -172,8 +176,7 @@ const OfflineBookingList = () => {
 												<li className="mr-2" key={workout}>
 													<button
 														className={active === workout ? activeTab : notActiveTab}
-														onClick={() => filterItem(workout)}
-													>
+														onClick={() => filterItem(workout)}>
 														{workout}
 													</button>
 												</li>
@@ -195,8 +198,7 @@ const OfflineBookingList = () => {
 								? "pointer-events-auto fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 								: "pointer-events-none fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 						}
-						onClick={handleSearchTrigger}
-					></div>
+						onClick={handleSearchTrigger}></div>
 					<div className="fixed top-10 right-0 z-40 mr-32 mt-24 w-48 rounded-xl bg-white shadow-4 transition-all duration-300 md:hidden">
 						<div className="relative">
 							<input
