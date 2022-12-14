@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import useHook from "../../../hooks/useHook";
 
 import { deleteInstructor } from "../../../stores/features/instructorSlice";
 import { formatLongDate } from "../../../utils/formatDate";
@@ -23,7 +24,7 @@ const InstructorListItem = ({ data }) => {
 		email,
 		updated_at,
 	} = data;
-	const [modalEditTrigger, setModalEditTrigger] = useState(false);
+	const { modalEditTrigger, setModalEditTrigger } = useHook();
 	const dispatch = useDispatch();
 
 	const handleDelete = () => {

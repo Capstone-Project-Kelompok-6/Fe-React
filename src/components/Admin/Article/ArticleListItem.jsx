@@ -81,17 +81,17 @@ const ArticleListItem = ({ data }) => {
 	};
 
 	return (
-		<div className="h-full rounded-xl bg-white shadow-4">
-			<div className="relative overflow-hidden rounded-xl pb-40">
+		<div className="h-full rounded-20 bg-white shadow-4">
+			<div className="relative overflow-hidden rounded-t-20 pb-40">
 				<img
-					className="absolute inset-0 h-full w-full rounded-t-xl object-cover object-center transition duration-300 ease-in-out hover:scale-105"
+					className="absolute inset-0 h-full w-full rounded-t-20 object-cover object-center transition duration-300 ease-in-out hover:scale-105"
 					src={article_image}
 					alt={image_name}
 					loading="lazy"
 				/>
 				<div className="group relative">
 					<button
-						className="absolute right-0 top-0 cursor-pointer rounded-bl-xl bg-neutral-80 bg-opacity-50 px-4 py-2 text-blue-100 shadow-4"
+						className="absolute right-0 top-0 cursor-pointer rounded-bl-20 bg-neutral-80 bg-opacity-50 px-4 py-2 text-blue-100 shadow-4"
 						onClick={handleActionDropdown}>
 						<i className="fi fi-br-menu-dots-vertical"></i>
 					</button>

@@ -73,7 +73,7 @@ const OfflineBookingListItem = ({ data }) => {
 											: "pointer-events-none fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 									}
 									onClick={handleActionDropdown}></div>
-								<div className="absolute right-0 z-40 mr-6 mt-5 w-32 rounded-xl bg-white shadow-4 transition duration-300">
+								<div className="absolute right-0 z-10 mr-6 mt-5 w-32 rounded-xl bg-white shadow-4 transition duration-300">
 									<ul className="list-reset">
 										<li>
 											<button

@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import Swal from "sweetalert2";
-import { cancelButton, inputNotError, labelNotError, saveButton, select } from "../../../utils/globalVariable";
+import {
+	cancelButton,
+	inputNotError,
+	labelNotError,
+	saveButton,
+	select,
+} from "../../../utils/globalVariable";
 import { fetchInstructor } from "../../../stores/features/instructorSlice";
 import { fetchWorkoutList } from "../../../stores/features/workoutSlice";
 import { createOfflineClasses } from "../../../stores/features/offlineClassesSlice";
@@ -31,7 +37,15 @@ const ModalCreateOfflineClasses = ({ handleModalCreateTrigger }) => {
 		const description = formData.get("description");
 
 		try {
-			dispatch(createOfflineClasses({ workout_id, instructor_id, class_dates: selectedClassDates, price, description })).then((res) => {
+			dispatch(
+				createOfflineClasses({
+					workout_id,
+					instructor_id,
+					class_dates: selectedClassDates,
+					price,
+					description,
+				})
+			).then((res) => {
 				if (!res.error) {
 					setTimeout(
 						() =>
@@ -71,14 +85,16 @@ const ModalCreateOfflineClasses = ({ handleModalCreateTrigger }) => {
 	];
 	return (
 		<div className="relative z-50">
-			<div className="fixed inset-0 z-50 bg-gray-400 bg-opacity-50 transition-opacity"></div>
+			<div className="fixed inset-0 z-50 bg-gray-600 bg-opacity-80 transition-opacity"></div>
 
 			<div className="fixed inset-0 z-50 items-center justify-center overflow-y-auto">
 				<div className="flex w-full items-end justify-center px-4 py-20 sm:h-full sm:items-center sm:p-0 md:h-screen">
 					<div className="relative h-full w-full max-w-sm sm:max-w-sm md:h-auto md:max-w-md lg:max-w-lg xl:max-w-xl">
 						<form onSubmit={handleSubmit} className="rounded-xl bg-white shadow">
 							<div className="flex items-center justify-between rounded-t p-4">
-								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">Add New Offline Classes</h3>
+								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">
+									Add New Offline Classes
+								</h3>
 							</div>
 							<div className="space-y-6 p-6">
 								<div className="relative">
@@ -126,15 +142,34 @@ const ModalCreateOfflineClasses = ({ handleModalCreateTrigger }) => {
 									/>
 								</div>
 								<div className="relative">
-									<input type="number" id="price" name="price" min="1" className={inputNotError} step="0.01" placeholder=" " required />
+									<input
+										type="number"
+										id="price"
+										name="price"
+										min="1"
+										className={inputNotError}
+										step="0.01"
+										placeholder=" "
+										required
+									/>
 									<label htmlFor="price" className={labelNotError}>
-										<span className="block after:ml-1 after:text-red-500 after:content-['*']">Price</span>
+										<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+											Price
+										</span>
 									</label>
 								</div>
 								<div className="relative">
-									<textarea id="description" name="description" rows="5" className={inputNotError} placeholder=" " required></textarea>
+									<textarea
+										id="description"
+										name="description"
+										rows="5"
+										className={inputNotError}
+										placeholder=" "
+										required></textarea>
 									<label htmlFor="description" className={labelNotError}>
-										<span className="block after:ml-1 after:text-red-500 after:content-['*']">Information</span>
+										<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+											Information
+										</span>
 									</label>
 								</div>
 							</div>

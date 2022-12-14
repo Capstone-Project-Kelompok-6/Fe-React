@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
 import { editInstructor } from "../../../stores/features/instructorSlice";
 import {
 	cancelButton,
@@ -12,6 +11,9 @@ import {
 	regexNameValidation,
 	saveButton,
 } from "../../../utils/globalVariable";
+
+import Swal from "sweetalert2";
+import { maxLengthCheck } from "../../../utils/maxLengthCheck";
 
 const baseErrors = {
 	instructor_name: "",
@@ -133,14 +135,9 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 		};
 	}, [file]);
 
-	const maxLengthCheck = (e) => {
-		if (e.target.value.length > e.target.maxLength) {
-			e.target.value = e.target.value.slice(0, e.target.maxLength);
-		}
-	};
-
 	const handleUpdate = (e) => {
 		e.preventDefault();
+
 		const formData = new FormData(e.target);
 		const instructor_name = formData.get("instructor_name");
 		const image = formData.get("image");

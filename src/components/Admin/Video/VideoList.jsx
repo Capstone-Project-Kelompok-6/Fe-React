@@ -14,7 +14,6 @@ import VideoListItem from "./VideoListItem";
 
 const Initial_Video = {
 	data: [],
-	page: 0,
 	status: false,
 };
 
@@ -32,7 +31,7 @@ const VideoList = () => {
 				setVideo({ status: true, data: result.data.data })
 			);
 		} else {
-			VideoAPI.getVideo().then((result) => setVideo({ status: true, data: result.data.data }));
+			VideoAPI.getVideo(1000).then((result) => setVideo({ status: true, data: result.data.data }));
 		}
 	}, [loading, debouncedKeyword]);
 
@@ -71,8 +70,7 @@ const VideoList = () => {
 							<button
 								type="button"
 								className="inset-y-0 flex items-center"
-								onClick={handleSearchTrigger}
-							>
+								onClick={handleSearchTrigger}>
 								<i className="fi fi-rr-search mt-1 text-lg"></i>
 							</button>
 						</div>
@@ -92,8 +90,7 @@ const VideoList = () => {
 									? "pointer-events-auto fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 									: "pointer-events-none fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 							}
-							onClick={handleSearchTrigger}
-						></div>
+							onClick={handleSearchTrigger}></div>
 						<div className="fixed top-0 right-0 z-40 mr-32 mt-24 w-48 rounded-xl bg-white shadow-4 transition-all duration-300 md:hidden">
 							<div className="relative">
 								<input
@@ -114,7 +111,7 @@ const VideoList = () => {
 				{video.status ? (
 					<div>
 						{video.data.rows?.length > 0 ? (
-							<div className="mb-6 grid grid-cols-1 gap-3 pt-20 pb-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+							<div className="mb-6 grid grid-cols-1 gap-6 pt-20 pb-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 								{video.data.rows?.map((item) => {
 									return <VideoListItem data={item} key={item.video_content_id} />;
 								})}
@@ -129,7 +126,7 @@ const VideoList = () => {
 						)}
 					</div>
 				) : (
-					<div className="mb-6 grid grid-cols-1 gap-3 pt-20 pb-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+					<div className="mb-6 grid grid-cols-1 gap-6 pt-20 pb-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 						<SkeletonLoadingVideo />
 						<SkeletonLoadingVideo />
 						<SkeletonLoadingVideo />

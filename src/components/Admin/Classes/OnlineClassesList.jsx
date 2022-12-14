@@ -28,9 +28,10 @@ const OnlineClassesList = () => {
 	const [modalCreateTrigger, setModalCreateTrigger] = useState(false);
 	const [searchTrigger, setSearchTrigger] = useState(false);
 	const [keyword, setKeyword] = useState("");
+	const [active, setActive] = useState(0);
+
 	const loading = useSelector((state) => state.onlineClasses.loading);
 	const [debouncedKeyword] = useDebounce(keyword, 1300);
-	const [active, setActive] = useState(0);
 	const [load, setLoad] = useState(true);
 
 	const classesOnline = new Set();
@@ -123,8 +124,7 @@ const OnlineClassesList = () => {
 								<button
 									type="button"
 									className="inset-y-0 flex items-center"
-									onClick={handleSearchTrigger}
-								>
+									onClick={handleSearchTrigger}>
 									<i className="fi fi-rr-search mt-1 text-lg"></i>
 								</button>
 							</div>
@@ -144,8 +144,7 @@ const OnlineClassesList = () => {
 												className={active === 0 ? activeTab : notActiveTab}
 												onClick={() => {
 													filterAll();
-												}}
-											>
+												}}>
 												All
 											</button>
 										</li>
@@ -170,8 +169,7 @@ const OnlineClassesList = () => {
 													<li className="mr-2" key={workout}>
 														<button
 															className={active === workout ? activeTab : notActiveTab}
-															onClick={() => filterItem(workout)}
-														>
+															onClick={() => filterItem(workout)}>
 															{workout}
 														</button>
 													</li>
@@ -194,8 +192,7 @@ const OnlineClassesList = () => {
 									? "pointer-events-auto fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 									: "pointer-events-none fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 							}
-							onClick={handleSearchTrigger}
-						></div>
+							onClick={handleSearchTrigger}></div>
 						<div className="fixed top-0 right-0 z-40 mr-32 mt-32 w-48 rounded-xl bg-white shadow-4 transition-all duration-300 md:hidden">
 							<div className="relative">
 								<input
@@ -214,7 +211,7 @@ const OnlineClassesList = () => {
 					</div>
 				)}
 				{load ? (
-					<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
+					<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 						<SkeletonLoadingOnlineClasses />
 						<SkeletonLoadingOnlineClasses />
 						<SkeletonLoadingOnlineClasses />
@@ -222,7 +219,7 @@ const OnlineClassesList = () => {
 				) : (
 					<div>
 						{onlineClasses.data.rows?.length > 0 ? (
-							<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
+							<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 								{onlineClasses.data.rows?.map((item) => {
 									return <OnlineClassesListItem data={item} key={item.class_id} />;
 								})}

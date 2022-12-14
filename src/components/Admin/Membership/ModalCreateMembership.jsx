@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
 import {
 	cancelButton,
 	inputError,
@@ -13,6 +12,9 @@ import {
 	saveButton,
 } from "../../../utils/globalVariable";
 import { createMembership } from "../../../stores/features/membershipSlice";
+
+import Swal from "sweetalert2";
+import { maxLengthCheck } from "../../../utils/maxLengthCheck";
 
 const baseValue = {
 	first_name: "",
@@ -92,18 +94,15 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 
 		if (name === "password") {
 			if (!regexPasswordValidation.test(value)) {
-				setErrors({ ...errors, password: "Password must contain minimum one capital letter and one number" });
+				setErrors({
+					...errors,
+					password: "Password must contain minimum one capital letter and one number",
+				});
 			} else if (value.length <= 8) {
 				setErrors({ ...errors, password: "Password must be more than 8 characters" });
 			} else {
 				setErrors({ ...errors, password: "" });
 			}
-		}
-	};
-
-	const checkMaxLengthPhoneNumber = (e) => {
-		if (e.target.value.length > e.target.maxLength) {
-			e.target.value = e.target.value.slice(0, e.target.maxLength);
 		}
 	};
 
@@ -120,27 +119,35 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 		const phone_number = formData.get("phone_number");
 		const password = formData.get("password");
 
-		if (!errors.first_name && !errors.last_name && !errors.email && !errors.phone_number && !errors.password) {
+		if (
+			!errors.first_name &&
+			!errors.last_name &&
+			!errors.email &&
+			!errors.phone_number &&
+			!errors.password
+		) {
 			try {
-				dispatch(createMembership({ first_name, last_name, phone_number, email, password })).then((res) => {
-					if (!res.error) {
-						setTimeout(
-							() =>
-								Swal.fire({
-									icon: "success",
-									title: "Saved",
-									text: "Membership data successfully saved",
-									showConfirmButton: false,
-									timer: 2000,
-									background: "#ffffff",
-								}),
-							1000
-						);
-						handleModalCreateTrigger();
-					} else {
-						Swal.fire("Sorry", res.error.message.split(":")[1], "error");
+				dispatch(createMembership({ first_name, last_name, phone_number, email, password })).then(
+					(res) => {
+						if (!res.error) {
+							setTimeout(
+								() =>
+									Swal.fire({
+										icon: "success",
+										title: "Saved",
+										text: "Membership data successfully saved",
+										showConfirmButton: false,
+										timer: 2000,
+										background: "#ffffff",
+									}),
+								1000
+							);
+							handleModalCreateTrigger();
+						} else {
+							Swal.fire("Sorry", res.error.message.split(":")[1], "error");
+						}
 					}
-				});
+				);
 			} catch (error) {
 				Swal.fire("Sorry", error.message, "error");
 			}
@@ -167,7 +174,9 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 					<div className="relative h-full w-full max-w-sm sm:max-w-sm md:h-auto md:max-w-md lg:max-w-lg xl:max-w-xl">
 						<form onSubmit={handleSubmit} className="rounded-xl bg-white shadow-4">
 							<div className="flex items-center justify-between rounded-t p-4">
-								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">Add New Membership</h3>
+								<h3 className="p-1.5 text-base font-bold text-neutral-100-2 lg:text-lg xl:text-xl">
+									Add New Membership
+								</h3>
 							</div>
 							<div className="space-y-6 p-6">
 								<div>
@@ -181,8 +190,12 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 											required
 											onChange={handleChange}
 										/>
-										<label htmlFor="first_name" className={errors.last_name ? labelError : labelNotError}>
-											<span className="block after:ml-1 after:text-red-500 after:content-['*']">First Name</span>
+										<label
+											htmlFor="first_name"
+											className={errors.last_name ? labelError : labelNotError}>
+											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+												First Name
+											</span>
 										</label>
 									</div>
 									<div className="mt-1">
@@ -204,8 +217,12 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 											required
 											onChange={handleChange}
 										/>
-										<label htmlFor="last_name" className={errors.last_name ? labelError : labelNotError}>
-											<span className="block after:ml-1 after:text-red-500 after:content-['*']">Last Name</span>
+										<label
+											htmlFor="last_name"
+											className={errors.last_name ? labelError : labelNotError}>
+											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+												Last Name
+											</span>
 										</label>
 									</div>
 									<div className="mt-1">
@@ -228,7 +245,9 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 											required
 										/>
 										<label htmlFor="email" className={errors.email ? labelError : labelNotError}>
-											<span className="block after:ml-1 after:text-red-500 after:content-['*']">Email</span>
+											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+												Email
+											</span>
 										</label>
 									</div>
 									<div className="mt-1">
@@ -245,13 +264,21 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 											type={passwordShown ? "text" : "password"}
 											id="password"
 											name="password"
-											className={errors.password ? `${inputError} flex-2 col-span-2` : `${inputNotError} flex-2 col-span-2`}
+											className={
+												errors.password
+													? `${inputError} flex-2 col-span-2`
+													: `${inputNotError} flex-2 col-span-2`
+											}
 											placeholder=" "
 											onChange={handleChange}
 											required
 										/>
-										<label htmlFor="password" className={errors.password ? labelError : labelNotError}>
-											<span className="block after:ml-1 after:text-red-500 after:content-['*']">Password</span>
+										<label
+											htmlFor="password"
+											className={errors.password ? labelError : labelNotError}>
+											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+												Password
+											</span>
 										</label>
 										<button type="button" onClick={togglePassword}>
 											{passwordShown === false ? (
@@ -281,10 +308,14 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 											onChange={handleChange}
 											required
 											maxLength={maxLengthPhoneNumber}
-											onInput={checkMaxLengthPhoneNumber}
+											onInput={maxLengthCheck}
 										/>
-										<label htmlFor="phone_number" className={errors.phone_number ? labelError : labelNotError}>
-											<span className="block after:ml-1 after:text-red-500 after:content-['*']">Phone Number</span>
+										<label
+											htmlFor="phone_number"
+											className={errors.phone_number ? labelError : labelNotError}>
+											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+												Phone Number
+											</span>
 										</label>
 									</div>
 									<div className="mt-1">
