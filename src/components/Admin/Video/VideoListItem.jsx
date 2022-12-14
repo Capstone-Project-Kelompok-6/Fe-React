@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import useHook from "../../../hooks/useHook";
 import { deleteVideo } from "../../../stores/features/videoSlice";
 import {
 	actionDropdownDelete,
@@ -13,8 +14,7 @@ import ModalEditVideo from "./ModalEditVideo";
 
 const VideoListItem = ({ data }) => {
 	const { video_content_id, title, video, video_name } = data;
-	const [actionDropdown, setActionDropdown] = useState(false);
-	const [modalEditTrigger, setModalEditTrigger] = useState(false);
+	const { actionDropdown, setActionDropdown, modalEditTrigger, setModalEditTrigger } = useHook();
 	const dispatch = useDispatch();
 
 	const handleDelete = () => {

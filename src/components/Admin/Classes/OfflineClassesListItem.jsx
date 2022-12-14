@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import useHook from "../../../hooks/useHook";
 import { deleteOfflineClasses } from "../../../stores/features/offlineClassesSlice";
 import { formatPrice } from "../../../utils/formatPrice";
 import {
@@ -23,8 +24,7 @@ const OfflineClassesListItem = ({ data }) => {
 		price,
 	} = data;
 	const dispatch = useDispatch();
-	const [modalEditTrigger, setModalEditTrigger] = useState(false);
-	const [actionDropdown, setActionDropdown] = useState(false);
+	const { actionDropdown, setActionDropdown, modalEditTrigger, setModalEditTrigger } = useHook();
 
 	const handleDelete = () => {
 		const swalWithBootstrapButtons = Swal.mixin({

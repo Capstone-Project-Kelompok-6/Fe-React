@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import useHook from "../../../hooks/useHook";
 import { deleteArticle } from "../../../stores/features/articleSlice";
 import {
 	actionDropdownDelete,
@@ -13,9 +14,7 @@ import ModalEditArticle from "./ModalEditArticle";
 
 const ArticleListItem = ({ data }) => {
 	const { article_id, title, article_image, image_name, description } = data;
-
-	const [modalEditTrigger, setModalEditTrigger] = useState(false);
-	const [actionDropdown, setActionDropdown] = useState(false);
+	const { actionDropdown, setActionDropdown, modalEditTrigger, setModalEditTrigger } = useHook();
 	const dispatch = useDispatch();
 
 	const handleDelete = () => {

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import useHook from "../../../hooks/useHook";
 import { fetchOfflineClassesByPrice } from "../../../stores/features/offlineClassesSlice";
 import { formatDateTime } from "../../../utils/formatDate";
 import { formatPrice } from "../../../utils/formatPrice";
@@ -22,8 +23,7 @@ const OfflineBookingListItem = ({ data }) => {
 	} = data;
 	const dispatch = useDispatch();
 	const offlineClassesList = useSelector((state) => state.offlineClasses.data);
-	const [actionDropdown, setActionDropdown] = useState(false);
-	const [modalEditTrigger, setModalEditTrigger] = useState(false);
+	const { actionDropdown, setActionDropdown, modalEditTrigger, setModalEditTrigger } = useHook();
 
 	const handleActionDropdown = () => {
 		setActionDropdown(!actionDropdown);

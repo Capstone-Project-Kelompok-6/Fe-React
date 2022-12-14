@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useDebounce } from "use-debounce";
 import VideoAPI from "../../../apis/video.api";
+import useHook from "../../../hooks/useHook";
 import {
 	addButton,
 	dataNotFound,
@@ -19,11 +19,16 @@ const Initial_Video = {
 
 const VideoList = () => {
 	const [video, setVideo] = useState(Initial_Video);
-	const [modalCreateTrigger, setModalCreateTrigger] = useState(false);
-	const [searchTrigger, setSearchTrigger] = useState(false);
-	const [keyword, setKeyword] = useState("");
+	const {
+		modalCreateTrigger,
+		setModalCreateTrigger,
+		keyword,
+		setKeyword,
+		debouncedKeyword,
+		searchTrigger,
+		setSearchTrigger,
+	} = useHook();
 	const loading = useSelector((state) => state.video.loading);
-	const [debouncedKeyword] = useDebounce(keyword, 1300);
 
 	useEffect(() => {
 		if (debouncedKeyword) {

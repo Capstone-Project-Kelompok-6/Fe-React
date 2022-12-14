@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import useHook from "../../../hooks/useHook";
 import { deleteOnlineClasses } from "../../../stores/features/onlineClassesSlice";
 import { formatPrice } from "../../../utils/formatPrice";
 import {
@@ -14,8 +15,7 @@ import ModalEditOnlineClasses from "./ModalEditOnlineClasses";
 
 const OnlineClassesListItem = ({ data }) => {
 	const { class_id, workout, video_title, video, video_name, price, description } = data;
-	const [modalEditTrigger, setModalEditTrigger] = useState(false);
-	const [actionDropdown, setActionDropdown] = useState(false);
+	const { actionDropdown, setActionDropdown, modalEditTrigger, setModalEditTrigger } = useHook();
 	const dispatch = useDispatch();
 
 	const handleDelete = () => {
@@ -175,7 +175,9 @@ const OnlineClassesListItem = ({ data }) => {
 						</h5>
 					</div>
 					<div className="min-w-0 flex-1">
-						<p className="text-sm font-normal text-neutral-80">{truncate(description, 100)}</p>
+						<p className="whitespace-pre-line break-all text-sm font-normal text-neutral-80">
+							{truncate(description, 30)}
+						</p>
 					</div>
 				</div>
 				{modalEditTrigger && (
