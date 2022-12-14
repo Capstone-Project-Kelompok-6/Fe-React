@@ -8,6 +8,8 @@ import {
 	createOnlineVideoClasses,
 } from "../../../stores/features/onlineClassesSlice";
 import { fetchWorkoutList } from "../../../stores/features/workoutSlice";
+import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
+import { maxLengthCheck } from "./../../../utils/maxLengthCheck";
 import {
 	cancelButton,
 	inputNotError,
@@ -27,7 +29,7 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 	const [title, setTitle] = useState("");
 	const workoutList = useSelector((state) => state.workout.data);
 	const dispatch = useDispatch();
-	const [load, setLoad] = useState(false);
+	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
 	const maxTitle = 100;
 	const MAX_FILE_SIZE = 5120;
@@ -76,7 +78,7 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		setLoad(true);
+		dispatch(setLoaderSubmit(true));
 
 		const formData = new FormData(e.target);
 		const video_title = formData.get("video_title");
@@ -105,7 +107,7 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 									}),
 								1000
 							);
-							setLoad(false);
+							dispatch(setLoaderSubmit(false));
 						} else {
 							handleModalCreateTrigger();
 							setTimeout(
@@ -120,7 +122,7 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 									}),
 								1000
 							);
-							setLoad(false);
+							dispatch(setLoaderSubmit(false));
 						}
 					});
 				}
@@ -136,13 +138,7 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 					}),
 				1000
 			);
-			setLoad(false);
-		}
-	};
-
-	const maxLengthCheck = (e) => {
-		if (e.target.value.length > e.target.maxLength) {
-			e.target.value = e.target.value.slice(0, e.target.maxLength);
+			dispatch(setLoaderSubmit(false));
 		}
 	};
 
@@ -263,7 +259,8 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 											rows="5"
 											className={inputNotError}
 											placeholder=" "
-											required></textarea>
+											required
+										></textarea>
 										<label htmlFor="description" className={labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												{" "}
@@ -277,7 +274,7 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 								<button type="button" className={cancelButton} onClick={handleModalCreateTrigger}>
 									Cancel
 								</button>
-								{load ? (
+								{loaderSubmit ? (
 									<button className={saveButton}>
 										<PulseLoader size={5} color={"#ffffff"} />
 									</button>

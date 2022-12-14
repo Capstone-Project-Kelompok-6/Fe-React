@@ -1,21 +1,25 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { editMembership } from "../../../stores/features/membershipSlice";
+import { PulseLoader } from "react-spinners";
 import {
 	cancelButton,
 	inputNotError,
 	labelNotError,
 	saveButton,
 } from "../../../utils/globalVariable";
+import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
 
 import Swal from "sweetalert2";
 
 const ModalEditMembership = ({ handleModalEditTrigger, handleActionDrowpdon, update }) => {
 	const { user_id, email } = update;
 	const dispatch = useDispatch();
+	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
 	const handleUpdate = (e) => {
 		e.preventDefault();
+		dispatch(setLoaderSubmit(true));
 
 		const formData = new FormData(e.target);
 		const email = formData.get("email");
@@ -35,15 +39,17 @@ const ModalEditMembership = ({ handleModalEditTrigger, handleActionDrowpdon, upd
 							}),
 						1000
 					);
-
+					dispatch(setLoaderSubmit(false));
 					handleModalEditTrigger();
 					handleActionDrowpdon();
 				} else {
 					Swal.fire("Sorry", "Email is already exists", "error");
+					dispatch(setLoaderSubmit(false));
 				}
 			});
 		} catch (error) {
 			Swal.fire("Sorry", error.message, "error");
+			dispatch(setLoaderSubmit(false));
 		}
 	};
 
@@ -82,9 +88,15 @@ const ModalEditMembership = ({ handleModalEditTrigger, handleActionDrowpdon, upd
 								<button type="button" className={cancelButton} onClick={handleModalEditTrigger}>
 									Cancel
 								</button>
-								<button type="submit" className={saveButton}>
-									Save
-								</button>
+								{loaderSubmit ? (
+									<button className={saveButton}>
+										<PulseLoader size={5} color={"#ffffff"} />
+									</button>
+								) : (
+									<button type="submit" className={saveButton}>
+										Save
+									</button>
+								)}
 							</div>
 						</form>
 					</div>

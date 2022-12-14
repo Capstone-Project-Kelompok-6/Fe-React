@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { editWorkout } from "../../../stores/features/workoutSlice";
 import {
@@ -11,6 +11,8 @@ import {
 	regexNameValidation,
 	saveButton,
 } from "../../../utils/globalVariable";
+import { PulseLoader } from "react-spinners";
+import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
 
 const baseValues = {
 	workout: "",
@@ -29,11 +31,13 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 	const [fileDataURL, setFileDataURL] = useState(null);
 	const [errors, setErrors] = useState(baseErrors);
 	const [values, setValues] = useState(baseValues);
+	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
 	const MAX_FILE_SIZE = 3072;
 
 	const handleUpdate = (e) => {
 		e.preventDefault();
+		dispatch(setLoaderSubmit(true));
 		const formData = new FormData(e.target);
 		const workout = formData.get("workout");
 		const image = formData.get("image");
@@ -63,13 +67,16 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 								}),
 							1000
 						);
+						dispatch(setLoaderSubmit(false));
 						handleModalEditTrigger();
 					} else {
 						Swal.fire("Sorry", "Workout already exists", "info");
+						dispatch(setLoaderSubmit(false));
 					}
 				});
 			} catch (error) {
 				Swal.fire("Sorry", error.message, "info");
+				dispatch(setLoaderSubmit(false));
 			}
 		} else {
 			setTimeout(
@@ -82,6 +89,7 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 					}),
 				1000
 			);
+			dispatch(setLoaderSubmit(false));
 		}
 	};
 
@@ -182,7 +190,8 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 											/>
 											<label
 												htmlFor="workout"
-												className={errors.workout ? labelError : labelNotError}>
+												className={errors.workout ? labelError : labelNotError}
+											>
 												<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 													Workout Name
 												</span>
@@ -247,7 +256,8 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 											defaultValue={description}
 											rows="5"
 											className={inputNotError}
-											placeholder=" "></textarea>
+											placeholder=" "
+										></textarea>
 										<label htmlFor="description" className={labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Information
@@ -260,9 +270,15 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 								<button type="button" className={cancelButton} onClick={handleModalEditTrigger}>
 									Cancel
 								</button>
-								<button type="submit" className={saveButton}>
-									Save
-								</button>
+								{loaderSubmit ? (
+									<button className={saveButton}>
+										<PulseLoader size={5} color={"#ffffff"} />
+									</button>
+								) : (
+									<button type="submit" className={saveButton}>
+										Save
+									</button>
+								)}
 							</div>
 						</form>
 					</div>

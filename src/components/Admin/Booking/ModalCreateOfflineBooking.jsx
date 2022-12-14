@@ -7,11 +7,15 @@ import { fetchMembership } from "./../../../stores/features/membershipSlice";
 import { fetchOfflineClasses } from "../../../stores/features/offlineClassesSlice";
 import { createOfflineBooking } from "./../../../stores/features/offlineBookingSlice";
 import { createPayment } from "../../../stores/features/paymentSlice";
+import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
+import { PulseLoader } from "react-spinners";
 
 const ModalCreateOfflineBooking = ({ handleModalCreateTrigger }) => {
 	const dispatch = useDispatch();
 	const membershipList = useSelector((state) => state.membership.data);
 	const offlineClassesList = useSelector((state) => state.offlineClasses.data);
+	const loaderSubmit = useSelector((state) => state.loaderSubmit);
+
 	const phoneNumber = {};
 
 	membershipList.rows?.map((row) => {
@@ -20,11 +24,13 @@ const ModalCreateOfflineBooking = ({ handleModalCreateTrigger }) => {
 
 	useEffect(() => {
 		dispatch(fetchMembership(1000));
-		dispatch(fetchOfflineClasses());
+		dispatch(fetchOfflineClasses(1000));
 	}, [dispatch]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		dispatch(setLoaderSubmit(true));
+
 		const formData = new FormData(e.target);
 		const user_id = formData.get("user_id");
 		const class_id = formData.get("class_id");
@@ -66,14 +72,17 @@ const ModalCreateOfflineBooking = ({ handleModalCreateTrigger }) => {
 									}),
 								1000
 							);
+							dispatch(setLoaderSubmit(false));
 						}
 					});
 				} else {
 					Swal.fire("Sorry", res.error.message.split(":")[1], "info");
+					dispatch(setLoaderSubmit(false));
 				}
 			});
 		} catch (error) {
 			Swal.fire("Sorry", error.message.split(":")[1], "info");
+			dispatch(setLoaderSubmit(false));
 		}
 	};
 
@@ -129,9 +138,15 @@ const ModalCreateOfflineBooking = ({ handleModalCreateTrigger }) => {
 								<button type="button" className={cancelButton} onClick={handleModalCreateTrigger}>
 									Cancel
 								</button>
-								<button type="submit" className={saveButton}>
-									Save
-								</button>
+								{loaderSubmit ? (
+									<button className={saveButton}>
+										<PulseLoader size={5} color={"#ffffff"} />
+									</button>
+								) : (
+									<button type="submit" className={saveButton}>
+										Save
+									</button>
+								)}
 							</div>
 						</form>
 					</div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { createWorkout } from "../../../stores/features/workoutSlice";
 import {
@@ -11,6 +11,8 @@ import {
 	regexNameValidation,
 	saveButton,
 } from "../../../utils/globalVariable";
+import { PulseLoader } from "react-spinners";
+import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
 
 const baseValues = {
 	workout: "",
@@ -29,6 +31,7 @@ const ModalCreateWorkout = ({ handleModalCreateTrigger }) => {
 	const [values, setValues] = useState(baseValues);
 	const imageWorkout = useRef(null);
 	const dispatch = useDispatch();
+	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
 	const MAX_FILE_SIZE = 3072;
 
@@ -103,6 +106,7 @@ const ModalCreateWorkout = ({ handleModalCreateTrigger }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		dispatch(setLoaderSubmit(true));
 		const formData = new FormData(e.target);
 		const workout = formData.get("workout");
 		const image = formData.get("image");
@@ -125,12 +129,15 @@ const ModalCreateWorkout = ({ handleModalCreateTrigger }) => {
 							1000
 						);
 						handleModalCreateTrigger();
+						dispatch(setLoaderSubmit(false));
 					} else {
 						Swal.fire("Sorry", res.error.message.split(":")[1], "info");
+						dispatch(setLoaderSubmit(false));
 					}
 				});
 			} catch (error) {
 				Swal.fire("Sorry", error.message.split(":")[1], "info");
+				dispatch(setLoaderSubmit(false));
 			}
 		} else {
 			setTimeout(
@@ -143,6 +150,7 @@ const ModalCreateWorkout = ({ handleModalCreateTrigger }) => {
 					}),
 				1000
 			);
+			dispatch(setLoaderSubmit(false));
 		}
 	};
 
@@ -179,7 +187,8 @@ const ModalCreateWorkout = ({ handleModalCreateTrigger }) => {
 											/>
 											<label
 												htmlFor="workout"
-												className={errors.workout ? labelError : labelNotError}>
+												className={errors.workout ? labelError : labelNotError}
+											>
 												<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 													Workout Name
 												</span>
@@ -205,7 +214,8 @@ const ModalCreateWorkout = ({ handleModalCreateTrigger }) => {
 													<button
 														type="button"
 														className="absolute -top-2 -right-2 inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-red-500 text-sm font-bold text-white sm:mr-10 md:right-0 md:mr-14 xl:mr-20"
-														onClick={handleCancelUpload}>
+														onClick={handleCancelUpload}
+													>
 														<i className="fi fi-rr-cross-small mt-1"></i>
 													</button>
 												</div>
@@ -250,7 +260,8 @@ const ModalCreateWorkout = ({ handleModalCreateTrigger }) => {
 											rows="5"
 											className={inputNotError}
 											placeholder=" "
-											required></textarea>
+											required
+										></textarea>
 										<label htmlFor="description" className={labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Information
@@ -263,9 +274,15 @@ const ModalCreateWorkout = ({ handleModalCreateTrigger }) => {
 								<button type="button" className={cancelButton} onClick={handleModalCreateTrigger}>
 									Cancel
 								</button>
-								<button type="submit" className={saveButton}>
-									Save
-								</button>
+								{loaderSubmit ? (
+									<button className={saveButton}>
+										<PulseLoader size={5} color={"#ffffff"} />
+									</button>
+								) : (
+									<button type="submit" className={saveButton}>
+										Save
+									</button>
+								)}
 							</div>
 						</form>
 					</div>

@@ -12,6 +12,8 @@ import { fetchInstructor } from "../../../stores/features/instructorSlice";
 import { fetchWorkoutList } from "../../../stores/features/workoutSlice";
 import { editOfflineClasses } from "../../../stores/features/offlineClassesSlice";
 import Swal from "sweetalert2";
+import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
+import { PulseLoader } from "react-spinners";
 
 const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown, update }) => {
 	const {
@@ -28,6 +30,7 @@ const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown,
 	const workoutList = useSelector((state) => state.workout.data);
 	const instructorList = useSelector((state) => state.instructor.data);
 	const [selectedClassDates, setSelectedClassDates] = useState([]);
+	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
 	useEffect(() => {
 		dispatch(fetchWorkoutList());
@@ -49,6 +52,8 @@ const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown,
 
 	const handleUpdate = (e) => {
 		e.preventDefault();
+		dispatch(setLoaderSubmit(true));
+
 		const formData = new FormData(e.target);
 		const workout_id = formData.get("workout_id");
 		const instructor_id = formData.get("instructor_id");
@@ -80,12 +85,15 @@ const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown,
 					);
 					handleModalEditTrigger();
 					handleActionDropdown();
+					dispatch(setLoaderSubmit(false));
 				} else {
 					Swal.fire("Sorry", "Classes already exists", "info");
+					dispatch(setLoaderSubmit(false));
 				}
 			});
 		} catch (error) {
 			Swal.fire("Sorry", error.message.split(":")[1], "info");
+			dispatch(setLoaderSubmit(false));
 		}
 	};
 
@@ -185,7 +193,8 @@ const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown,
 										rows="5"
 										className={inputNotError}
 										placeholder=" "
-										defaultValue={description}></textarea>
+										defaultValue={description}
+									></textarea>
 									<label htmlFor="description" className={labelNotError}>
 										<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 											{" "}
@@ -198,9 +207,15 @@ const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown,
 								<button type="button" className={cancelButton} onClick={handleModalEditTrigger}>
 									Cancel
 								</button>
-								<button type="submit" className={saveButton}>
-									Save
-								</button>
+								{loaderSubmit ? (
+									<button className={saveButton}>
+										<PulseLoader size={5} color={"#ffffff"} />
+									</button>
+								) : (
+									<button type="submit" className={saveButton}>
+										Save
+									</button>
+								)}
 							</div>
 						</form>
 					</div>
