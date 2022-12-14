@@ -7,8 +7,8 @@ const OfflineBookingPage = () => {
 	return (
 		<>
 			<Helmet>
-				<title>Manage Offline Booking - Gym Membership</title>
-				<meta name="website" content="Gym Membership" />
+				<title>Manage Offline Booking - WorkFit</title>
+				<meta name="website" content="WorkFit" />
 			</Helmet>
 			<OfflineBookingList />
 			<ToTop />

@@ -7,8 +7,8 @@ const OfflineClassesPage = () => {
 	return (
 		<>
 			<Helmet>
-				<title>Manage Offline Classes - Gym Membership</title>
-				<meta name="website" content="Gym Membership" />
+				<title>Manage Offline Classes - WorkFit</title>
+				<meta name="website" content="WorkFit" />
 			</Helmet>
 			<OfflineClassesList />
 			<ToTop />

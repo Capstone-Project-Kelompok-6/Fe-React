@@ -7,8 +7,8 @@ const ArticlePage = () => {
 	return (
 		<>
 			<Helmet>
-				<title>Manage Article - Gym Membership</title>
-				<meta name="website" content="Gym Membership" />
+				<title>Manage Article - WorkFit</title>
+				<meta name="website" content="WorkFit" />
 			</Helmet>
 			<ArticleList />
 			<ToTop />

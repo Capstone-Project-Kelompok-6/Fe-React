@@ -7,8 +7,8 @@ const VideoPage = () => {
 	return (
 		<>
 			<Helmet>
-				<title>Manage Video - Gym Membership</title>
-				<meta name="website" content="Gym Membership" />
+				<title>Manage Video - WorkFit</title>
+				<meta name="website" content="WorkFit" />
 			</Helmet>
 			<VideoList />
 			<ToTop />

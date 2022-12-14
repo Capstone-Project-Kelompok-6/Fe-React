@@ -6,8 +6,8 @@ const LoginPage = () => {
 	return (
 		<div>
 			<Helmet>
-				<title>Login Page - Gym Membership</title>
-				<meta name="website" content="Gym Membership" />
+				<title>Login Page - WorkFit</title>
+				<meta name="website" content="WorkFit" />
 			</Helmet>
 			<FormLogin />
 		</div>

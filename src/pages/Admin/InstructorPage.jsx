@@ -6,8 +6,8 @@ const InstructorPage = () => {
 	return (
 		<>
 			<Helmet>
-				<title>Manage Instructor - Gym Membership</title>
-				<meta name="website" content="Gym Membership" />
+				<title>Manage Instructor - WorkFit</title>
+				<meta name="website" content="WorkFit" />
 			</Helmet>
 			<InstructorList />
 		</>
