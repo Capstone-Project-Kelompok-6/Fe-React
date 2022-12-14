@@ -83,8 +83,7 @@ const FormLogin = () => {
 			style={{
 				backgroundImage: `url(${loginBG})`,
 			}}
-			className="z-[3] max-h-full w-full bg-cover bg-no-repeat md:fixed md:h-screen"
-		>
+			className="z-[3] max-h-full w-full bg-cover bg-no-repeat md:fixed md:h-screen">
 			<div className="container z-[1] overflow-y-auto py-5">
 				<div className="inset-x-5 mx-auto">
 					<div className="lg:m-auto">
@@ -119,8 +118,7 @@ const FormLogin = () => {
 										{message === "" ? (
 											<i
 												title="Input with email type ('yourEmail'@mail.com)"
-												className="fi fi-rr-info absolute right-0.5 -bottom-0.5 p-2.5 text-gray-300 hover:text-black hover:transition lg:-bottom-1.5 lg:text-lg"
-											></i>
+												className="fi fi-rr-info absolute right-0.5 -bottom-0.5 p-2.5 text-gray-300 hover:text-black hover:transition lg:-bottom-1.5 lg:text-lg"></i>
 										) : (
 											error && <div className="relative">{error}</div>
 										)}
@@ -129,8 +127,7 @@ const FormLogin = () => {
 								<div className="mb-3 lg:mb-4">
 									<label
 										htmlFor="password"
-										className="mb-2 block text-sm font-medium text-gray-900"
-									>
+										className="mb-2 block text-sm font-medium text-gray-900">
 										Password
 									</label>
 									<div className="relative grid grid-flow-col grid-cols-2 gap-0">
@@ -158,14 +155,13 @@ const FormLogin = () => {
 								) : (
 									<button
 										type="submit"
-										className="w-full rounded-16 bg-secondary-navy px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
-									>
+										className="w-full rounded-16 bg-secondary-navy px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300">
 										Sign In
 									</button>
 								)}
 							</form>
 							<div className="copyright mt-10 text-center text-xs font-normal text-tertiary-6 lg:text-base">
-								<span>Copyright @ 2022 Gym Membership.</span>
+								<span>Copyright @ 2022 WorkFit.</span>
 								<br />
 								<span>All right reserved.</span>
 							</div>

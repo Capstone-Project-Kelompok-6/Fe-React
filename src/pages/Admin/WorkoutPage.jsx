@@ -6,8 +6,8 @@ const WorkoutPage = () => {
 	return (
 		<>
 			<Helmet>
-				<title>Manage Workout - Gym Membership</title>
-				<meta name="website" content="Gym Membership" />
+				<title>Manage Workout - WorkFit</title>
+				<meta name="website" content="WorkFit" />
 			</Helmet>
 			<WorkoutList />
 		</>

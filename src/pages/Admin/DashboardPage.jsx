@@ -6,8 +6,8 @@ const DashboardPage = () => {
 	return (
 		<>
 			<Helmet>
-				<title>Dashboard - Gym Membership</title>
-				<meta name="website" content="Gym Membership" />
+				<title>Dashboard - WorkFit</title>
+				<meta name="website" content="WorkFit" />
 			</Helmet>
 			<Overview />
 		</>

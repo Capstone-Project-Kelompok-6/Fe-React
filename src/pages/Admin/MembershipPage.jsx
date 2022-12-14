@@ -7,8 +7,8 @@ const MembershipPage = () => {
 	return (
 		<>
 			<Helmet>
-				<title>Manage Membership - Gym Membership</title>
-				<meta name="website" content="Gym Membership" />
+				<title>Manage Membership - WorkFit</title>
+				<meta name="website" content="WorkFit" />
 			</Helmet>
 			<MembershipList />
 			<ToTop />

@@ -7,8 +7,8 @@ const OnlineBookingPage = () => {
 	return (
 		<>
 			<Helmet>
-				<title>Manage Online Booking - Gym Membership</title>
-				<meta name="website" content="Gym Membership" />
+				<title>Manage Online Booking - WorkFit</title>
+				<meta name="website" content="WorkFit" />
 			</Helmet>
 			<OnlineBookingList />
 			<ToTop />
