@@ -1,70 +1,100 @@
 import React, { useEffect, useState } from "react";
-import { useDebounce } from "use-debounce";
-import { useSelector } from "react-redux";
-import { activeTab, addButton, dataNotFound, notActiveTab, searchInputForLgScreen, searchInputForSmScreen } from "../../../utils/globalVariable";
+import { useDispatch, useSelector } from "react-redux";
+import {
+	activeTab,
+	addButton,
+	dataNotFound,
+	notActiveTab,
+	searchInputForLgScreen,
+	searchInputForSmScreen,
+} from "../../../utils/globalVariable";
 import BookingHeader from "./BookingHeader";
 import BookingTabs from "./BookingTabs";
 import BookingAPI from "./../../../apis/booking.api";
 import OfflineBookingListItem from "./OfflineBookingListItem";
 import SkeletonLoadingBooking from "./SkeletonLoadingBooking";
 import ModalCreateOfflineBooking from "./ModalCreateOfflineBooking";
-import WorkoutAPI from "../../../apis/workout.api";
 import SkeletonLoadingTabs from "../SkeletonLoadingTabs";
+import { setLoaderFetchData } from "../../../stores/features/loaderFetchDataSlice";
+import useHook from "../../../hooks/useHook";
 
 const Initial_Offline_Booking = {
 	data: [],
-	page: 0,
-	status: false,
 };
 
 const OfflineBookingList = () => {
 	const [offlineBooking, setOfflineBooking] = useState(Initial_Offline_Booking);
-	const [workout, setWorkout] = useState(Initial_Offline_Booking);
-	const [modalCreateTrigger, setModalCreateTrigger] = useState(false);
-	const [searchTrigger, setSearchTrigger] = useState(false);
-	const [keyword, setKeyword] = useState("");
-	const loading = useSelector((state) => state.offlineBooking.loading);
-	const [debouncedKeyword] = useDebounce(keyword, 1300);
-	const loadingWorkout = useSelector((state) => state.workout.loading);
+	const [filterOfflineBooking, setFilterOfflineBooking] = useState(Initial_Offline_Booking);
+	const {
+		modalCreateTrigger,
+		setModalCreateTrigger,
+		keyword,
+		setKeyword,
+		debouncedKeyword,
+		searchTrigger,
+		setSearchTrigger,
+	} = useHook();
 	const [active, setActive] = useState(0);
+
+	const dispatch = useDispatch();
+	const loading = useSelector((state) => state.offlineBooking.loading);
+	const loaderFetchData = useSelector((state) => state.loaderFetchData);
+
+	const bookingOffline = new Set();
+	const bookingOfflineFilter = new Set();
+
+	offlineBooking.data.rows?.forEach((value) => {
+		bookingOffline.add(value.workout);
+	});
+
+	filterOfflineBooking.data.rows?.forEach((value) => {
+		bookingOfflineFilter.add(value.workout);
+	});
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			BookingAPI.searchOfflineBooking(debouncedKeyword.toLowerCase()).then((result) => setOfflineBooking({ status: true, data: result.data.data }));
+			BookingAPI.searchOfflineBooking(debouncedKeyword.toLowerCase()).then((result) => {
+				setOfflineBooking({ data: result.data.data });
+				setActive(result.data.data.rows[0].workout);
+			});
 		} else {
-			setTimeout(
-				() =>
-					BookingAPI.getOfflineBooking().then((result) =>
-						setOfflineBooking({
-							status: true,
-							data: result.data.data,
-						})
-					),
-				1300
-			);
+			dispatch(setLoaderFetchData(true));
+			BookingAPI.getOfflineBooking(1000).then((result) => {
+				setOfflineBooking({
+					data: result.data.data,
+				});
+				setActive(0);
+				dispatch(setLoaderFetchData(false));
+			});
 		}
 	}, [loading, debouncedKeyword]);
 
 	useEffect(() => {
-		setTimeout(() => WorkoutAPI.getWorkout().then((result) => setWorkout({ status: true, data: result.data.data })), 1300);
-	}, [loadingWorkout]);
+		BookingAPI.getOfflineBooking(1000).then((result) => {
+			setFilterOfflineBooking({
+				data: result.data.data,
+			});
+		});
+	}, [loading]);
 
-	const filterItem = (workout_id) => {
-		setTimeout(
-			() =>
-				BookingAPI.filterOfflineBooking(workout_id).then((result) =>
-					setOfflineBooking({
-						status: true,
-						data: result.data.data,
-					})
-				),
-			500
-		);
-		setActive(workout_id);
+	const filterItem = (workout) => {
+		dispatch(setLoaderFetchData(true));
+		BookingAPI.filterOfflineBooking(workout).then((result) => {
+			setOfflineBooking({
+				data: result.data.data,
+			});
+			setActive(workout);
+			dispatch(setLoaderFetchData(false));
+		});
 	};
 
 	const filterAll = () => {
-		setActive(0);
+		BookingAPI.getOfflineBooking(1000).then((result) => {
+			setOfflineBooking({
+				data: result.data.data,
+			});
+			setActive(0);
+		});
 	};
 
 	const handleModalCreateTrigger = () => {
@@ -99,7 +129,10 @@ const OfflineBookingList = () => {
 								</div>
 							</div>
 							<div className="mt-1 mr-5 md:hidden">
-								<button type="button" className="inset-y-0 flex items-center" onClick={handleSearchTrigger}>
+								<button
+									type="button"
+									className="inset-y-0 flex items-center"
+									onClick={handleSearchTrigger}>
 									<i className="fi fi-rr-search mt-1 text-lg"></i>
 								</button>
 							</div>
@@ -111,56 +144,46 @@ const OfflineBookingList = () => {
 					</div>
 					<div className="grid grid-cols-1 gap-4 lg:col-span-3">
 						<div className="relative">
-							<div className="relative">
-								<div className="sm:block">
-									<ul className="-mb-px flex list-none overflow-x-scroll whitespace-nowrap text-center text-xs font-medium scrollbar-hide">
-										<li className="mr-2">
-											<button
-												className={active === 0 ? activeTab : notActiveTab}
-												onClick={() => {
-													filterAll();
-													setTimeout(
-														() =>
-															BookingAPI.getOfflineBooking().then((result) =>
-																setOfflineBooking({
-																	status: true,
-																	data: result.data.data,
-																})
-															),
-														500
-													);
-												}}>
-												All
-											</button>
-										</li>
-										{offlineBooking.status ? (
-											workout.data.rows?.map((item) => {
-												return (
-													<li className="mr-2" key={item.workout_id}>
-														<button className={active === item.workout_id ? activeTab : notActiveTab} onClick={() => filterItem(item.workout_id)}>
-															{item.workout}
-														</button>
-													</li>
-												);
-											})
-										) : (
-											<ul className="-mb-px flex list-none text-center">
-												<li className="mr-2">
-													<SkeletonLoadingTabs />
+							<div className="sm:block">
+								<ul className="-mb-px flex list-none overflow-x-scroll whitespace-nowrap text-center text-xs font-medium scrollbar-hide">
+									<li className="mr-2">
+										<button
+											className={active === 0 ? activeTab : notActiveTab}
+											onClick={() => {
+												filterAll();
+											}}>
+											All
+										</button>
+									</li>
+									{loaderFetchData ? (
+										<ul className="-mb-px flex list-none text-center">
+											<li className="mr-2">
+												<SkeletonLoadingTabs />
+											</li>
+											<li className="mr-2">
+												<SkeletonLoadingTabs />
+											</li>
+											<li className="mr-2">
+												<SkeletonLoadingTabs />
+											</li>
+											<li className="mr-2">
+												<SkeletonLoadingTabs />
+											</li>
+										</ul>
+									) : (
+										Array.from(bookingOfflineFilter).map((workout) => {
+											return (
+												<li className="mr-2" key={workout}>
+													<button
+														className={active === workout ? activeTab : notActiveTab}
+														onClick={() => filterItem(workout)}>
+														{workout}
+													</button>
 												</li>
-												<li className="mr-2">
-													<SkeletonLoadingTabs />
-												</li>
-												<li className="mr-2">
-													<SkeletonLoadingTabs />
-												</li>
-												<li className="mr-2">
-													<SkeletonLoadingTabs />
-												</li>
-											</ul>
-										)}
-									</ul>
-								</div>
+											);
+										})
+									)}
+								</ul>
 							</div>
 						</div>
 					</div>
@@ -193,16 +216,22 @@ const OfflineBookingList = () => {
 					</div>
 				</div>
 			)}
-			{offlineBooking.status ? (
+			{loaderFetchData ? (
+				<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
+					<SkeletonLoadingBooking />
+					<SkeletonLoadingBooking />
+					<SkeletonLoadingBooking />
+				</div>
+			) : (
 				<div>
 					{offlineBooking.data.rows?.length > 0 ? (
-						<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
+						<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
 							{offlineBooking.data.rows?.map((item) => {
 								return <OfflineBookingListItem data={item} key={item.book_id} />;
 							})}
 						</div>
 					) : (
-						<div className="pt-40 pb-6">
+						<div className="pt-36 pb-6">
 							<div className={dataNotFound}>
 								<i className="fi fi-rr-info mr-3 text-sm"></i>
 								Data Offline Booking not found
@@ -210,15 +239,11 @@ const OfflineBookingList = () => {
 						</div>
 					)}
 				</div>
-			) : (
-				<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
-					<SkeletonLoadingBooking />
-					<SkeletonLoadingBooking />
-					<SkeletonLoadingBooking />
-				</div>
 			)}
 
-			{modalCreateTrigger && <ModalCreateOfflineBooking handleModalCreateTrigger={handleModalCreateTrigger} />}
+			{modalCreateTrigger && (
+				<ModalCreateOfflineBooking handleModalCreateTrigger={handleModalCreateTrigger} />
+			)}
 		</div>
 	);
 };

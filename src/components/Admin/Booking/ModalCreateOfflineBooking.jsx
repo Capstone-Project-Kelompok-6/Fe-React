@@ -6,45 +6,83 @@ import { cancelButton, saveButton, select } from "../../../utils/globalVariable"
 import { fetchMembership } from "./../../../stores/features/membershipSlice";
 import { fetchOfflineClasses } from "../../../stores/features/offlineClassesSlice";
 import { createOfflineBooking } from "./../../../stores/features/offlineBookingSlice";
+import { createPayment } from "../../../stores/features/paymentSlice";
+import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
+import { PulseLoader } from "react-spinners";
 
 const ModalCreateOfflineBooking = ({ handleModalCreateTrigger }) => {
 	const dispatch = useDispatch();
 	const membershipList = useSelector((state) => state.membership.data);
 	const offlineClassesList = useSelector((state) => state.offlineClasses.data);
+	const loaderSubmit = useSelector((state) => state.loaderSubmit);
+
+	const phoneNumber = {};
+
+	membershipList.rows?.map((row) => {
+		phoneNumber[row.user_id] = row.phone_number;
+	});
 
 	useEffect(() => {
-		dispatch(fetchMembership());
-		dispatch(fetchOfflineClasses());
+		dispatch(fetchMembership(1000));
+		dispatch(fetchOfflineClasses(1000));
 	}, [dispatch]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		dispatch(setLoaderSubmit(true));
+
 		const formData = new FormData(e.target);
 		const user_id = formData.get("user_id");
 		const class_id = formData.get("class_id");
 
+		let name = "";
+		let price = 0;
+
+		offlineClassesList.rows?.map((row) => {
+			if (row.class_id === class_id) {
+				name = row.workout;
+				price = row.price;
+				return;
+			}
+		});
+
 		try {
-			dispatch(createOfflineBooking({ user_id, class_id })).then((res) => {
+			dispatch(createOfflineBooking({ user_id, class_id, is_online: false })).then((res) => {
+				console.log(res);
 				if (!res.error) {
-					handleModalCreateTrigger();
-					setTimeout(
-						() =>
-							Swal.fire({
-								icon: "success",
-								title: "Saved",
-								text: "Offline booking data successfully saved",
-								showConfirmButton: false,
-								timer: 2000,
-								background: "#ffffff",
-							}),
-						1000
-					);
+					const book_id = res.payload.book_id;
+					dispatch(
+						createPayment({
+							book_id,
+							mobile_number: phoneNumber[user_id],
+							items: [{ name, price, quantity: 1 }],
+						})
+					).then((result) => {
+						if (result) {
+							handleModalCreateTrigger();
+							setTimeout(
+								() =>
+									Swal.fire({
+										icon: "success",
+										title: "Saved",
+										text: "Offline booking data successfully saved",
+										showConfirmButton: false,
+										timer: 2000,
+										background: "#ffffff",
+									}),
+								1000
+							);
+							dispatch(setLoaderSubmit(false));
+						}
+					});
 				} else {
 					Swal.fire("Sorry", res.error.message.split(":")[1], "info");
+					dispatch(setLoaderSubmit(false));
 				}
 			});
 		} catch (error) {
 			Swal.fire("Sorry", error.message.split(":")[1], "info");
+			dispatch(setLoaderSubmit(false));
 		}
 	};
 
@@ -100,9 +138,15 @@ const ModalCreateOfflineBooking = ({ handleModalCreateTrigger }) => {
 								<button type="button" className={cancelButton} onClick={handleModalCreateTrigger}>
 									Cancel
 								</button>
-								<button type="submit" className={saveButton}>
-									Save
-								</button>
+								{loaderSubmit ? (
+									<button className={saveButton}>
+										<PulseLoader size={5} color={"#ffffff"} />
+									</button>
+								) : (
+									<button type="submit" className={saveButton}>
+										Save
+									</button>
+								)}
 							</div>
 						</form>
 					</div>

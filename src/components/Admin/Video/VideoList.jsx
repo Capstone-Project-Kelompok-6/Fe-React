@@ -1,31 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useDebounce } from "use-debounce";
 import VideoAPI from "../../../apis/video.api";
-import { addButton, dataNotFound, searchInputForLgScreen, searchInputForSmScreen } from "../../../utils/globalVariable";
+import useHook from "../../../hooks/useHook";
+import {
+	addButton,
+	dataNotFound,
+	searchInputForLgScreen,
+	searchInputForSmScreen,
+} from "../../../utils/globalVariable";
 import ModalCreateVideo from "./ModalCreateVideo";
 import SkeletonLoadingVideo from "./SkeletonLoadingVideo";
 import VideoListItem from "./VideoListItem";
 
 const Initial_Video = {
 	data: [],
-	page: 0,
 	status: false,
 };
 
 const VideoList = () => {
 	const [video, setVideo] = useState(Initial_Video);
-	const [modalCreateTrigger, setModalCreateTrigger] = useState(false);
-	const [searchTrigger, setSearchTrigger] = useState(false);
-	const [keyword, setKeyword] = useState("");
+	const {
+		modalCreateTrigger,
+		setModalCreateTrigger,
+		keyword,
+		setKeyword,
+		debouncedKeyword,
+		searchTrigger,
+		setSearchTrigger,
+	} = useHook();
 	const loading = useSelector((state) => state.video.loading);
-	const [debouncedKeyword] = useDebounce(keyword, 1300);
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			VideoAPI.searchVideo(debouncedKeyword.toLowerCase()).then((result) => setVideo({ status: true, data: result.data.data }));
+			VideoAPI.searchVideo(debouncedKeyword.toLowerCase()).then((result) =>
+				setVideo({ status: true, data: result.data.data })
+			);
 		} else {
-			setTimeout(() => VideoAPI.getVideo().then((result) => setVideo({ status: true, data: result.data.data })), 1300);
+			VideoAPI.getVideo(1000).then((result) => setVideo({ status: true, data: result.data.data }));
 		}
 	}, [loading, debouncedKeyword]);
 
@@ -42,7 +53,9 @@ const VideoList = () => {
 			<div className="fixed left-0 right-0 z-20 w-full bg-white bg-opacity-90 px-6 py-2 shadow-3 backdrop-blur-sm">
 				<div className="flex items-center space-x-4">
 					<div className="min-w-0 flex-1">
-						<h2 className="text-sm font-medium text-neutral-100-2 md:pl-52 md:text-lg">Manage Video</h2>
+						<h2 className="text-sm font-medium text-neutral-100-2 md:pl-52 md:text-lg">
+							Manage Video
+						</h2>
 					</div>
 					<div className="inline-flex items-center text-sm font-medium text-neutral-100-2">
 						<div className="relative mt-1 mr-3 mb-1 hidden w-full md:block md:w-48 lg:w-80">
@@ -59,7 +72,10 @@ const VideoList = () => {
 							</div>
 						</div>
 						<div className="mt-1 mr-5 md:hidden">
-							<button type="button" className="inset-y-0 flex items-center" onClick={handleSearchTrigger}>
+							<button
+								type="button"
+								className="inset-y-0 flex items-center"
+								onClick={handleSearchTrigger}>
 								<i className="fi fi-rr-search mt-1 text-lg"></i>
 							</button>
 						</div>
@@ -100,7 +116,7 @@ const VideoList = () => {
 				{video.status ? (
 					<div>
 						{video.data.rows?.length > 0 ? (
-							<div className="mb-6 grid grid-cols-1 gap-3 pt-20 pb-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+							<div className="mb-6 grid grid-cols-1 gap-6 pt-20 pb-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 								{video.data.rows?.map((item) => {
 									return <VideoListItem data={item} key={item.video_content_id} />;
 								})}
@@ -115,14 +131,16 @@ const VideoList = () => {
 						)}
 					</div>
 				) : (
-					<div className="mb-6 grid grid-cols-1 gap-3 pt-20 pb-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+					<div className="mb-6 grid grid-cols-1 gap-6 pt-20 pb-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 						<SkeletonLoadingVideo />
 						<SkeletonLoadingVideo />
 						<SkeletonLoadingVideo />
 						<SkeletonLoadingVideo />
 					</div>
 				)}
-				{modalCreateTrigger && <ModalCreateVideo handleModalCreateTrigger={handleModalCreateTrigger} />}
+				{modalCreateTrigger && (
+					<ModalCreateVideo handleModalCreateTrigger={handleModalCreateTrigger} />
+				)}
 			</div>
 		</div>
 	);

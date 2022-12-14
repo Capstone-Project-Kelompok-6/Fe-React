@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import useHook from "../../../hooks/useHook";
 import { deleteOnlineClasses } from "../../../stores/features/onlineClassesSlice";
 import { formatPrice } from "../../../utils/formatPrice";
 import {
@@ -9,12 +10,12 @@ import {
 	cancelButtonSwal,
 	confirmButtonSwal,
 } from "../../../utils/globalVariable";
+import { truncate } from "../../../utils/truncate";
 import ModalEditOnlineClasses from "./ModalEditOnlineClasses";
 
 const OnlineClassesListItem = ({ data }) => {
 	const { class_id, workout, video_title, video, video_name, price, description } = data;
-	const [modalEditTrigger, setModalEditTrigger] = useState(false);
-	const [actionDropdown, setActionDropdown] = useState(false);
+	const { actionDropdown, setActionDropdown, modalEditTrigger, setModalEditTrigger } = useHook();
 	const dispatch = useDispatch();
 
 	const handleDelete = () => {
@@ -79,14 +80,10 @@ const OnlineClassesListItem = ({ data }) => {
 		setActionDropdown(!actionDropdown);
 	};
 
-	const truncate = (string, n) => {
-		return string?.length > n ? string.substr(0, n - 1) + "..." : string;
-	};
-
 	return (
 		<div>
 			<div className="h-full rounded-20 bg-white shadow-4">
-				<div className="relative overflow-hidden rounded-20 pb-48">
+				<div className="relative overflow-hidden pb-48">
 					{!video_name ? (
 						<div
 							role="status"
@@ -178,7 +175,9 @@ const OnlineClassesListItem = ({ data }) => {
 						</h5>
 					</div>
 					<div className="min-w-0 flex-1">
-						<p className="text-sm font-normal text-neutral-80">{truncate(description, 100)}</p>
+						<p className="whitespace-pre-line break-all text-sm font-normal text-neutral-80">
+							{truncate(description, 30)}
+						</p>
 					</div>
 				</div>
 				{modalEditTrigger && (

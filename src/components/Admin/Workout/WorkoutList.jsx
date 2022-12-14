@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useDebounce } from "use-debounce";
 import { PulseLoader } from "react-spinners";
 import WorkoutAPI from "../../../apis/workout.api";
 import { useSelector } from "react-redux";
@@ -14,6 +13,7 @@ import {
 	searchInputForLgScreen,
 	searchInputForSmScreen,
 } from "../../../utils/globalVariable";
+import useHook from "../../../hooks/useHook";
 
 const Initial_Workout = {
 	data: [],
@@ -23,26 +23,29 @@ const Initial_Workout = {
 
 const WorkoutList = () => {
 	const [workout, setWorkout] = useState(Initial_Workout);
-	const [modalCreateTrigger, setModalCreateTrigger] = useState(false);
-	const [keyword, setKeyword] = useState("");
+	const {
+		modalCreateTrigger,
+		setModalCreateTrigger,
+		keyword,
+		setKeyword,
+		debouncedKeyword,
+		searchTrigger,
+		setSearchTrigger,
+	} = useHook();
 	const loading = useSelector((state) => state.workout.loading);
-	const [searchTrigger, setSearchTrigger] = useState(false);
-	const [debouncedKeyword] = useDebounce(keyword, 1300);
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			WorkoutAPI.searchWorkout(debouncedKeyword.toLowerCase()).then((result) => setWorkout({ status: true, data: result.data.data }));
+			WorkoutAPI.searchWorkout(debouncedKeyword.toLowerCase()).then((result) =>
+				setWorkout({ status: true, data: result.data.data })
+			);
 		} else {
-			setTimeout(
-				() =>
-					WorkoutAPI.getWorkout(5).then((result) =>
-						setWorkout({
-							status: true,
-							data: result.data.data,
-							page: result.data.data.page ? 1 : result.data.data.page,
-						})
-					),
-				1300
+			WorkoutAPI.getWorkout(5).then((result) =>
+				setWorkout({
+					status: true,
+					data: result.data.data,
+					page: result.data.data.page ? 1 : result.data.data.page,
+				})
 			);
 		}
 	}, [loading, debouncedKeyword]);
@@ -71,7 +74,9 @@ const WorkoutList = () => {
 				<div className="fixed left-0 right-0 z-20 w-full bg-white bg-opacity-90 px-6 py-2 shadow-3 backdrop-blur-sm">
 					<div className="flex items-center space-x-4">
 						<div className="min-w-0 flex-1">
-							<h2 className="text-sm font-medium text-neutral-100-2 md:pl-52 md:text-lg">Manage Workout</h2>
+							<h2 className="text-sm font-medium text-neutral-100-2 md:pl-52 md:text-lg">
+								Manage Workout
+							</h2>
 						</div>
 						<div className="inline-flex items-center text-sm font-medium text-neutral-100-2">
 							<div className="relative mt-1 mr-3 mb-1 hidden w-full md:block md:w-60 lg:w-80">
@@ -88,7 +93,10 @@ const WorkoutList = () => {
 								</div>
 							</div>
 							<div className="mt-1 mr-5 md:hidden">
-								<button type="button" className="inset-y-0 flex items-center" onClick={handleSearchTrigger}>
+								<button
+									type="button"
+									className="inset-y-0 flex items-center"
+									onClick={handleSearchTrigger}>
 									<i className="fi fi-rr-search mt-1 text-lg"></i>
 								</button>
 							</div>
@@ -136,7 +144,7 @@ const WorkoutList = () => {
 										<div className="w-full overflow-x-auto rounded-xl scrollbar-hide md:scrollbar-default">
 											<table className="w-full text-left">
 												<thead>
-													<tr className="text-semibold w-full whitespace-nowrap rounded-xl border-x border-t border-primary-violet bg-primary-background text-xs uppercase text-primary-violet">
+													<tr className="text-semibold w-full whitespace-nowrap rounded-xl border-x border-t border-primary-violet bg-primary-background text-xs text-primary-violet">
 														<th scope="col" className="py-3 px-6">
 															No
 														</th>
@@ -157,7 +165,7 @@ const WorkoutList = () => {
 															key={item.workout_id}
 															data={{
 																...item,
-																no: workout.data.page * 10 - 10 + 1 + i,
+																no: workout.data.page * 5 - 5 + 1 + i,
 															}}
 														/>
 													);
@@ -177,7 +185,11 @@ const WorkoutList = () => {
 												<li>
 													<button
 														type="button"
-														className={workout.data.page === 1 ? previousButtonDisabled : previousButtonActive}
+														className={
+															workout.data.page === 1
+																? previousButtonDisabled
+																: previousButtonActive
+														}
 														onClick={() => handlePreviousPage(workout.data.page)}
 														disabled={workout.data.page === 1}>
 														<span>Previous</span>
@@ -187,7 +199,11 @@ const WorkoutList = () => {
 												<li>
 													<button
 														type="button"
-														className={workout.data.page + 1 > workout.data.total_pages ? nextButtonDisabled : nextButtonActive}
+														className={
+															workout.data.page + 1 > workout.data.total_pages
+																? nextButtonDisabled
+																: nextButtonActive
+														}
 														onClick={() => handleNextPage(workout.data.page)}
 														disabled={workout.data.page + 1 > workout.data.total_pages}>
 														<span>Next</span>
@@ -203,11 +219,13 @@ const WorkoutList = () => {
 									</div>
 								)}
 
-								{modalCreateTrigger && <ModalCreateWorkout handleModalCreateTrigger={handleModalCreateTrigger} />}
+								{modalCreateTrigger && (
+									<ModalCreateWorkout handleModalCreateTrigger={handleModalCreateTrigger} />
+								)}
 							</div>
 						) : (
 							<div className="my-0 mx-auto flex items-center justify-center py-4 px-6">
-								<PulseLoader size={10} color="#2563eb" />
+								<PulseLoader size={10} color="#6FCBFD" />
 							</div>
 						)}
 					</div>

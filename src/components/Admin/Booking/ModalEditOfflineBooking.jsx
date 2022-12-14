@@ -1,9 +1,11 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import Swal from "sweetalert2";
 import { editOfflineBooking } from "../../../stores/features/offlineBookingSlice";
 import { cancelButton, saveButton, select } from "../../../utils/globalVariable";
+import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
+import { PulseLoader } from "react-spinners";
 
 const ModalEditOfflineBooking = ({
 	handleModalEditTrigger,
@@ -11,14 +13,17 @@ const ModalEditOfflineBooking = ({
 	offlineClassesList,
 	update,
 }) => {
-	const { book_id, class_id, workout, instructor_name } = update;
+	const { book_id, class_id, user_id, workout, instructor_name } = update;
 	const dispatch = useDispatch();
+	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
 	const handleUpdate = (e) => {
 		e.preventDefault();
+		dispatch(setLoaderSubmit(true));
+
 		const formData = new FormData(e.target);
 		const class_id = formData.get("class_id");
-		dispatch(editOfflineBooking({ book_id, class_id })).then((result) => {
+		dispatch(editOfflineBooking({ book_id, user_id, class_id })).then((result) => {
 			if (!result.error) {
 				handleModalEditTrigger();
 				handleActionDropdown();
@@ -34,8 +39,10 @@ const ModalEditOfflineBooking = ({
 						}),
 					1000
 				);
+				dispatch(setLoaderSubmit(false));
 			} else {
 				Swal.fire("Sorry", result.error.message.split(":")[1], "info");
+				dispatch(setLoaderSubmit(false));
 			}
 		});
 	};
@@ -80,9 +87,15 @@ const ModalEditOfflineBooking = ({
 								<button type="button" className={cancelButton} onClick={handleModalEditTrigger}>
 									Cancel
 								</button>
-								<button type="submit" className={saveButton}>
-									Save
-								</button>
+								{loaderSubmit ? (
+									<button className={saveButton}>
+										<PulseLoader size={5} color={"#ffffff"} />
+									</button>
+								) : (
+									<button type="submit" className={saveButton}>
+										Save
+									</button>
+								)}
 							</div>
 						</form>
 					</div>

@@ -1,68 +1,90 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useDebounce } from "use-debounce";
+import { useDispatch, useSelector } from "react-redux";
 import BookingAPI from "../../../apis/booking.api";
-import WorkoutAPI from "../../../apis/workout.api";
-import { activeTab, dataNotFound, notActiveTab, searchInputForLgScreen, searchInputForSmScreen } from "../../../utils/globalVariable";
+import {
+	activeTab,
+	dataNotFound,
+	notActiveTab,
+	searchInputForLgScreen,
+	searchInputForSmScreen,
+} from "../../../utils/globalVariable";
 import SkeletonLoadingTabs from "../SkeletonLoadingTabs";
 import BookingTabs from "./BookingTabs";
 import BookingHeader from "./BookingHeader";
 import OnlineBookingListItem from "./OnlineBookingListItem";
 import SkeletonLoadingBooking from "./SkeletonLoadingBooking";
+import { setLoaderFetchData } from "../../../stores/features/loaderFetchDataSlice";
+import useHook from "../../../hooks/useHook";
 
 const Initial_Online_Booking = {
 	data: [],
-	page: 0,
-	status: false,
 };
 
 const OnlineBookingList = () => {
 	const [onlineBooking, setOnlineBooking] = useState(Initial_Online_Booking);
-	const [workout, setWorkout] = useState(Initial_Online_Booking);
-	const [searchTrigger, setSearchTrigger] = useState(false);
-	const [keyword, setKeyword] = useState("");
-	const loading = useSelector((state) => state.onlineBooking.loading);
-	const [debouncedKeyword] = useDebounce(keyword, 3000);
-	const loadingWorkout = useSelector((state) => state.workout.loading);
+	const [filterOnlineBooking, setFilterOnlineBooking] = useState(Initial_Online_Booking);
 	const [active, setActive] = useState(0);
+	const { keyword, setKeyword, debouncedKeyword, searchTrigger, setSearchTrigger } = useHook();
+
+	const dispatch = useDispatch();
+	const loading = useSelector((state) => state.onlineBooking.loading);
+	const loaderFetchData = useSelector((state) => state.loaderFetchData);
+
+	const bookingOnline = new Set();
+	const bookingOnlineFilter = new Set();
+
+	onlineBooking.data.rows?.forEach((value) => {
+		bookingOnline.add(value.workout);
+	});
+
+	filterOnlineBooking.data.rows?.forEach((value) => {
+		bookingOnlineFilter.add(value.workout);
+	});
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			BookingAPI.searchOnlineBooking(debouncedKeyword.toLowerCase()).then((result) => setOnlineBooking({ status: true, data: result.data.data }));
+			BookingAPI.searchOnlineBooking(debouncedKeyword.toLowerCase()).then((result) => {
+				setOnlineBooking({ data: result.data.data });
+				setActive(result.data.data.rows[0].workout);
+			});
 		} else {
-			setTimeout(
-				() =>
-					BookingAPI.getOnlineBooking().then((result) =>
-						setOnlineBooking({
-							status: true,
-							data: result.data.data,
-						})
-					),
-				1300
-			);
+			dispatch(setLoaderFetchData(true));
+			BookingAPI.getOnlineBooking(1000).then((result) => {
+				setOnlineBooking({
+					data: result.data.data,
+				});
+				setActive(0);
+				dispatch(setLoaderFetchData(false));
+			});
 		}
 	}, [loading, debouncedKeyword]);
 
 	useEffect(() => {
-		setTimeout(() => WorkoutAPI.getWorkout().then((result) => setWorkout({ status: true, data: result.data.data })), 1300);
-	}, [loadingWorkout]);
+		BookingAPI.getOnlineBooking(1000).then((result) => {
+			setFilterOnlineBooking({
+				data: result.data.data,
+			});
+		});
+	}, [loading]);
 
-	const filterItem = (workout_id) => {
-		setTimeout(
-			() =>
-				BookingAPI.filterOnlineBooking(workout_id).then((result) =>
-					setOnlineBooking({
-						status: true,
-						data: result.data.data,
-					})
-				),
-			500
-		);
-		setActive(workout_id);
+	const filterItem = (workout) => {
+		dispatch(setLoaderFetchData(true));
+		BookingAPI.filterOnlineBooking(workout).then((result) => {
+			setOnlineBooking({
+				data: result.data.data,
+			});
+			setActive(workout);
+			dispatch(setLoaderFetchData(false));
+		});
 	};
 
 	const filterAll = () => {
-		setActive(0);
+		BookingAPI.getOnlineBooking(1000).then((result) => {
+			setOnlineBooking({
+				data: result.data.data,
+			});
+			setActive(0);
+		});
 	};
 
 	const handleSearchTrigger = () => {
@@ -93,7 +115,10 @@ const OnlineBookingList = () => {
 								</div>
 							</div>
 							<div className="mt-1 mr-5 md:hidden">
-								<button type="button" className="inset-y-0 flex items-center" onClick={handleSearchTrigger}>
+								<button
+									type="button"
+									className="inset-y-0 flex items-center"
+									onClick={handleSearchTrigger}>
 									<i className="fi fi-rr-search mt-1 text-lg"></i>
 								</button>
 							</div>
@@ -101,56 +126,46 @@ const OnlineBookingList = () => {
 					</div>
 					<div className="grid grid-cols-1 gap-4 lg:col-span-3">
 						<div className="relative">
-							<div className="relative">
-								<div className="sm:block">
-									<ul className="-mb-px flex list-none overflow-x-scroll whitespace-nowrap text-center text-xs font-medium scrollbar-hide">
-										<li className="mr-2">
-											<button
-												className={active === 0 ? activeTab : notActiveTab}
-												onClick={() => {
-													filterAll();
-													setTimeout(
-														() =>
-															BookingAPI.getOnlineBooking().then((result) =>
-																setOnlineBooking({
-																	status: true,
-																	data: result.data.data,
-																})
-															),
-														500
-													);
-												}}>
-												All
-											</button>
-										</li>
-										{onlineBooking.status ? (
-											workout.data.rows?.map((item) => {
-												return (
-													<li className="mr-2" key={item.workout_id}>
-														<button className={active === item.workout_id ? activeTab : notActiveTab} onClick={() => filterItem(item.workout_id)}>
-															{item.workout}
-														</button>
-													</li>
-												);
-											})
-										) : (
-											<ul className="-mb-px flex list-none text-center">
-												<li className="mr-2">
-													<SkeletonLoadingTabs />
+							<div className="sm:block">
+								<ul className="-mb-px flex list-none overflow-x-scroll whitespace-nowrap text-center text-xs font-medium scrollbar-hide">
+									<li className="mr-2">
+										<button
+											className={active === 0 ? activeTab : notActiveTab}
+											onClick={() => {
+												filterAll();
+											}}>
+											All
+										</button>
+									</li>
+									{loaderFetchData ? (
+										<ul className="-mb-px flex list-none text-center">
+											<li className="mr-2">
+												<SkeletonLoadingTabs />
+											</li>
+											<li className="mr-2">
+												<SkeletonLoadingTabs />
+											</li>
+											<li className="mr-2">
+												<SkeletonLoadingTabs />
+											</li>
+											<li className="mr-2">
+												<SkeletonLoadingTabs />
+											</li>
+										</ul>
+									) : (
+										Array.from(bookingOnlineFilter).map((workout) => {
+											return (
+												<li className="mr-2" key={workout}>
+													<button
+														className={active === workout ? activeTab : notActiveTab}
+														onClick={() => filterItem(workout)}>
+														{workout}
+													</button>
 												</li>
-												<li className="mr-2">
-													<SkeletonLoadingTabs />
-												</li>
-												<li className="mr-2">
-													<SkeletonLoadingTabs />
-												</li>
-												<li className="mr-2">
-													<SkeletonLoadingTabs />
-												</li>
-											</ul>
-										)}
-									</ul>
-								</div>
+											);
+										})
+									)}
+								</ul>
 							</div>
 						</div>
 					</div>
@@ -183,10 +198,16 @@ const OnlineBookingList = () => {
 					</div>
 				</div>
 			)}
-			{onlineBooking.status ? (
+			{loaderFetchData ? (
+				<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
+					<SkeletonLoadingBooking />
+					<SkeletonLoadingBooking />
+					<SkeletonLoadingBooking />
+				</div>
+			) : (
 				<div>
 					{onlineBooking.data.rows?.length > 0 ? (
-						<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
+						<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
 							{onlineBooking.data.rows?.map((item) => {
 								return <OnlineBookingListItem data={item} key={item.book_id} />;
 							})}
@@ -199,14 +220,6 @@ const OnlineBookingList = () => {
 							</div>
 						</div>
 					)}
-				</div>
-			) : (
-				<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
-					<SkeletonLoadingBooking />
-					<SkeletonLoadingBooking />
-					<SkeletonLoadingBooking />
-					<SkeletonLoadingBooking />
-					<SkeletonLoadingBooking />
 				</div>
 			)}
 		</div>

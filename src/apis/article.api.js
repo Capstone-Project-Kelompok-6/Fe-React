@@ -1,9 +1,15 @@
 import axiosInstance from "../configs/axiosInstance";
 
 const ArticleAPI = {
-	async getArticle() {
+	async getArticle(limit, page) {
 		try {
-			const response = await axiosInstance.get("/articles");
+			const config = {
+				params: {
+					limit,
+					page,
+				},
+			};
+			const response = await axiosInstance.get("/articles", config);
 			return response;
 		} catch (error) {
 			const { message } = error.response.data;

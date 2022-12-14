@@ -1,9 +1,15 @@
 import axiosInstance from "../configs/axiosInstance";
 
 const VideoAPI = {
-	async getVideo() {
+	async getVideo(limit, page) {
 		try {
-			const response = await axiosInstance.get("/contents");
+			const config = {
+				params: {
+					limit,
+					page,
+				},
+			};
+			const response = await axiosInstance.get("/contents", config);
 			return response;
 		} catch (error) {
 			const { message } = error.response.data;

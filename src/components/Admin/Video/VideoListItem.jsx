@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import useHook from "../../../hooks/useHook";
 import { deleteVideo } from "../../../stores/features/videoSlice";
 import {
 	actionDropdownDelete,
@@ -8,12 +9,12 @@ import {
 	cancelButtonSwal,
 	confirmButtonSwal,
 } from "../../../utils/globalVariable";
+import { truncate } from "../../../utils/truncate";
 import ModalEditVideo from "./ModalEditVideo";
 
 const VideoListItem = ({ data }) => {
 	const { video_content_id, title, video, video_name } = data;
-	const [actionDropdown, setActionDropdown] = useState(false);
-	const [modalEditTrigger, setModalEditTrigger] = useState(false);
+	const { actionDropdown, setActionDropdown, modalEditTrigger, setModalEditTrigger } = useHook();
 	const dispatch = useDispatch();
 
 	const handleDelete = () => {
@@ -78,13 +79,10 @@ const VideoListItem = ({ data }) => {
 		setActionDropdown(!actionDropdown);
 	};
 
-	const truncate = (string, n) => {
-		return string?.length > n ? string.substr(0, n - 1) + "..." : string;
-	};
 	return (
 		<div>
-			<div className="h-full rounded-xl bg-white shadow-4">
-				<div className="relative overflow-hidden rounded-xl pb-48">
+			<div className="h-full rounded-20 bg-white shadow-4">
+				<div className="relative overflow-hidden rounded-t-20 pb-48">
 					{video_name === "-" ? (
 						<div
 							role="status"
@@ -104,7 +102,7 @@ const VideoListItem = ({ data }) => {
 
 					<div className="group relative">
 						<button
-							className="absolute right-0 top-0 cursor-pointer rounded-bl-xl rounded-tr-xl bg-neutral-80 bg-opacity-50 px-4 py-2 text-blue-100 shadow-4"
+							className="absolute right-0 top-0 cursor-pointer rounded-bl-20 rounded-tr-20 bg-neutral-80 bg-opacity-50 px-4 py-2 text-blue-100 shadow-4"
 							onClick={handleActionDrowpdon}>
 							<i className="fi fi-rr-menu-dots-vertical"></i>
 						</button>
@@ -149,7 +147,7 @@ const VideoListItem = ({ data }) => {
 						<div className="min-w-0 flex-1">
 							<div className="group relative">
 								<h5 className="text-sm font-medium tracking-tight text-neutral-100-2 md:text-base">
-									{truncate(title, 30)}
+									{truncate(title, 50)}
 								</h5>
 
 								<div className="absolute top-0 left-0 mt-5 mr-1 hidden flex-col items-center group-hover:flex md:-top-4 md:mt-10">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
+import { useDispatch, useSelector } from "react-redux";
 import { editInstructor } from "../../../stores/features/instructorSlice";
+import { PulseLoader } from "react-spinners";
 import {
 	cancelButton,
 	inputError,
@@ -12,6 +12,10 @@ import {
 	regexNameValidation,
 	saveButton,
 } from "../../../utils/globalVariable";
+
+import Swal from "sweetalert2";
+import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
+import { maxLengthCheck } from "../../../utils/maxLengthCheck";
 
 const baseErrors = {
 	instructor_name: "",
@@ -35,6 +39,7 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 	const [errors, setErrors] = useState(baseErrors);
 	const [values, setValues] = useState(baseValues);
 	const dispatch = useDispatch();
+	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
 	const MAX_FILE_SIZE = 3072;
 	const maxLengthPhoneNumber = 13;
@@ -133,14 +138,10 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 		};
 	}, [file]);
 
-	const maxLengthCheck = (e) => {
-		if (e.target.value.length > e.target.maxLength) {
-			e.target.value = e.target.value.slice(0, e.target.maxLength);
-		}
-	};
-
 	const handleUpdate = (e) => {
 		e.preventDefault();
+		dispatch(setLoaderSubmit(true));
+
 		const formData = new FormData(e.target);
 		const instructor_name = formData.get("instructor_name");
 		const image = formData.get("image");
@@ -173,12 +174,15 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 							1000
 						);
 						handleModalEditTrigger();
+						dispatch(setLoaderSubmit(false));
 					} else {
 						Swal.fire("Sorry", "Email or phone number already exists", "info");
+						dispatch(setLoaderSubmit(false));
 					}
 				});
 			} catch (error) {
 				Swal.fire("Sorry", error.message, "info");
+				dispatch(setLoaderSubmit(false));
 			}
 		} else {
 			setTimeout(
@@ -191,6 +195,7 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 					}),
 				1000
 			);
+			dispatch(setLoaderSubmit(false));
 		}
 	};
 
@@ -222,7 +227,8 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 										/>
 										<label
 											htmlFor="instructor_name"
-											className={errors.instructor_name ? labelError : labelNotError}>
+											className={errors.instructor_name ? labelError : labelNotError}
+										>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Fullname
 											</span>
@@ -322,7 +328,8 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 										/>
 										<label
 											htmlFor="phone_number"
-											className={errors.phone_number ? labelError : labelNotError}>
+											className={errors.phone_number ? labelError : labelNotError}
+										>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Phone Number
 											</span>
@@ -341,9 +348,15 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 								<button type="button" className={cancelButton} onClick={handleModalEditTrigger}>
 									Cancel
 								</button>
-								<button data-modal-toggle="staticModal" type="submit" className={saveButton}>
-									Save Changes
-								</button>
+								{loaderSubmit ? (
+									<button className={saveButton}>
+										<PulseLoader size={5} color={"#ffffff"} />
+									</button>
+								) : (
+									<button type="submit" className={saveButton}>
+										Save
+									</button>
+								)}
 							</div>
 						</form>
 					</div>

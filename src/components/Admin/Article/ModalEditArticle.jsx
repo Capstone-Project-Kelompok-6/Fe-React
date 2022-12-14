@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { editArticle } from "../../../stores/features/articleSlice";
 import {
@@ -8,6 +8,8 @@ import {
 	labelNotError,
 	saveButton,
 } from "../../../utils/globalVariable";
+import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
+import { PulseLoader } from "react-spinners";
 
 const baseErrors = {
 	image: "",
@@ -19,6 +21,7 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 	const [fileDataURL, setFileDataURL] = useState(null);
 	const [errors, setErrors] = useState(baseErrors);
 	const dispatch = useDispatch();
+	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
 	const MAX_FILE_SIZE = 3072;
 
@@ -66,6 +69,7 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 
 	const handleUpdate = (e) => {
 		e.preventDefault();
+		dispatch(setLoaderSubmit(true));
 		const formData = new FormData(e.target);
 		const title = formData.get("title");
 		const image = formData.get("image");
@@ -89,12 +93,15 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 						);
 						handleModalEditTrigger();
 						handleActionDropdown();
+						dispatch(setLoaderSubmit(false));
 					} else {
 						Swal.fire("Sorry", "One article just have one image", "info");
+						dispatch(setLoaderSubmit(false));
 					}
 				});
 			} catch (error) {
 				Swal.fire("Sorry", "Error", "info");
+				dispatch(setLoaderSubmit(false));
 			}
 		} else {
 			setTimeout(
@@ -107,6 +114,7 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 					}),
 				1000
 			);
+			dispatch(setLoaderSubmit(false));
 		}
 	};
 
@@ -195,7 +203,8 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 											className={inputNotError}
 											placeholder=" "
 											required
-											defaultValue={description}></textarea>
+											defaultValue={description}
+										></textarea>
 										<label htmlFor="description" className={labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Description
@@ -208,9 +217,15 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 								<button type="button" className={cancelButton} onClick={handleModalEditTrigger}>
 									Cancel
 								</button>
-								<button type="submit" className={saveButton}>
-									Save
-								</button>
+								{loaderSubmit ? (
+									<button className={saveButton}>
+										<PulseLoader size={5} color={"#ffffff"} />
+									</button>
+								) : (
+									<button type="submit" className={saveButton}>
+										Save
+									</button>
+								)}
 							</div>
 						</form>
 					</div>

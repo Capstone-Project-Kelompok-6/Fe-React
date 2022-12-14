@@ -8,9 +8,9 @@ const initialState = {
 	loading: false,
 };
 
-export const fetchVideo = createAsyncThunk("fetch/video", async () => {
+export const fetchVideo = createAsyncThunk("fetch/video", async (limit) => {
 	try {
-		const response = await VideoAPI.getVideo();
+		const response = await VideoAPI.getVideo(limit);
 		return response.data.data;
 	} catch (error) {
 		throw Error(Error);

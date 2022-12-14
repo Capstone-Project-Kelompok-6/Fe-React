@@ -1,30 +1,45 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useDebounce } from "use-debounce";
+import {
+	addButton,
+	dataNotFound,
+	searchInputForLgScreen,
+	searchInputForSmScreen,
+} from "../../../utils/globalVariable";
+
 import MembershipAPI from "../../../apis/membership.api";
-import { addButton, dataNotFound, searchInputForLgScreen, searchInputForSmScreen } from "../../../utils/globalVariable";
 import MembershipListItem from "./MembershipListItem";
 import ModalCreateMembership from "./ModalCreateMembership";
 import SkeletonLoadingMembership from "./SkeletonLoadingMembership";
+import useHook from "../../../hooks/useHook";
 
 const Initial_Membership = {
 	data: [],
-	page: 0,
 	status: false,
 };
 const MembershipList = () => {
 	const [membership, setMembership] = useState(Initial_Membership);
-	const [modalCreateTrigger, setModalCreateTrigger] = useState(false);
+	const {
+		modalCreateTrigger,
+		setModalCreateTrigger,
+		keyword,
+		setKeyword,
+		debouncedKeyword,
+		searchTrigger,
+		setSearchTrigger,
+	} = useHook();
+
 	const loading = useSelector((state) => state.membership.loading);
-	const [searchTrigger, setSearchTrigger] = useState(false);
-	const [keyword, setKeyword] = useState("");
-	const [debouncedKeyword] = useDebounce(keyword, 1300);
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			MembershipAPI.searchMembership(debouncedKeyword.toLowerCase()).then((result) => setMembership({ status: true, data: result.data.data }));
+			MembershipAPI.searchMembership(debouncedKeyword.toLowerCase()).then((result) =>
+				setMembership({ status: true, data: result.data.data })
+			);
 		} else {
-			setTimeout(() => MembershipAPI.getMembership(1000).then((result) => setMembership({ status: true, data: result.data.data })), 1300);
+			MembershipAPI.getMembership(1000).then((result) =>
+				setMembership({ status: true, data: result.data.data })
+			);
 		}
 	}, [loading, debouncedKeyword]);
 
@@ -41,7 +56,9 @@ const MembershipList = () => {
 			<div className="fixed left-0 right-0 z-20 w-full bg-white bg-opacity-90 px-6 py-2 shadow-3 backdrop-blur-sm">
 				<div className="flex items-center space-x-4">
 					<div className="min-w-0 flex-1">
-						<h2 className="text-sm font-medium text-neutral-100-2 md:pl-52 md:text-lg">Manage Membership</h2>
+						<h2 className="text-sm font-medium text-neutral-100-2 md:pl-52 md:text-lg">
+							Manage Membership
+						</h2>
 					</div>
 					<div className="inline-flex items-center text-sm font-medium text-neutral-100-2">
 						<div className="relative mt-1 mr-3 mb-1 hidden w-full md:block md:w-48 lg:w-80">
@@ -58,7 +75,10 @@ const MembershipList = () => {
 							</div>
 						</div>
 						<div className="mt-1 mr-5 md:hidden">
-							<button type="button" className="inset-y-0 flex items-center" onClick={handleSearchTrigger}>
+							<button
+								type="button"
+								className="inset-y-0 flex items-center"
+								onClick={handleSearchTrigger}>
 								<i className="fi fi-rr-search mt-1 text-lg"></i>
 							</button>
 						</div>
@@ -99,7 +119,7 @@ const MembershipList = () => {
 				<div>
 					{membership.data.rows?.length > 0 ? (
 						<div>
-							<div className="mb-6 grid grid-cols-1 gap-3 pt-20 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
+							<div className="mb-6 grid grid-cols-1 gap-6 pt-20 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
 								{membership.data.rows?.map((item) => {
 									return <MembershipListItem key={item.user_id} data={item} />;
 								})}
@@ -115,7 +135,7 @@ const MembershipList = () => {
 					)}
 				</div>
 			) : (
-				<div className="mb-6 grid gap-3 pt-20 md:grid-cols-2 xl:grid-cols-3">
+				<div className="mb-6 grid grid-cols-1 gap-6 pt-20 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 					<SkeletonLoadingMembership />
 					<SkeletonLoadingMembership />
 					<SkeletonLoadingMembership />
@@ -125,7 +145,12 @@ const MembershipList = () => {
 				</div>
 			)}
 
-			{modalCreateTrigger && <ModalCreateMembership handleModalCreateTrigger={handleModalCreateTrigger} modalCreateTrigger={modalCreateTrigger} />}
+			{modalCreateTrigger && (
+				<ModalCreateMembership
+					handleModalCreateTrigger={handleModalCreateTrigger}
+					modalCreateTrigger={modalCreateTrigger}
+				/>
+			)}
 		</div>
 	);
 };

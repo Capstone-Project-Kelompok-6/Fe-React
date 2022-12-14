@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useDebounce } from "use-debounce";
 import { useSelector } from "react-redux";
 import { PulseLoader } from "react-spinners";
 import InstructorListItem from "./InstructorListItem";
@@ -14,6 +13,7 @@ import {
 	searchInputForLgScreen,
 	searchInputForSmScreen,
 } from "../../../utils/globalVariable";
+import useHook from "../../../hooks/useHook";
 
 const Initial_Instructor = {
 	data: [],
@@ -23,32 +23,30 @@ const Initial_Instructor = {
 
 const InstructorList = () => {
 	const [instructor, setInstructor] = useState(Initial_Instructor);
-	const [keyword, setKeyword] = useState("");
-	const [modalCreateTrigger, setModalCreateTrigger] = useState(false);
-	const [searchTrigger, setSearchTrigger] = useState(false);
-	const [debouncedKeyword] = useDebounce(keyword, 1300);
+	const {
+		modalCreateTrigger,
+		setModalCreateTrigger,
+		keyword,
+		setKeyword,
+		debouncedKeyword,
+		searchTrigger,
+		setSearchTrigger,
+	} = useHook();
+
 	const loading = useSelector((state) => state.instructor.loading);
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			InstructorAPI.searchInstructor(
-				debouncedKeyword.toLowerCase(),
-			).then((result) =>
-				setInstructor({ status: true, data: result.data.data }),
+			InstructorAPI.searchInstructor(debouncedKeyword.toLowerCase()).then((result) =>
+				setInstructor({ status: true, data: result.data.data })
 			);
 		} else {
-			setTimeout(
-				() =>
-					InstructorAPI.getInstructor(10).then((result) =>
-						setInstructor({
-							status: true,
-							data: result.data.data,
-							page: result.data.data.page
-								? 1
-								: result.data.data.page,
-						}),
-					),
-				1300,
+			InstructorAPI.getInstructor(10).then((result) =>
+				setInstructor({
+					status: true,
+					data: result.data.data,
+					page: result.data.data.page ? 1 : result.data.data.page,
+				})
 			);
 		}
 	}, [loading, debouncedKeyword]);
@@ -89,9 +87,7 @@ const InstructorList = () => {
 									placeholder="Search by instructor name"
 									required
 									value={keyword}
-									onChange={(e) =>
-										setKeyword(e.target.value)
-									}
+									onChange={(e) => setKeyword(e.target.value)}
 								/>
 								<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-dark-4">
 									<i className="fi fi-rr-search mt-1 text-sm"></i>
@@ -101,16 +97,11 @@ const InstructorList = () => {
 								<button
 									type="button"
 									className="inset-y-0 flex items-center"
-									onClick={handleSearchTrigger}
-								>
+									onClick={handleSearchTrigger}>
 									<i className="fi fi-rr-search mt-1 text-lg"></i>
 								</button>
 							</div>
-							<button
-								type="button"
-								className={addButton}
-								onClick={handleModalCreateTrigger}
-							>
+							<button type="button" className={addButton} onClick={handleModalCreateTrigger}>
 								<i className="fi fi-rr-plus-small mr-1 mt-1 text-sm md:text-lg"></i>
 								<span className="text-xs">Add New</span>
 							</button>
@@ -127,8 +118,7 @@ const InstructorList = () => {
 									? "pointer-events-auto fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 									: "pointer-events-none fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 							}
-							onClick={handleSearchTrigger}
-						></div>
+							onClick={handleSearchTrigger}></div>
 						<div className="fixed top-0 right-0 z-40 mr-32 mt-24 w-48 rounded-xl bg-white shadow-4 transition-all duration-300 md:hidden">
 							<div className="relative">
 								<input
@@ -137,9 +127,7 @@ const InstructorList = () => {
 									placeholder="Search by instructor name"
 									required
 									value={keyword}
-									onChange={(e) =>
-										setKeyword(e.target.value)
-									}
+									onChange={(e) => setKeyword(e.target.value)}
 								/>
 								<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-dark-4">
 									<i className="fi fi-rr-search mt-1 text-sm"></i>
@@ -157,153 +145,69 @@ const InstructorList = () => {
 										<div className="w-full overflow-x-auto rounded-xl scrollbar-hide md:scrollbar-default">
 											<table className="w-full text-left">
 												<thead>
-													<tr className="text-semibold w-full whitespace-nowrap rounded-xl border-x border-t border-primary-violet bg-primary-background text-xs uppercase text-primary-violet">
-														<th
-															scope="col"
-															className="py-3 px-6"
-														>
+													<tr className="text-semibold w-full whitespace-nowrap rounded-xl border-x border-t border-primary-violet bg-primary-background text-xs text-primary-violet">
+														<th scope="col" className="py-3 px-6">
 															No
 														</th>
-														<th
-															scope="col"
-															className="py-3 px-6"
-														>
+														<th scope="col" className="py-3 px-6">
 															Fullname
 														</th>
-														<th
-															scope="col"
-															className="py-3 px-6"
-														>
-															Phone
-															Number
+														<th scope="col" className="py-3 px-6">
+															Phone Number
 														</th>
-														<th
-															scope="col"
-															className="py-3 px-6"
-														>
+														<th scope="col" className="py-3 px-6">
 															Updated
 														</th>
-														<th
-															scope="col"
-															className="py-3 px-6"
-														>
+														<th scope="col" className="py-3 px-6">
 															Action
 														</th>
 													</tr>
 												</thead>
-												{instructor.data.rows?.map(
-													(item, i) => {
-														return (
-															<InstructorListItem
-																key={
-																	item.instructor_id
-																}
-																data={{
-																	...item,
-																	no:
-																		instructor
-																			.data
-																			.page *
-																			10 -
-																		10 +
-																		1 +
-																		i,
-																}}
-															/>
-														);
-													},
-												)}
+												{instructor.data.rows?.map((item, i) => {
+													return (
+														<InstructorListItem
+															key={item.instructor_id}
+															data={{
+																...item,
+																no: instructor.data.page * 10 - 10 + 1 + i,
+															}}
+														/>
+													);
+												})}
 											</table>
 										</div>
 										<nav className="flex flex-col items-center justify-between pt-4 md:flex-row lg:flex-row xl:flex-row">
 											<span className="text-sm font-normal text-neutral-80">
-												<span>
-													Showing{" "}
-												</span>
-												<span className="mr-1">
-													page{" "}
-													{
-														instructor
-															.data
-															.page
-													}
-												</span>
+												<span>Showing </span>
+												<span className="mr-1">page {instructor.data.page}</span>
 												of
-												<span>
-													{" "}
-													{
-														instructor
-															.data
-															.total_rows
-													}{" "}
-													entries
-												</span>
+												<span> {instructor.data.total_rows} entries</span>
 											</span>
 											<ul className="mt-3 inline-flex items-center -space-x-px text-sm md:mt-0 lg:mt-0 xl:mt-0">
 												<li>
 													<button
 														type="button"
 														className={
-															instructor
-																.data
-																.page ===
-															1
+															instructor.data.page === 1
 																? previousButtonDisabled
 																: previousButtonActive
 														}
-														onClick={() =>
-															handlePreviousPage(
-																instructor
-																	.data
-																	.page,
-															)
-														}
-														disabled={
-															instructor
-																.data
-																.page ===
-															1
-														}
-													>
-														<span>
-															Previous
-														</span>
+														onClick={() => handlePreviousPage(instructor.data.page)}
+														disabled={instructor.data.page === 1}>
+														<span>Previous</span>
 													</button>
 												</li>
 												<li>
 													<button
 														type="button"
 														className={
-															instructor
-																.data
-																.page +
-																1 >
-															instructor
-																.data
-																.total_pages
+															instructor.data.page + 1 > instructor.data.total_pages
 																? nextButtonDisabled
 																: nextButtonActive
 														}
-														onClick={() =>
-															handleNextPage(
-																instructor
-																	.data
-																	.page,
-															)
-														}
-														disabled={
-															instructor
-																.data
-																.page +
-																1 >
-															instructor
-																.data
-																.total_pages
-														}
-													>
-														<span>
-															Next
-														</span>
+														onClick={() => handleNextPage(instructor.data.page)}
+														disabled={instructor.data.page + 1 > instructor.data.total_pages}>
+														<span>Next</span>
 													</button>
 												</li>
 											</ul>
@@ -316,19 +220,12 @@ const InstructorList = () => {
 									</div>
 								)}
 								{modalCreateTrigger && (
-									<ModalCreateInstructor
-										handleModalCreateTrigger={
-											handleModalCreateTrigger
-										}
-									/>
+									<ModalCreateInstructor handleModalCreateTrigger={handleModalCreateTrigger} />
 								)}
 							</div>
 						) : (
 							<div className="my-0 mx-auto flex items-center justify-center py-4 px-6">
-								<PulseLoader
-									size={10}
-									color="#2563eb"
-								/>
+								<PulseLoader size={10} color="#6FCBFD" />
 							</div>
 						)}
 					</div>

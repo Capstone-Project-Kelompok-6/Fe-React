@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { formatShortDate } from "../../../utils/formatDate";
 import { actionDropdownEdit } from "../../../utils/globalVariable";
 import ModalEditMembership from "./ModalEditMembership";
+import useHook from "../../../hooks/useHook";
 
 const MembershipListItem = ({ data }) => {
 	const { full_name, image, image_name, phone_number, email, created_at, is_active } = data;
-	const [actionDropdown, setActionDropdown] = useState(false);
-	const [modalEditTrigger, setModalEditTrigger] = useState(false);
+	const { actionDropdown, setActionDropdown, modalEditTrigger, setModalEditTrigger } = useHook();
 
 	const handleModalEditTrigger = () => {
 		setModalEditTrigger(!modalEditTrigger);
@@ -19,7 +19,9 @@ const MembershipListItem = ({ data }) => {
 	return (
 		<div className="rounded-xl bg-white p-4 shadow-4">
 			<div className="group relative">
-				<button className="absolute right-0 top-0 cursor-pointer text-neutral-100-2" onClick={handleActionDrowpdon}>
+				<button
+					className="absolute right-0 top-0 cursor-pointer text-neutral-100-2"
+					onClick={handleActionDrowpdon}>
 					<i className="fi fi-rr-menu-dots-vertical"></i>
 				</button>
 				{actionDropdown && (
@@ -34,7 +36,10 @@ const MembershipListItem = ({ data }) => {
 						<div className="absolute top-0 right-0 z-10 mr-1 mt-7 w-32 rounded-xl bg-white shadow-4 transition duration-300">
 							<ul className="list-reset">
 								<li>
-									<button type="button" className={`rounded-xl ${actionDropdownEdit}`} onClick={handleModalEditTrigger}>
+									<button
+										type="button"
+										className={`rounded-xl ${actionDropdownEdit}`}
+										onClick={handleModalEditTrigger}>
 										<i className="fi fi-sr-pencil mr-2 -ml-1 mt-1 text-sm text-secondary-yellow"></i>
 										Edit
 									</button>
@@ -45,7 +50,11 @@ const MembershipListItem = ({ data }) => {
 				)}
 			</div>
 			<div className="flex items-center space-x-3">
-				<img className="h-12 w-12 rounded-full object-cover object-center" src={image} alt={image_name} />
+				<img
+					className="h-12 w-12 rounded-full object-cover object-center"
+					src={image}
+					alt={image_name}
+				/>
 				<div className="min-w-0 flex-1">
 					<div className="text-base">
 						<span className="truncate font-normal not-italic text-neutral-100-2">{full_name}</span>
@@ -75,7 +84,7 @@ const MembershipListItem = ({ data }) => {
 			<div className="flex items-center space-x-3 text-sm">
 				<div className="inline-flex flex-shrink-0 items-center justify-center">
 					<span className="mt-1 text-secondary-navy">
-						<i className="fi fi-sr-info"></i>
+						<i className="fi fi-sr-calendar"></i>
 					</span>
 				</div>
 				<div className="flex-1">
