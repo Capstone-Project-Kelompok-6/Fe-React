@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { formatShortDate } from "../../../utils/formatDate";
 import { actionDropdownEdit } from "../../../utils/globalVariable";
 import ModalEditMembership from "./ModalEditMembership";
+import useHook from "../../../hooks/useHook";
 
 const MembershipListItem = ({ data }) => {
 	const { full_name, image, image_name, phone_number, email, created_at, is_active } = data;
-	const [actionDropdown, setActionDropdown] = useState(false);
-	const [modalEditTrigger, setModalEditTrigger] = useState(false);
+	const { actionDropdown, setActionDropdown, modalEditTrigger, setModalEditTrigger } = useHook();
 
 	const handleModalEditTrigger = () => {
 		setModalEditTrigger(!modalEditTrigger);

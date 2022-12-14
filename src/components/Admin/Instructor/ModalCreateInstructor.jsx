@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
 import { createInstructor } from "../../../stores/features/instructorSlice";
+import { useDispatch } from "react-redux";
 import {
 	cancelButton,
 	inputError,
@@ -12,6 +11,9 @@ import {
 	regexNameValidation,
 	saveButton,
 } from "../../../utils/globalVariable";
+import { maxLengthCheck } from "../../../utils/maxLengthCheck";
+
+import Swal from "sweetalert2";
 
 const baseErrors = {
 	instructor_name: "",
@@ -136,12 +138,6 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 	const handleCancelUpload = () => {
 		setFileDataURL("");
 		imageInstructor.current.value = "";
-	};
-
-	const checkMaxLengthPhoneNumber = (e) => {
-		if (e.target.value.length > e.target.maxLength) {
-			e.target.value = e.target.value.slice(0, e.target.maxLength);
-		}
 	};
 
 	const handleSubmit = (e) => {
@@ -320,7 +316,7 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 											type="number"
 											min="1"
 											maxLength={maxLengthPhoneNumber}
-											onInput={checkMaxLengthPhoneNumber}
+											onInput={maxLengthCheck}
 											onChange={handleChange}
 											id="phone_number"
 											name="phone_number"
