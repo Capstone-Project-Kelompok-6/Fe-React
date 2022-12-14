@@ -23,13 +23,13 @@ const baseErrors = {
 const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, update }) => {
 	const { class_id, video_title, workout, video, video_name, price, description, workout_id } =
 		update;
-	const dispatch = useDispatch();
-	const workoutList = useSelector((state) => state.workout.data);
-	const loading = useSelector((state) => state.workout.loading);
 	const [file, setFile] = useState("");
 	const [fileDataURL, setFileDataURL] = useState(null);
 	const [title, setTitle] = useState("");
 	const [errors, setErrors] = useState(baseErrors);
+	const dispatch = useDispatch();
+	const workoutList = useSelector((state) => state.workout.data);
+	const loading = useSelector((state) => state.workout.loading);
 	const [load, setLoad] = useState(false);
 
 	const maxTitle = 100;
@@ -109,7 +109,6 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 										}),
 									1000
 								);
-								setLoad(false);
 							}
 						});
 					} else {
@@ -154,7 +153,7 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 
 	return (
 		<div className="relative z-50">
-			<div className="fixed inset-0 z-50 bg-gray-400 bg-opacity-50 transition-opacity"></div>
+			<div className="fixed inset-0 z-50 bg-gray-600 bg-opacity-80 transition-opacity"></div>
 
 			<div className="fixed inset-0 z-50 items-center justify-center overflow-y-auto">
 				<div className="flex w-full items-end justify-center px-4 py-20 sm:h-full sm:items-center sm:p-0 md:h-screen">
@@ -278,7 +277,6 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 											defaultValue={description}></textarea>
 										<label htmlFor="description" className={labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
-												{" "}
 												Information
 											</span>
 										</label>

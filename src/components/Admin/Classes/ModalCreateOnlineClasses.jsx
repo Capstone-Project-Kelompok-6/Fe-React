@@ -148,7 +148,7 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 
 	return (
 		<div className="relative z-50">
-			<div className="fixed inset-0 z-50 bg-gray-400 bg-opacity-50 transition-opacity"></div>
+			<div className="fixed inset-0 z-50 bg-gray-600 bg-opacity-80 transition-opacity"></div>
 
 			<div className="fixed inset-0 z-50 items-center justify-center">
 				<div className="flex w-full items-end justify-center px-4 py-16 sm:h-full sm:items-center sm:p-0 md:h-screen">
