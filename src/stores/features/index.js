@@ -10,11 +10,13 @@ import membershipSlice from "./membershipSlice";
 import onlineBookingSlice from "./onlineBookingSlice";
 import videoSlice from "./videoSlice";
 import paymentSlice from "./paymentSlice";
+import loaderSlice from "./loaderSlice";
 
 export const rootReducer = combineReducers({
 	article: articleSlice,
 	workout: workoutSlice,
 	instructor: instructorSlice,
+	loader: loaderSlice,
 	offlineClasses: offlineClassesSlice,
 	onlineClasses: onlineClassesSlice,
 	offlineBooking: offlineBookingSlice,
