@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
 	cancelButton,
 	inputError,
@@ -11,7 +11,9 @@ import {
 	regexPasswordValidation,
 	saveButton,
 } from "../../../utils/globalVariable";
+import { PulseLoader } from "react-spinners";
 import { createMembership } from "../../../stores/features/membershipSlice";
+import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
 
 import Swal from "sweetalert2";
 import { maxLengthCheck } from "../../../utils/maxLengthCheck";
@@ -37,6 +39,7 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 	const [errors, setErrors] = useState(baseErrors);
 	const [passwordShown, setPasswordShown] = useState(false);
 	const dispatch = useDispatch();
+	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
 	const maxLengthPhoneNumber = 13;
 
@@ -112,6 +115,8 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		dispatch(setLoaderSubmit(true));
+
 		const formData = new FormData(e.target);
 		const first_name = formData.get("first_name");
 		const last_name = formData.get("last_name");
@@ -143,13 +148,16 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 								1000
 							);
 							handleModalCreateTrigger();
+							dispatch(setLoaderSubmit(false));
 						} else {
 							Swal.fire("Sorry", res.error.message.split(":")[1], "error");
+							dispatch(setLoaderSubmit(false));
 						}
 					}
 				);
 			} catch (error) {
 				Swal.fire("Sorry", error.message, "error");
+				dispatch(setLoaderSubmit(false));
 			}
 		} else {
 			setTimeout(
@@ -162,6 +170,7 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 					}),
 				1000
 			);
+			dispatch(setLoaderSubmit(false));
 		}
 	};
 
@@ -192,7 +201,8 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 										/>
 										<label
 											htmlFor="first_name"
-											className={errors.last_name ? labelError : labelNotError}>
+											className={errors.last_name ? labelError : labelNotError}
+										>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												First Name
 											</span>
@@ -219,7 +229,8 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 										/>
 										<label
 											htmlFor="last_name"
-											className={errors.last_name ? labelError : labelNotError}>
+											className={errors.last_name ? labelError : labelNotError}
+										>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Last Name
 											</span>
@@ -275,7 +286,8 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 										/>
 										<label
 											htmlFor="password"
-											className={errors.password ? labelError : labelNotError}>
+											className={errors.password ? labelError : labelNotError}
+										>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Password
 											</span>
@@ -312,7 +324,8 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 										/>
 										<label
 											htmlFor="phone_number"
-											className={errors.phone_number ? labelError : labelNotError}>
+											className={errors.phone_number ? labelError : labelNotError}
+										>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Phone Number
 											</span>
@@ -331,9 +344,15 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 								<button type="button" className={cancelButton} onClick={handleModalCreateTrigger}>
 									Cancel
 								</button>
-								<button type="submit" className={saveButton}>
-									Save
-								</button>
+								{loaderSubmit ? (
+									<button className={saveButton}>
+										<PulseLoader size={5} color={"#ffffff"} />
+									</button>
+								) : (
+									<button type="submit" className={saveButton}>
+										Save
+									</button>
+								)}
 							</div>
 						</form>
 					</div>

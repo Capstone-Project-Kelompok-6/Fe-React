@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { editVideo, editVideoTitle } from "../../../stores/features/videoSlice";
 import {
@@ -9,6 +9,8 @@ import {
 	saveButton,
 } from "../../../utils/globalVariable";
 import { PulseLoader } from "react-spinners";
+import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
+import { maxLengthCheck } from "../../../utils/maxLengthCheck";
 
 const baseErrors = {
 	video: "",
@@ -21,7 +23,7 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 	const [fileDataURL, setFileDataURL] = useState(null);
 	const [videoTitle, setVideoTitle] = useState("");
 	const [errors, setErrors] = useState(baseErrors);
-	const [load, setLoad] = useState(false);
+	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
 	const maxTitle = 100;
 	const MAX_FILE_SIZE = 5120;
@@ -66,7 +68,7 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 
 	const handleUpdate = (e) => {
 		e.preventDefault();
-		setLoad(true);
+		dispatch(setLoaderSubmit(true));
 		const formData = new FormData(e.target);
 		const title = formData.get("title");
 
@@ -90,7 +92,7 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 									}),
 								1000
 							);
-							setLoad(false);
+							dispatch(setLoaderSubmit(false));
 						}
 					});
 				} else {
@@ -108,7 +110,7 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 							}),
 						1000
 					);
-					setLoad(false);
+					dispatch(setLoaderSubmit(false));
 				}
 			});
 		} else {
@@ -122,13 +124,7 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 					}),
 				1000
 			);
-			setLoad(false);
-		}
-	};
-
-	const maxLengthCheck = (e) => {
-		if (e.target.value.length > e.target.maxLength) {
-			e.target.value = e.target.value.slice(0, e.target.maxLength);
+			dispatch(setLoaderSubmit(false));
 		}
 	};
 
@@ -224,13 +220,13 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 								<button type="button" className={cancelButton} onClick={handleModalEditTrigger}>
 									Cancel
 								</button>
-								{load ? (
+								{loaderSubmit ? (
 									<button className={saveButton}>
 										<PulseLoader size={5} color={"#ffffff"} />
 									</button>
 								) : (
 									<button type="submit" className={saveButton}>
-										Save Changes
+										Save
 									</button>
 								)}
 							</div>

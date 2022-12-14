@@ -8,6 +8,8 @@ import {
 	editOnlineVideoClasses,
 } from "../../../stores/features/onlineClassesSlice";
 import { fetchWorkoutList } from "../../../stores/features/workoutSlice";
+import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
+import { maxLengthCheck } from "./../../../utils/maxLengthCheck";
 import {
 	cancelButton,
 	inputNotError,
@@ -30,7 +32,7 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 	const dispatch = useDispatch();
 	const workoutList = useSelector((state) => state.workout.data);
 	const loading = useSelector((state) => state.workout.loading);
-	const [load, setLoad] = useState(false);
+	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
 	const maxTitle = 100;
 	const MAX_FILE_SIZE = 5120;
@@ -79,7 +81,7 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 
 	const handleUpdate = (e) => {
 		e.preventDefault();
-		setLoad(true);
+		dispatch(setLoaderSubmit(true));
 
 		const formData = new FormData(e.target);
 		const video_title = formData.get("video_title");
@@ -109,6 +111,7 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 										}),
 									1000
 								);
+								dispatch(setLoaderSubmit(false));
 							}
 						});
 					} else {
@@ -126,7 +129,7 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 								}),
 							1000
 						);
-						setLoad(false);
+						dispatch(setLoaderSubmit(false));
 					}
 				}
 			);
@@ -141,13 +144,7 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 					}),
 				1000
 			);
-			setLoad(false);
-		}
-	};
-
-	const maxLengthCheck = (e) => {
-		if (e.target.value.length > e.target.maxLength) {
-			e.target.value = e.target.value.slice(0, e.target.maxLength);
+			dispatch(setLoaderSubmit(false));
 		}
 	};
 
@@ -274,7 +271,8 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 											rows="5"
 											className={inputNotError}
 											placeholder=" "
-											defaultValue={description}></textarea>
+											defaultValue={description}
+										></textarea>
 										<label htmlFor="description" className={labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Information
@@ -287,13 +285,13 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 								<button type="button" className={cancelButton} onClick={handleModalEditTrigger}>
 									Cancel
 								</button>
-								{load ? (
+								{loaderSubmit ? (
 									<button className={saveButton}>
 										<PulseLoader size={5} color={"#ffffff"} />
 									</button>
 								) : (
 									<button type="submit" className={saveButton}>
-										Save Changes
+										Save
 									</button>
 								)}
 							</div>

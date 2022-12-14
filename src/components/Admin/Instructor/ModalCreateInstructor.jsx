@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createInstructor } from "../../../stores/features/instructorSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
 	cancelButton,
 	inputError,
@@ -12,6 +12,8 @@ import {
 	saveButton,
 } from "../../../utils/globalVariable";
 import { maxLengthCheck } from "../../../utils/maxLengthCheck";
+import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
+import { PulseLoader } from "react-spinners";
 
 import Swal from "sweetalert2";
 
@@ -35,6 +37,7 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 	const [errors, setErrors] = useState(baseErrors);
 	const [values, setValues] = useState(baseValues);
 	const imageInstructor = useRef(null);
+	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 	const dispatch = useDispatch();
 
 	const MAX_FILE_SIZE = 3072;
@@ -142,6 +145,7 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		dispatch(setLoaderSubmit(true));
 
 		const formData = new FormData(e.target);
 		const instructor_name = formData.get("instructor_name");
@@ -173,12 +177,15 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 							1000
 						);
 						handleModalCreateTrigger();
+						dispatch(setLoaderSubmit(false));
 					} else {
 						Swal.fire("Sorry", res.error.message.split(":")[1], "info");
+						dispatch(setLoaderSubmit(false));
 					}
 				});
 			} catch (error) {
 				Swal.fire("Sorry", error.message, "info");
+				dispatch(setLoaderSubmit(false));
 			}
 		} else {
 			setTimeout(
@@ -191,6 +198,7 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 					}),
 				1000
 			);
+			dispatch(setLoaderSubmit(false));
 		}
 	};
 
@@ -221,7 +229,8 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 										/>
 										<label
 											htmlFor="instructor_name"
-											className={errors.instructor_name ? labelError : labelNotError}>
+											className={errors.instructor_name ? labelError : labelNotError}
+										>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Fullname
 											</span>
@@ -247,7 +256,8 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 												<button
 													type="button"
 													className="absolute top-0 ml-20 inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-red-500 text-sm font-bold text-white"
-													onClick={handleCancelUpload}>
+													onClick={handleCancelUpload}
+												>
 													<i className="fi fi-rr-cross-small mt-1"></i>
 												</button>
 											</div>
@@ -326,7 +336,8 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 										/>
 										<label
 											htmlFor="phone_number"
-											className={errors.phone_number ? labelError : labelNotError}>
+											className={errors.phone_number ? labelError : labelNotError}
+										>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Phone Number
 											</span>
@@ -345,9 +356,15 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 								<button type="button" className={cancelButton} onClick={handleModalCreateTrigger}>
 									Cancel
 								</button>
-								<button type="submit" className={saveButton}>
-									Save
-								</button>
+								{loaderSubmit ? (
+									<button className={saveButton}>
+										<PulseLoader size={5} color={"#ffffff"} />
+									</button>
+								) : (
+									<button type="submit" className={saveButton}>
+										Save
+									</button>
+								)}
 							</div>
 						</form>
 					</div>
