@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
 	activeTab,
 	addButton,
@@ -16,6 +16,7 @@ import ClassesTabs from "./ClassesTabs";
 import ClassesAPI from "../../../apis/classes.api";
 import SkeletonLoadingOfflineClasses from "./SkeletonLoadingOfflineClasses";
 import SkeletonLoadingTabs from "../SkeletonLoadingTabs";
+import { setLoaderFetchData } from "../../../stores/features/loaderFetchDataSlice";
 
 const Initial_Offline_Classes = {
 	data: [],
@@ -28,9 +29,13 @@ const OfflineClassesList = () => {
 	const [searchTrigger, setSearchTrigger] = useState(false);
 	const [keyword, setKeyword] = useState("");
 	const [active, setActive] = useState(0);
+
+	const dispatch = useDispatch();
 	const loading = useSelector((state) => state.offlineClasses.loading);
 	const [debouncedKeyword] = useDebounce(keyword, 1300);
-	const [load, setLoad] = useState(true);
+	const loaderFetchData = useSelector((state) => state.loaderFetchData);
+
+	console.log({ loaderFetchData });
 
 	const classesOffline = new Set();
 	const classesOfflineFilter = new Set();
@@ -50,13 +55,12 @@ const OfflineClassesList = () => {
 				setActive(result.data.data.rows[0].workout);
 			});
 		} else {
-			setLoad(true);
 			ClassesAPI.getOfflineClasses(10).then((result) => {
 				setOfflineClasses({
 					data: result.data.data,
 				});
 				setActive(0);
-				setLoad(false);
+				dispatch(setLoaderFetchData(false));
 			});
 		}
 	}, [loading, debouncedKeyword]);
@@ -70,20 +74,18 @@ const OfflineClassesList = () => {
 	}, [loading]);
 
 	const filterItem = (workout) => {
-		setLoad(true);
+		dispatch(setLoaderFetchData(true));
 		ClassesAPI.filterOfflineClasses(workout).then((result) => {
 			setOfflineClasses({ data: result.data.data });
 			setActive(workout);
-			setLoad(false);
+			dispatch(setLoaderFetchData(false));
 		});
 	};
 
 	const filterAll = () => {
-		setLoad(true);
 		ClassesAPI.getOfflineClasses().then((result) => {
 			setOfflineClasses({ data: result.data.data });
 			setActive(0);
-			setLoad(false);
 		});
 	};
 
@@ -122,7 +124,8 @@ const OfflineClassesList = () => {
 								<button
 									type="button"
 									className="inset-y-0 flex items-center"
-									onClick={handleSearchTrigger}>
+									onClick={handleSearchTrigger}
+								>
 									<i className="fi fi-rr-search mt-1 text-lg"></i>
 								</button>
 							</div>
@@ -142,11 +145,12 @@ const OfflineClassesList = () => {
 												className={active === 0 ? activeTab : notActiveTab}
 												onClick={() => {
 													filterAll();
-												}}>
+												}}
+											>
 												All
 											</button>
 										</li>
-										{load ? (
+										{loaderFetchData ? (
 											<ul className="-mb-px flex list-none text-center">
 												<li className="mr-2">
 													<SkeletonLoadingTabs />
@@ -167,7 +171,8 @@ const OfflineClassesList = () => {
 													<li className="mr-2" key={workout}>
 														<button
 															className={active === workout ? activeTab : notActiveTab}
-															onClick={() => filterItem(workout)}>
+															onClick={() => filterItem(workout)}
+														>
 															{workout}
 														</button>
 													</li>
@@ -190,7 +195,8 @@ const OfflineClassesList = () => {
 									? "pointer-events-auto fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 									: "pointer-events-none fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 							}
-							onClick={handleSearchTrigger}></div>
+							onClick={handleSearchTrigger}
+						></div>
 						<div className="fixed top-0 right-0 z-40 mr-32 mt-32 w-48 rounded-xl bg-white shadow-4 transition-all duration-300 md:hidden">
 							<div className="relative">
 								<input
@@ -208,8 +214,8 @@ const OfflineClassesList = () => {
 						</div>
 					</div>
 				)}
-				{load ? (
-					<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+				{loaderFetchData ? (
+					<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 						<SkeletonLoadingOfflineClasses />
 						<SkeletonLoadingOfflineClasses />
 						<SkeletonLoadingOfflineClasses />
@@ -217,7 +223,7 @@ const OfflineClassesList = () => {
 				) : (
 					<div>
 						{offlineClasses.data.rows?.length > 0 ? (
-							<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+							<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 								{offlineClasses.data.rows?.map((item) => {
 									return <OfflineClassesListItem data={item} key={item.class_id} />;
 								})}

@@ -16,7 +16,7 @@ import OfflineBookingListItem from "./OfflineBookingListItem";
 import SkeletonLoadingBooking from "./SkeletonLoadingBooking";
 import ModalCreateOfflineBooking from "./ModalCreateOfflineBooking";
 import SkeletonLoadingTabs from "../SkeletonLoadingTabs";
-import { setLoader } from "../../../stores/features/loaderSlice";
+import { setLoaderFetchData } from "../../../stores/features/loaderFetchDataSlice";
 
 const Initial_Offline_Booking = {
 	data: [],
@@ -32,8 +32,8 @@ const OfflineBookingList = () => {
 
 	const dispatch = useDispatch();
 	const loading = useSelector((state) => state.offlineBooking.loading);
-	const loader = useSelector((state) => state.loader);
 	const [debouncedKeyword] = useDebounce(keyword, 1300);
+	const loaderFetchData = useSelector((state) => state.loaderFetchData);
 
 	const bookingOffline = new Set();
 	const bookingOfflineFilter = new Set();
@@ -53,13 +53,12 @@ const OfflineBookingList = () => {
 				setActive(result.data.data.rows[0].workout);
 			});
 		} else {
-			dispatch(setLoader(true));
 			BookingAPI.getOfflineBooking(1000).then((result) => {
 				setOfflineBooking({
 					data: result.data.data,
 				});
 				setActive(0);
-				dispatch(setLoader(false));
+				dispatch(setLoaderFetchData(false));
 			});
 		}
 	}, [loading, debouncedKeyword]);
@@ -73,24 +72,22 @@ const OfflineBookingList = () => {
 	}, [loading]);
 
 	const filterItem = (workout) => {
-		dispatch(setLoader(true));
+		dispatch(setLoaderFetchData(true));
 		BookingAPI.filterOfflineBooking(workout).then((result) => {
 			setOfflineBooking({
 				data: result.data.data,
 			});
 			setActive(workout);
-			dispatch(setLoader(false));
+			dispatch(setLoaderFetchData(false));
 		});
 	};
 
 	const filterAll = () => {
-		dispatch(setLoader(true));
 		BookingAPI.getOfflineBooking(1000).then((result) => {
 			setOfflineBooking({
 				data: result.data.data,
 			});
 			setActive(0);
-			dispatch(setLoader(false));
 		});
 	};
 
@@ -129,7 +126,8 @@ const OfflineBookingList = () => {
 								<button
 									type="button"
 									className="inset-y-0 flex items-center"
-									onClick={handleSearchTrigger}>
+									onClick={handleSearchTrigger}
+								>
 									<i className="fi fi-rr-search mt-1 text-lg"></i>
 								</button>
 							</div>
@@ -148,11 +146,12 @@ const OfflineBookingList = () => {
 											className={active === 0 ? activeTab : notActiveTab}
 											onClick={() => {
 												filterAll();
-											}}>
+											}}
+										>
 											All
 										</button>
 									</li>
-									{loader ? (
+									{loaderFetchData ? (
 										<ul className="-mb-px flex list-none text-center">
 											<li className="mr-2">
 												<SkeletonLoadingTabs />
@@ -173,7 +172,8 @@ const OfflineBookingList = () => {
 												<li className="mr-2" key={workout}>
 													<button
 														className={active === workout ? activeTab : notActiveTab}
-														onClick={() => filterItem(workout)}>
+														onClick={() => filterItem(workout)}
+													>
 														{workout}
 													</button>
 												</li>
@@ -195,7 +195,8 @@ const OfflineBookingList = () => {
 								? "pointer-events-auto fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 								: "pointer-events-none fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 						}
-						onClick={handleSearchTrigger}></div>
+						onClick={handleSearchTrigger}
+					></div>
 					<div className="fixed top-10 right-0 z-40 mr-32 mt-24 w-48 rounded-xl bg-white shadow-4 transition-all duration-300 md:hidden">
 						<div className="relative">
 							<input
@@ -213,7 +214,7 @@ const OfflineBookingList = () => {
 					</div>
 				</div>
 			)}
-			{loader ? (
+			{loaderFetchData ? (
 				<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
 					<SkeletonLoadingBooking />
 					<SkeletonLoadingBooking />

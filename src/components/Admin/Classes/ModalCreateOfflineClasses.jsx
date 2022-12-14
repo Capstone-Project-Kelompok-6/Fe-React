@@ -12,12 +12,15 @@ import {
 import { fetchInstructor } from "../../../stores/features/instructorSlice";
 import { fetchWorkoutList } from "../../../stores/features/workoutSlice";
 import { createOfflineClasses } from "../../../stores/features/offlineClassesSlice";
+import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
+import { PulseLoader } from "react-spinners";
 
 const ModalCreateOfflineClasses = ({ handleModalCreateTrigger }) => {
 	const dispatch = useDispatch();
 	const workoutList = useSelector((state) => state.workout.data);
 	const instructorList = useSelector((state) => state.instructor.data);
 	const [selectedClassDates, setSelectedClassDates] = useState([]);
+	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
 	useEffect(() => {
 		dispatch(fetchWorkoutList());
@@ -30,6 +33,8 @@ const ModalCreateOfflineClasses = ({ handleModalCreateTrigger }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		dispatch(setLoaderSubmit(true));
+
 		const formData = new FormData(e.target);
 		const workout_id = formData.get("workout_id");
 		const instructor_id = formData.get("instructor_id");
@@ -60,12 +65,15 @@ const ModalCreateOfflineClasses = ({ handleModalCreateTrigger }) => {
 						1000
 					);
 					handleModalCreateTrigger();
+					dispatch(setLoaderSubmit(false));
 				} else {
 					Swal.fire("Sorry", res.error.message.split(":")[1], "info");
+					dispatch(setLoaderSubmit(false));
 				}
 			});
 		} catch (error) {
 			Swal.fire("Sorry", error.message.split(":")[1], "info");
+			dispatch(setLoaderSubmit(false));
 		}
 	};
 
@@ -165,7 +173,8 @@ const ModalCreateOfflineClasses = ({ handleModalCreateTrigger }) => {
 										rows="5"
 										className={inputNotError}
 										placeholder=" "
-										required></textarea>
+										required
+									></textarea>
 									<label htmlFor="description" className={labelNotError}>
 										<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 											Information
@@ -177,9 +186,15 @@ const ModalCreateOfflineClasses = ({ handleModalCreateTrigger }) => {
 								<button type="button" className={cancelButton} onClick={handleModalCreateTrigger}>
 									Cancel
 								</button>
-								<button type="submit" className={saveButton}>
-									Save
-								</button>
+								{loaderSubmit ? (
+									<button className={saveButton}>
+										<PulseLoader size={5} color={"#ffffff"} />
+									</button>
+								) : (
+									<button type="submit" className={saveButton}>
+										Save
+									</button>
+								)}
 							</div>
 						</form>
 					</div>

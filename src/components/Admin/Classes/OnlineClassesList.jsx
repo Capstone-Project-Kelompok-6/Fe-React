@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useDebounce } from "use-debounce";
 import ClassesAPI from "../../../apis/classes.api";
 import {
@@ -17,6 +17,7 @@ import ModalCreateOnlineClasses from "./ModalCreateOnlineClasses";
 import OnlineClassesListItem from "./OnlineClassesListItem";
 import SkeletonLoadingOnlineClasses from "./SkeletonLoadingOnlineClasses";
 import SkeletonLoadingTabs from "../SkeletonLoadingTabs";
+import { setLoaderFetchData } from "../../../stores/features/loaderFetchDataSlice";
 
 const Initial_Online_Classes = {
 	data: [],
@@ -30,9 +31,10 @@ const OnlineClassesList = () => {
 	const [keyword, setKeyword] = useState("");
 	const [active, setActive] = useState(0);
 
+	const dispatch = useDispatch();
 	const loading = useSelector((state) => state.onlineClasses.loading);
 	const [debouncedKeyword] = useDebounce(keyword, 1300);
-	const [load, setLoad] = useState(true);
+	const loaderFetchData = useSelector((state) => state.loaderFetchData);
 
 	const classesOnline = new Set();
 	const classesOnlineFilter = new Set();
@@ -52,13 +54,12 @@ const OnlineClassesList = () => {
 				setActive(result.data.data.rows[0].workout);
 			});
 		} else {
-			setLoad(true);
 			ClassesAPI.getOnlineClasses(10).then((result) => {
 				setOnlineClasses({
 					data: result.data.data,
 				});
 				setActive(0);
-				setLoad(false);
+				dispatch(setLoaderFetchData(false));
 			});
 		}
 	}, [loading, debouncedKeyword]);
@@ -72,21 +73,19 @@ const OnlineClassesList = () => {
 	}, [loading]);
 
 	const filterItem = (workout) => {
-		setLoad(true);
+		dispatch(setLoaderFetchData(true));
 		ClassesAPI.filterOnlineClasses(workout).then((result) => {
 			setOnlineClasses({ data: result.data.data });
 			setActive(workout);
-			setLoad(false);
+			dispatch(setLoaderFetchData(false));
 		});
 	};
 
 	const filterAll = () => {
-		setLoad(true);
 		ClassesAPI.getOnlineClasses().then((result) => {
-			return setOnlineClasses({ data: result.data.data });
+			setOnlineClasses({ data: result.data.data });
+			setActive(0);
 		});
-		setActive(0);
-		setLoad(false);
 	};
 
 	const handleModalCreateTrigger = () => {
@@ -124,7 +123,8 @@ const OnlineClassesList = () => {
 								<button
 									type="button"
 									className="inset-y-0 flex items-center"
-									onClick={handleSearchTrigger}>
+									onClick={handleSearchTrigger}
+								>
 									<i className="fi fi-rr-search mt-1 text-lg"></i>
 								</button>
 							</div>
@@ -144,11 +144,12 @@ const OnlineClassesList = () => {
 												className={active === 0 ? activeTab : notActiveTab}
 												onClick={() => {
 													filterAll();
-												}}>
+												}}
+											>
 												All
 											</button>
 										</li>
-										{load ? (
+										{loaderFetchData ? (
 											<ul className="-mb-px flex list-none text-center">
 												<li className="mr-2">
 													<SkeletonLoadingTabs />
@@ -169,7 +170,8 @@ const OnlineClassesList = () => {
 													<li className="mr-2" key={workout}>
 														<button
 															className={active === workout ? activeTab : notActiveTab}
-															onClick={() => filterItem(workout)}>
+															onClick={() => filterItem(workout)}
+														>
 															{workout}
 														</button>
 													</li>
@@ -192,7 +194,8 @@ const OnlineClassesList = () => {
 									? "pointer-events-auto fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 									: "pointer-events-none fixed inset-0 z-10 transition-opacity duration-300 ease-linear"
 							}
-							onClick={handleSearchTrigger}></div>
+							onClick={handleSearchTrigger}
+						></div>
 						<div className="fixed top-0 right-0 z-40 mr-32 mt-32 w-48 rounded-xl bg-white shadow-4 transition-all duration-300 md:hidden">
 							<div className="relative">
 								<input
@@ -210,8 +213,8 @@ const OnlineClassesList = () => {
 						</div>
 					</div>
 				)}
-				{load ? (
-					<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+				{loaderFetchData ? (
+					<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 						<SkeletonLoadingOnlineClasses />
 						<SkeletonLoadingOnlineClasses />
 						<SkeletonLoadingOnlineClasses />
@@ -219,7 +222,7 @@ const OnlineClassesList = () => {
 				) : (
 					<div>
 						{onlineClasses.data.rows?.length > 0 ? (
-							<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+							<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 								{onlineClasses.data.rows?.map((item) => {
 									return <OnlineClassesListItem data={item} key={item.class_id} />;
 								})}
