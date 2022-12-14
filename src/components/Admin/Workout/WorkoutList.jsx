@@ -165,7 +165,7 @@ const WorkoutList = () => {
 															key={item.workout_id}
 															data={{
 																...item,
-																no: workout.data.page * 10 - 10 + 1 + i,
+																no: workout.data.page * 5 - 5 + 1 + i,
 															}}
 														/>
 													);
