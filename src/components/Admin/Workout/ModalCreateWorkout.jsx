@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { createWorkout } from "../../../stores/features/workoutSlice";
 import {
 	cancelButton,
+	imageMimeType,
 	inputError,
 	inputNotError,
 	labelError,
@@ -13,15 +14,18 @@ import {
 } from "../../../utils/globalVariable";
 import { PulseLoader } from "react-spinners";
 import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
+import { handleKeyDown } from "../../../utils/rmvHtmlTag";
 
 const baseValues = {
 	workout: "",
 	image: "",
+	description: "",
 };
 
 const baseErrors = {
 	workout: "",
 	image: "",
+	description: "",
 };
 
 const ModalCreateWorkout = ({ handleModalCreateTrigger }) => {
@@ -70,7 +74,13 @@ const ModalCreateWorkout = ({ handleModalCreateTrigger }) => {
 
 		const fileSizeKiloBytes = file.size / 1024;
 
-		if (fileSizeKiloBytes > MAX_FILE_SIZE) {
+		if (!file.type.match(imageMimeType)) {
+			setErrors({
+				...errors,
+				image: "Image mime type is not valid",
+			});
+			return;
+		} else if (fileSizeKiloBytes > MAX_FILE_SIZE) {
 			setErrors({
 				...errors,
 				image: "File size is greater than maximum limit",
@@ -172,8 +182,8 @@ const ModalCreateWorkout = ({ handleModalCreateTrigger }) => {
 									Add New Workout
 								</h3>
 							</div>
-							<div className="h-[65vh] overflow-y-auto p-6">
-								<div className="h-[90&] space-y-6">
+							<div className="h-[68vh] overflow-y-auto px-6 pt-0 pb-6">
+								<div className="h-[90%] space-y-6">
 									<div className="relative">
 										<div className="relative">
 											<input
@@ -258,7 +268,8 @@ const ModalCreateWorkout = ({ handleModalCreateTrigger }) => {
 											rows="5"
 											className={inputNotError}
 											placeholder=" "
-											required></textarea>
+											required
+											onKeyDown={handleKeyDown}></textarea>
 										<label htmlFor="description" className={labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Information

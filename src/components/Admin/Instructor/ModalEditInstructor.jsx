@@ -4,6 +4,7 @@ import { editInstructor } from "../../../stores/features/instructorSlice";
 import { PulseLoader } from "react-spinners";
 import {
 	cancelButton,
+	imageMimeType,
 	inputError,
 	inputNotError,
 	labelError,
@@ -104,7 +105,13 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 
 		const fileSizeKiloBytes = file.size / 1024;
 
-		if (fileSizeKiloBytes > MAX_FILE_SIZE) {
+		if (!file.type.match(imageMimeType)) {
+			setErrors({
+				...errors,
+				image: "Image mime type is not valid",
+			});
+			return;
+		} else if (fileSizeKiloBytes > MAX_FILE_SIZE) {
 			setErrors({
 				...errors,
 				image: "File size is greater than maximum limit",
@@ -227,8 +234,7 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 										/>
 										<label
 											htmlFor="instructor_name"
-											className={errors.instructor_name ? labelError : labelNotError}
-										>
+											className={errors.instructor_name ? labelError : labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Fullname
 											</span>
@@ -328,8 +334,7 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 										/>
 										<label
 											htmlFor="phone_number"
-											className={errors.phone_number ? labelError : labelNotError}
-										>
+											className={errors.phone_number ? labelError : labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Phone Number
 											</span>

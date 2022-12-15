@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { createArticle } from "../../../stores/features/articleSlice";
 import {
 	cancelButton,
+	imageMimeType,
 	inputNotError,
 	labelNotError,
 	saveButton,
@@ -11,6 +12,7 @@ import {
 
 import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
 import { PulseLoader } from "react-spinners";
+import { handleKeyDown } from "../../../utils/rmvHtmlTag";
 
 const baseErrors = {
 	image: "",
@@ -33,8 +35,13 @@ const ModalCreateArticle = ({ handleModalCreateTrigger }) => {
 		if (!file) return;
 
 		const fileSizeKiloBytes = file.size / 1024;
-
-		if (fileSizeKiloBytes > MAX_FILE_SIZE) {
+		if (!file.type.match(imageMimeType)) {
+			setErrors({
+				...errors,
+				image: "Video mime type is not valid",
+			});
+			return;
+		} else if (fileSizeKiloBytes > MAX_FILE_SIZE) {
 			setErrors({
 				...errors,
 				image: "File size is greater than maximum limit",
@@ -137,8 +144,8 @@ const ModalCreateArticle = ({ handleModalCreateTrigger }) => {
 									Add New Article
 								</h3>
 							</div>
-							<div className="h-[65vh] overflow-y-auto p-6">
-								<div className="h-[90&] space-y-6">
+							<div className="h-[68vh] overflow-y-auto px-6 pt-0 pb-6">
+								<div className="h-[90%] space-y-6">
 									<div className="relative">
 										<div className="relative">
 											<input
@@ -168,8 +175,7 @@ const ModalCreateArticle = ({ handleModalCreateTrigger }) => {
 													<button
 														type="button"
 														className="absolute -top-2 -right-2 inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-red-500 text-sm font-bold text-white sm:mr-10 md:right-0 md:mr-14 xl:mr-20"
-														onClick={handleCancelUpload}
-													>
+														onClick={handleCancelUpload}>
 														<i className="fi fi-rr-cross-small mt-1"></i>
 													</button>
 												</div>
@@ -215,7 +221,7 @@ const ModalCreateArticle = ({ handleModalCreateTrigger }) => {
 											className={inputNotError}
 											placeholder=" "
 											required
-										></textarea>
+											onKeyDown={handleKeyDown}></textarea>
 										<label htmlFor="description" className={labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Description

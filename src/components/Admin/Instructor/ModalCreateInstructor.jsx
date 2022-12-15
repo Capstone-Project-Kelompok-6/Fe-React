@@ -3,6 +3,7 @@ import { createInstructor } from "../../../stores/features/instructorSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	cancelButton,
+	imageMimeType,
 	inputError,
 	inputNotError,
 	labelError,
@@ -60,7 +61,7 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 					...errors,
 					instructor_name: "Full name must be in letters",
 				});
-			} else if (value == "") {
+			} else if (value === "") {
 				setErrors({
 					...errors,
 					instructor_name: "Full name is required",
@@ -73,7 +74,7 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 		if (name === "email") {
 			if (!regexEmailValidation.test(value)) {
 				setErrors({ ...errors, email: "Invalid email" });
-			} else if (value == "") {
+			} else if (value === "") {
 				setErrors({ ...errors, email: "Email is required" });
 			} else {
 				setErrors({ ...errors, email: "" });
@@ -104,7 +105,13 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 
 		const fileSizeKiloBytes = file.size / 1024;
 
-		if (fileSizeKiloBytes > MAX_FILE_SIZE) {
+		if (!file.type.match(imageMimeType)) {
+			setErrors({
+				...errors,
+				image: "Image mime type is not valid",
+			});
+			return;
+		} else if (fileSizeKiloBytes > MAX_FILE_SIZE) {
 			setErrors({
 				...errors,
 				image: "File size is greater than maximum limit",
@@ -229,8 +236,7 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 										/>
 										<label
 											htmlFor="instructor_name"
-											className={errors.instructor_name ? labelError : labelNotError}
-										>
+											className={errors.instructor_name ? labelError : labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Fullname
 											</span>
@@ -256,8 +262,7 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 												<button
 													type="button"
 													className="absolute top-0 ml-20 inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-red-500 text-sm font-bold text-white"
-													onClick={handleCancelUpload}
-												>
+													onClick={handleCancelUpload}>
 													<i className="fi fi-rr-cross-small mt-1"></i>
 												</button>
 											</div>
@@ -336,8 +341,7 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 										/>
 										<label
 											htmlFor="phone_number"
-											className={errors.phone_number ? labelError : labelNotError}
-										>
+											className={errors.phone_number ? labelError : labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Phone Number
 											</span>

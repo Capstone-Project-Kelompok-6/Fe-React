@@ -7,9 +7,11 @@ import {
 	inputNotError,
 	labelNotError,
 	saveButton,
+	videoMimeType,
 } from "../../../utils/globalVariable";
 import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
 import { PulseLoader } from "react-spinners";
+import { handleKeyDown } from "../../../utils/rmvHtmlTag";
 
 const baseErrors = {
 	image: "",
@@ -33,7 +35,13 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 
 		const fileSizeKiloBytes = file.size / 1024;
 
-		if (fileSizeKiloBytes > MAX_FILE_SIZE) {
+		if (!file.type.match(videoMimeType)) {
+			setErrors({
+				...errors,
+				video: "Video mime type is not valid",
+			});
+			return;
+		} else if (fileSizeKiloBytes > MAX_FILE_SIZE) {
 			setErrors({
 				...errors,
 				image: "File size is greater than maximum limit",
@@ -131,8 +139,8 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 									Edit Article
 								</h3>
 							</div>
-							<div className="h-[65vh] overflow-y-auto p-6">
-								<div className="h-[90&] space-y-6">
+							<div className="h-[68vh] overflow-y-auto px-6 pt-2 pb-6">
+								<div className="h-[90%] space-y-6">
 									<div className="relative">
 										<div className="relative">
 											<input
@@ -204,7 +212,7 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 											placeholder=" "
 											required
 											defaultValue={description}
-										></textarea>
+											onKeyDown={handleKeyDown}></textarea>
 										<label htmlFor="description" className={labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Description
