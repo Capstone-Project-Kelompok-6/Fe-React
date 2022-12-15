@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import { editVideo, editVideoTitle } from "../../../stores/features/videoSlice";
+import { editVideoContent, editVideoTitle } from "../../../stores/features/videoSlice";
 import {
 	cancelButton,
+	imageMimeType,
 	inputNotError,
 	labelNotError,
 	saveButton,
+	videoMimeType,
 } from "../../../utils/globalVariable";
 import { PulseLoader } from "react-spinners";
 import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
@@ -14,57 +16,102 @@ import { maxLengthCheck } from "../../../utils/maxLengthCheck";
 
 const baseErrors = {
 	video: "",
+	thumbnail: "",
 };
 
 const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }) => {
-	const { video_content_id, title, video, video_name } = update;
+	const [editVideo, setEditVideo] = useState("");
+	const [editThumbnail, setEditThumbnail] = useState("");
+	const [videoDataURL, setVideoDataURL] = useState(null);
+	const [thumbnailDataURL, setThumbnailDataURL] = useState(null);
+	const { video_content_id, title, video, video_name, thumbnail, thumbnail_name } = update;
 	const dispatch = useDispatch();
-	const [file, setFile] = useState("");
-	const [fileDataURL, setFileDataURL] = useState(null);
 	const [videoTitle, setVideoTitle] = useState("");
 	const [errors, setErrors] = useState(baseErrors);
 	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
 	const maxTitle = 100;
-	const MAX_FILE_SIZE = 5120;
+	const MAX_FILE_SIZE_VIDEO = 5120;
+	const MAX_FILE_SIZE_IMAGE = 3072;
 
 	const handleUploadVideo = (e) => {
 		e.preventDefault();
-		const file = e.target.files[0];
-		if (!file) return;
+		const fileVideo = e.target.files[0];
+		if (!fileVideo) return;
 
-		const fileSizeKiloBytes = file.size / 1024;
-
-		if (fileSizeKiloBytes > MAX_FILE_SIZE) {
+		const fileSizeKiloBytes = fileVideo.size / 1024;
+		if (!fileVideo.type.match(videoMimeType)) {
+			setErrors({
+				...errors,
+				video: "Video mime type is not valid",
+			});
+			return;
+		} else if (fileSizeKiloBytes > MAX_FILE_SIZE_VIDEO) {
 			setErrors({ ...errors, video: "File size is greater than maximum limit" });
 			return;
 		} else {
 			setErrors({ ...errors, video: "" });
 		}
 
-		setFile(file);
+		setEditVideo(fileVideo);
+	};
+
+	const handleUploadImage = (e) => {
+		e.preventDefault();
+		const fileThumbnail = e.target.files[0];
+		if (!fileThumbnail) return;
+
+		const fileSizeKiloBytes = fileThumbnail.size / 1024;
+		if (!fileThumbnail.type.match(imageMimeType)) {
+			setErrors({
+				...errors,
+				thumbnail: "Image mime type is not valid",
+			});
+			return;
+		} else if (fileSizeKiloBytes > MAX_FILE_SIZE_IMAGE) {
+			setErrors({ ...errors, thumbnail: "File size is greater than maximum limit" });
+			return;
+		} else {
+			setErrors({ ...errors, thumbnail: "" });
+		}
+
+		setEditThumbnail(fileThumbnail);
 	};
 
 	useEffect(() => {
-		let fileReader,
+		let fileReaderVideo,
+			fileReaderThumbnail,
 			isCancel = false;
-		if (file) {
-			fileReader = new FileReader();
-			fileReader.onload = (e) => {
+		if (editVideo) {
+			fileReaderVideo = new FileReader();
+			fileReaderVideo.onload = (e) => {
 				const { result } = e.target;
 				if (result && !isCancel) {
-					setFileDataURL(result);
+					setVideoDataURL(result);
 				}
 			};
-			fileReader.readAsDataURL(file);
+			fileReaderVideo.readAsDataURL(editVideo);
+		}
+		if (editThumbnail) {
+			fileReaderThumbnail = new FileReader();
+			fileReaderThumbnail.onload = (e) => {
+				const { result } = e.target;
+				if (result && !isCancel) {
+					setThumbnailDataURL(result);
+				}
+			};
+			fileReaderThumbnail.readAsDataURL(editThumbnail);
 		}
 		return () => {
 			isCancel = true;
-			if (fileReader && fileReader.readyState === 1) {
-				fileReader.abort();
+			if (fileReaderVideo && fileReaderVideo.readyState === 1) {
+				fileReaderVideo.abort();
+			}
+			if (fileReaderThumbnail && fileReaderThumbnail.readyState === 1) {
+				fileReaderThumbnail.abort();
 			}
 		};
-	}, [file]);
+	}, [editVideo, editThumbnail]);
 
 	const handleUpdate = (e) => {
 		e.preventDefault();
@@ -75,8 +122,11 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 		if (!errors.video) {
 			dispatch(editVideoTitle({ video_content_id, title })).then(() => {
 				const video = formData.get("video");
-				if (video.name !== "") {
-					dispatch(editVideo({ video_content_id, video, video_name })).then((result) => {
+				const thumbnail = formData.get("thumbnail");
+				if (video.name !== "" && thumbnail.name !== "") {
+					dispatch(
+						editVideoContent({ video_content_id, video, video_name, thumbnail, thumbnail_name })
+					).then((result) => {
 						if (result) {
 							handleModalEditTrigger();
 							handleActionDropdown();
@@ -141,77 +191,122 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 									Edit Video
 								</h3>
 							</div>
-							<div className="space-y-6 p-6">
-								<div>
-									<div className="relative">
-										<input
-											type="text"
-											id="title"
-											name="title"
-											maxLength={maxTitle}
-											onInput={maxLengthCheck}
-											onChange={(e) => setVideoTitle(e.target.value)}
-											className={inputNotError}
-											placeholder=" "
-											required
-											defaultValue={title}
-										/>
+							<div className="h-[68vh] overflow-y-auto px-6 pt-2 pb-6">
+								<div className="h-[90%] space-y-6">
+									<div>
+										<div className="relative">
+											<input
+												type="text"
+												id="title"
+												name="title"
+												maxLength={maxTitle}
+												onInput={maxLengthCheck}
+												onChange={(e) => setVideoTitle(e.target.value)}
+												className={inputNotError}
+												placeholder=" "
+												required
+												defaultValue={title}
+											/>
 
-										<label htmlFor="title" className={labelNotError}>
-											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
-												Title
-											</span>
-										</label>
-									</div>
-									{title ? (
-										<h1 className="mt-2 text-end text-xs font-normal text-dark-4 md:text-sm">
-											{title.length}/{maxTitle}
-										</h1>
-									) : (
-										<h1 className="mt-2 text-end text-xs font-normal text-dark-4 md:text-sm">
-											{videoTitle.length}/{maxTitle}
-										</h1>
-									)}
-								</div>
-								<div className="relative">
-									{fileDataURL ? (
-										<div className="my-5 flex w-full items-center justify-center">
-											<div className="flex flex-col items-center justify-center">
-												<video
-													src={fileDataURL}
-													controls
-													className="inset-0 h-52 w-80 rounded-lg border-2 border-dashed border-gray-300 object-fill object-center"
-												/>
-											</div>
+											<label htmlFor="title" className={labelNotError}>
+												<span className="block after:ml-1 after:text-red-500 after:content-['*']">
+													Title
+												</span>
+											</label>
 										</div>
-									) : (
-										<div className="my-5 flex w-full items-center justify-center">
-											<div className="flex flex-col items-center justify-center">
-												<video
-													src={video}
-													alt={video_name}
-													controls
-													className="inset-0 h-52 w-80 rounded-lg border-2 border-dashed border-neutral-80 object-fill object-center"
-												/>
-											</div>
-										</div>
-									)}
-									<input
-										className="mb-1 block w-full cursor-pointer rounded-lg border border-neutral-60 text-xs text-secondary-red placeholder-gray-400"
-										id="video"
-										name="video"
-										type="file"
-										accept="video/mp4"
-										onChange={handleUploadVideo}
-									/>
-									<div className="mb-2 flex items-center space-x-4">
-										{errors.video && (
-											<span className="text-sm text-secondary-red">{errors.video}</span>
+										{title ? (
+											<h1 className="mt-2 text-end text-xs font-normal text-dark-4 md:text-sm">
+												{title.length}/{maxTitle}
+											</h1>
+										) : (
+											<h1 className="mt-2 text-end text-xs font-normal text-dark-4 md:text-sm">
+												{videoTitle.length}/{maxTitle}
+											</h1>
 										)}
-										<div className="min-w-0 flex-1">
-											<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">
-												Max size: 5MB
-											</p>
+									</div>
+									<div className="relative">
+										{videoDataURL ? (
+											<div className="my-5 flex w-full items-center justify-center">
+												<div className="flex flex-col items-center justify-center">
+													<video
+														src={videoDataURL}
+														controls
+														className="inset-0 h-52 w-80 rounded-lg border-2 border-dashed border-gray-300 object-fill object-center"
+													/>
+												</div>
+											</div>
+										) : (
+											<div className="my-5 flex w-full items-center justify-center">
+												<div className="flex flex-col items-center justify-center">
+													<video
+														src={video}
+														alt={video_name}
+														controls
+														className="inset-0 h-52 w-80 rounded-lg border-2 border-dashed border-neutral-80 object-fill object-center"
+													/>
+												</div>
+											</div>
+										)}
+										<input
+											className="mb-1 block w-full cursor-pointer rounded-lg border border-neutral-60 text-xs text-secondary-red placeholder-gray-400"
+											id="video"
+											name="video"
+											type="file"
+											accept="video/mp4"
+											onChange={handleUploadVideo}
+										/>
+										<div className="mb-2 flex items-center space-x-4">
+											{errors.video && (
+												<span className="text-sm text-secondary-red">{errors.video}</span>
+											)}
+											<div className="min-w-0 flex-1">
+												<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">
+													Max size: 5MB
+												</p>
+											</div>
+										</div>
+									</div>
+									<div className="relative">
+										{thumbnailDataURL ? (
+											<div className="my-5 flex w-full items-center justify-center">
+												<div className="flex flex-col items-center justify-center">
+													<img
+														src={thumbnailDataURL}
+														alt=""
+														className="h-52 w-80 rounded-lg border-2 border-dashed border-neutral-80 object-cover object-center"
+													/>
+												</div>
+											</div>
+										) : (
+											<div className="my-5 flex w-full items-center justify-center">
+												<div className="flex flex-col items-center justify-center">
+													<img
+														src={thumbnail}
+														alt={thumbnail_name}
+														className="h-52 w-80 rounded-lg border-2 border-dashed border-neutral-80 object-cover object-center"
+													/>
+												</div>
+											</div>
+										)}
+										<input
+											className="mb-1 block w-full cursor-pointer rounded-lg border border-neutral-60 text-xs text-secondary-red placeholder-gray-400"
+											name="thumbnail"
+											id="thumbnail"
+											type="file"
+											accept="image/*"
+											onChange={handleUploadImage}
+										/>
+										<div className="mb-2 flex items-center space-x-4">
+											{errors.thumbnail && (
+												<span className="text-xs font-light text-secondary-red md:text-sm">
+													<i className="fi fi-rr-info"></i> {errors.thumbnail}
+												</span>
+											)}
+											<div className="min-w-0 flex-1">
+												<p className="text-end text-xs font-medium text-neutral-100-2 md:text-sm">
+													Max size: 3MB
+												</p>
+											</div>
 										</div>
 									</div>
 								</div>
