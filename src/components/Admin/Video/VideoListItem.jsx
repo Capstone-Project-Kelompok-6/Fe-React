@@ -1,4 +1,5 @@
 import React from "react";
+import ReactPlayer from "react-player";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import useHook from "../../../hooks/useHook";
@@ -13,7 +14,7 @@ import { truncate } from "../../../utils/truncate";
 import ModalEditVideo from "./ModalEditVideo";
 
 const VideoListItem = ({ data }) => {
-	const { video_content_id, title, video, video_name } = data;
+	const { video_content_id, title, video, video_name, thumbnail } = data;
 	const { actionDropdown, setActionDropdown, modalEditTrigger, setModalEditTrigger } = useHook();
 	const dispatch = useDispatch();
 
@@ -83,7 +84,7 @@ const VideoListItem = ({ data }) => {
 		<div>
 			<div className="h-full rounded-20 bg-white shadow-4">
 				<div className="relative overflow-hidden rounded-t-20 pb-48">
-					{video_name === "-" ? (
+					{!video_name ? (
 						<div
 							role="status"
 							className="absolute inset-0 h-full w-full animate-pulse rounded-t-20 bg-gray-300 object-fill object-center p-20 text-center">
@@ -91,13 +92,23 @@ const VideoListItem = ({ data }) => {
 							<span className="sr-only">Loading...</span>
 						</div>
 					) : (
-						<video
-							className="absolute inset-0 h-full w-full rounded-t-20 object-cover object-center"
-							controls
-							src={video}
-							alt={video_name}
-							type="video/mp4"
-						/>
+						<div className="player-wrapper">
+							<ReactPlayer
+								className="video-player"
+								url={video}
+								alt={video_name}
+								width="100%"
+								height="100%"
+								playing
+								controls
+								playIcon={
+									<button className="shadow-4">
+										<i className="fi fi-sr-play text-4xl text-white"></i>
+									</button>
+								}
+								light={thumbnail}
+							/>
+						</div>
 					)}
 
 					<div className="group relative">
