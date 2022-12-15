@@ -19,6 +19,36 @@ html {
 	scroll-behavior: smooth;
 }
 
+.player-wrapper {
+	border-radius: 20px 20px 0 0;
+}
+
+.video-player {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: none;
+	border-radius: 20px 20px 0 0;
+	overflow: hidden;
+}
+
+.video-input {
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	border-width: 2px;
+	border-radius: 8px;
+	border-style: dashed;
+	border-color: #515151;
+	object-fit: fill;
+	object-position: center;
+}
+
 .react-calendar {
 	@apply w-[300px] max-w-full bg-white leading-tight md:w-[350px];
 }
