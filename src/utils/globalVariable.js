@@ -28,6 +28,10 @@ export const regexEmailValidation =
 
 export const regexPasswordValidation = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
 
+export const imageMimeType = /image\/(png|jpg|jpeg)/i;
+
+export const videoMimeType = /video\/(mp4)/i;
+
 // Tabs
 export const activeTab =
 	"inline-block rounded-full border border-primary-violet bg-tertiary-background-1 px-3 py-1 text-xs text-tertiary-3";
