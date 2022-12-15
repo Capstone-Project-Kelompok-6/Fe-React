@@ -59,7 +59,7 @@ const OfflineClassesList = () => {
 			});
 		} else {
 			dispatch(setLoaderFetchData(true));
-			ClassesAPI.getOfflineClasses(10).then((result) => {
+			ClassesAPI.getOfflineClasses(1000).then((result) => {
 				setOfflineClasses({
 					data: result.data.data,
 				});
