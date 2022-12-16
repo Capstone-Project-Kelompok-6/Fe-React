@@ -199,7 +199,7 @@ const OnlineBookingList = () => {
 				</div>
 			)}
 			{loaderFetchData ? (
-				<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
+				<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 md:gap-6 xl:grid-cols-2 2xl:grid-cols-3">
 					<SkeletonLoadingBooking />
 					<SkeletonLoadingBooking />
 					<SkeletonLoadingBooking />
@@ -207,7 +207,7 @@ const OnlineBookingList = () => {
 			) : (
 				<div>
 					{onlineBooking.data.rows?.length > 0 ? (
-						<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
+						<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 md:gap-6 xl:grid-cols-2 2xl:grid-cols-3">
 							{onlineBooking.data.rows?.map((item) => {
 								return <OnlineBookingListItem data={item} key={item.book_id} />;
 							})}

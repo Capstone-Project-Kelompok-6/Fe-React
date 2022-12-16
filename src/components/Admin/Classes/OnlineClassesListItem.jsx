@@ -103,7 +103,7 @@ const OnlineClassesListItem = ({ data }) => {
 								playing
 								controls
 								playIcon={
-									<button className="shadow-4">
+									<button>
 										<i className="fi fi-sr-play text-4xl text-white"></i>
 									</button>
 								}

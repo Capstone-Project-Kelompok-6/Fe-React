@@ -215,7 +215,7 @@ const OfflineClassesList = () => {
 					</div>
 				)}
 				{loaderFetchData ? (
-					<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+					<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 						<SkeletonLoadingOfflineClasses />
 						<SkeletonLoadingOfflineClasses />
 						<SkeletonLoadingOfflineClasses />
@@ -223,7 +223,7 @@ const OfflineClassesList = () => {
 				) : (
 					<div>
 						{offlineClasses.data.rows?.length > 0 ? (
-							<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+							<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 								{offlineClasses.data.rows?.map((item) => {
 									return <OfflineClassesListItem data={item} key={item.class_id} />;
 								})}

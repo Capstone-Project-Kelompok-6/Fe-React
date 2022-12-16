@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import LazyLoad from "react-lazyload";
 import { useSelector } from "react-redux";
 import VideoAPI from "../../../apis/video.api";
 import useHook from "../../../hooks/useHook";
@@ -116,9 +117,18 @@ const VideoList = () => {
 				{video.status ? (
 					<div>
 						{video.data.rows?.length > 0 ? (
-							<div className="mb-6 grid grid-cols-1 gap-6 pt-20 pb-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+							<div className="mb-6 grid grid-cols-1 gap-3 pt-20 pb-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 								{video.data.rows?.map((item) => {
-									return <VideoListItem data={item} key={item.video_content_id} />;
+									return (
+										<LazyLoad
+											once={item.once}
+											key={item.video_content_id}
+											offset={[-200, 0]}
+											placeholder={<SkeletonLoadingVideo />}
+											debounce={300}>
+											<VideoListItem once={item.once} data={item} />
+										</LazyLoad>
+									);
 								})}
 							</div>
 						) : (
@@ -131,8 +141,7 @@ const VideoList = () => {
 						)}
 					</div>
 				) : (
-					<div className="mb-6 grid grid-cols-1 gap-6 pt-20 pb-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-						<SkeletonLoadingVideo />
+					<div className="mb-6 grid grid-cols-1 gap-3 pt-20 pb-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 						<SkeletonLoadingVideo />
 						<SkeletonLoadingVideo />
 						<SkeletonLoadingVideo />
