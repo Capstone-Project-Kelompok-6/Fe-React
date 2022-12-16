@@ -38,12 +38,6 @@ const OnlineBookingListItem = ({ data }) => {
 								<span className="text-xs">{status}</span>
 							</p>
 						)}
-						{status === "" && (
-							<p className="rounded-full border border-red-2 bg-red-2 bg-opacity-25 px-2 py-1 font-medium text-red-1 md:px-3">
-								<i className="fi fi-sr-rec mr-1 mt-1 text-[10px]"></i>
-								<span className="text-xs">{status}</span>
-							</p>
-						)}
 					</div>
 				</div>
 				<div className="mx-5 mb-2 border-b border-neutral-100-2 md:mb-0"></div>
