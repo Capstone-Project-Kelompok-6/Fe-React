@@ -43,7 +43,7 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 	const MAX_FILE_SIZE_IMAGE = 3072;
 
 	useEffect(() => {
-		dispatch(fetchWorkoutList());
+		dispatch(fetchWorkoutList(1000));
 	}, [dispatch]);
 
 	const handleUploadVideo = (e) => {

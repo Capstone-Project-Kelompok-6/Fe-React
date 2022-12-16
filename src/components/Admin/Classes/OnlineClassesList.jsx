@@ -88,7 +88,7 @@ const OnlineClassesList = () => {
 	};
 
 	const filterAll = () => {
-		ClassesAPI.getOnlineClasses().then((result) => {
+		ClassesAPI.getOnlineClasses(1000).then((result) => {
 			setOnlineClasses({ data: result.data.data });
 			setActive(0);
 		});

@@ -38,12 +38,12 @@ const Overview = () => {
 	useEffect(() => {
 		dispatch(fetchInstructor(4));
 		dispatch(fetchMembership(4));
-		dispatch(fetchOfflineClasses());
-		dispatch(fetchOnlineClasses());
+		dispatch(fetchOfflineClasses(1000));
+		dispatch(fetchOnlineClasses(1000));
 		dispatch(fetchOfflineBookingList(1000));
-		dispatch(fetchWorkoutList());
+		dispatch(fetchWorkoutList(1000));
 		dispatch(fetchOnlineBookingList(1000));
-		dispatch(fetchVideo());
+		dispatch(fetchVideo(1000));
 	}, [dispatch]);
 
 	const bookingOffline = new Set();

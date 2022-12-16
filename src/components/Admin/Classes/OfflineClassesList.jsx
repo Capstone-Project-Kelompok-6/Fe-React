@@ -87,7 +87,7 @@ const OfflineClassesList = () => {
 	};
 
 	const filterAll = () => {
-		ClassesAPI.getOfflineClasses().then((result) => {
+		ClassesAPI.getOfflineClasses(1000).then((result) => {
 			setOfflineClasses({ data: result.data.data });
 			setActive(0);
 		});
