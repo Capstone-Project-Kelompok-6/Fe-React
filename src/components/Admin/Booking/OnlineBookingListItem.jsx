@@ -4,8 +4,17 @@ import { formatPrice } from "../../../utils/formatPrice";
 import { truncate } from "../../../utils/truncate";
 
 const OnlineBookingListItem = ({ data }) => {
-	const { email, full_name, price, video_title, workout, created_at, video, video_name, status } =
-		data;
+	const {
+		email,
+		full_name,
+		price,
+		video_title,
+		workout,
+		created_at,
+		thumbnail,
+		thumbnail_name,
+		status,
+	} = data;
 
 	return (
 		<div>
@@ -39,11 +48,10 @@ const OnlineBookingListItem = ({ data }) => {
 				</div>
 				<div className="mx-5 mb-2 border-b border-neutral-100-2 md:mb-0"></div>
 				<div className="flex flex-col px-5 md:flex-row md:items-center">
-					<video
+					<img
 						className="h-48 w-full rounded-xl object-cover md:h-[120px] md:w-28"
-						src={video}
-						alt={video_name}
-						type="video/mp4"
+						src={thumbnail}
+						alt={thumbnail_name}
 					/>
 					<div className="flex flex-col py-0 px-0 leading-normal md:py-2 md:px-4">
 						<h5 className="mb-2 mt-4 text-base font-semibold tracking-tight text-neutral-100-2 md:mt-2">

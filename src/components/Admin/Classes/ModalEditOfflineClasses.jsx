@@ -14,6 +14,7 @@ import { editOfflineClasses } from "../../../stores/features/offlineClassesSlice
 import Swal from "sweetalert2";
 import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
 import { PulseLoader } from "react-spinners";
+import { handleKeyDown } from "../../../utils/rmvHtmlTag";
 
 const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown, update }) => {
 	const {
@@ -194,7 +195,7 @@ const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown,
 										className={inputNotError}
 										placeholder=" "
 										defaultValue={description}
-									></textarea>
+										onKeyDown={handleKeyDown}></textarea>
 									<label htmlFor="description" className={labelNotError}>
 										<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 											{" "}

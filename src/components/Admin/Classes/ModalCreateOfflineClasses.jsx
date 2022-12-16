@@ -14,6 +14,7 @@ import { fetchWorkoutList } from "../../../stores/features/workoutSlice";
 import { createOfflineClasses } from "../../../stores/features/offlineClassesSlice";
 import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
 import { PulseLoader } from "react-spinners";
+import { handleKeyDown } from "../../../utils/rmvHtmlTag";
 
 const ModalCreateOfflineClasses = ({ handleModalCreateTrigger }) => {
 	const dispatch = useDispatch();
@@ -23,8 +24,8 @@ const ModalCreateOfflineClasses = ({ handleModalCreateTrigger }) => {
 	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
 	useEffect(() => {
-		dispatch(fetchWorkoutList());
-		dispatch(fetchInstructor());
+		dispatch(fetchWorkoutList(1000));
+		dispatch(fetchInstructor(1000));
 	}, [dispatch]);
 
 	const handleChangeClassDates = (e) => {
@@ -79,24 +80,29 @@ const ModalCreateOfflineClasses = ({ handleModalCreateTrigger }) => {
 
 	const dataClassDates = [
 		{
-			label: "Sunday, 09:00 - 11:00",
-			value: "Sunday, 09:00 - 11:00",
+			label: "Sunday (09:00 - 11:00)",
+			value: "Sunday (09:00 - 11:00)",
 		},
 		{
-			label: "Wednesday, 13:00 - 15:00",
-			value: "Wednesday, 13:00 - 15:00",
+			label: "Wednesday (13:00 - 15:00)",
+			value: "Wednesday (13:00 - 15:00)",
 		},
 		{
-			label: "Friday, 14:00 - 18:00",
-			value: "Friday, 14:00 - 18:00",
+			label: "Friday (14:00 - 18:00)",
+			value: "Friday (14:00 - 18:00)",
 		},
 	];
+
+	const schedule = dataClassDates.map((item) => {
+		return { value: item.value, label: item.label.split("(")[0] };
+	});
+
 	return (
 		<div className="relative z-50">
 			<div className="fixed inset-0 z-50 bg-gray-600 bg-opacity-80 transition-opacity"></div>
 
 			<div className="fixed inset-0 z-50 items-center justify-center overflow-y-auto">
-				<div className="flex w-full items-end justify-center px-4 py-20 sm:h-full sm:items-center sm:p-0 md:h-screen">
+				<div className="flex w-full items-end justify-center px-4 py-16 sm:h-full sm:items-center sm:p-0 md:h-full">
 					<div className="relative h-full w-full max-w-sm sm:max-w-sm md:h-auto md:max-w-md lg:max-w-lg xl:max-w-xl">
 						<form onSubmit={handleSubmit} className="rounded-xl bg-white shadow">
 							<div className="flex items-center justify-between rounded-t p-4">
@@ -138,7 +144,7 @@ const ModalCreateOfflineClasses = ({ handleModalCreateTrigger }) => {
 								<div className="relative">
 									<Select
 										className={`z-30 ${select}`}
-										options={dataClassDates}
+										options={schedule}
 										name="class_dates"
 										placeholder="Select schedule"
 										noOptionsMessage={() => "Schedule data not found"}
@@ -174,7 +180,7 @@ const ModalCreateOfflineClasses = ({ handleModalCreateTrigger }) => {
 										className={inputNotError}
 										placeholder=" "
 										required
-									></textarea>
+										onKeyDown={handleKeyDown}></textarea>
 									<label htmlFor="description" className={labelNotError}>
 										<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 											Information

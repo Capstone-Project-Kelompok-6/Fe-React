@@ -88,7 +88,7 @@ const OnlineClassesList = () => {
 	};
 
 	const filterAll = () => {
-		ClassesAPI.getOnlineClasses().then((result) => {
+		ClassesAPI.getOnlineClasses(1000).then((result) => {
 			setOnlineClasses({ data: result.data.data });
 			setActive(0);
 		});
@@ -216,7 +216,7 @@ const OnlineClassesList = () => {
 					</div>
 				)}
 				{loaderFetchData ? (
-					<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+					<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 						<SkeletonLoadingOnlineClasses />
 						<SkeletonLoadingOnlineClasses />
 						<SkeletonLoadingOnlineClasses />
@@ -224,7 +224,7 @@ const OnlineClassesList = () => {
 				) : (
 					<div>
 						{onlineClasses.data.rows?.length > 0 ? (
-							<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+							<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 								{onlineClasses.data.rows?.map((item) => {
 									return <OnlineClassesListItem data={item} key={item.class_id} />;
 								})}

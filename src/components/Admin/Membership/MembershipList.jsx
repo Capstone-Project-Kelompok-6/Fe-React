@@ -119,7 +119,7 @@ const MembershipList = () => {
 				<div>
 					{membership.data.rows?.length > 0 ? (
 						<div>
-							<div className="mb-6 grid grid-cols-1 gap-6 pt-20 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
+							<div className="mb-6 grid grid-cols-1 gap-3 pt-20 md:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
 								{membership.data.rows?.map((item) => {
 									return <MembershipListItem key={item.user_id} data={item} />;
 								})}
@@ -135,7 +135,7 @@ const MembershipList = () => {
 					)}
 				</div>
 			) : (
-				<div className="mb-6 grid grid-cols-1 gap-6 pt-20 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+				<div className="mb-6 grid grid-cols-1 gap-3 pt-20 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 					<SkeletonLoadingMembership />
 					<SkeletonLoadingMembership />
 					<SkeletonLoadingMembership />

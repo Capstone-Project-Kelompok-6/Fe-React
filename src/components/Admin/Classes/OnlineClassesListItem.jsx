@@ -12,9 +12,10 @@ import {
 } from "../../../utils/globalVariable";
 import { truncate } from "../../../utils/truncate";
 import ModalEditOnlineClasses from "./ModalEditOnlineClasses";
+import ReactPlayer from "react-player";
 
 const OnlineClassesListItem = ({ data }) => {
-	const { class_id, workout, video_title, video, video_name, price, description } = data;
+	const { class_id, workout, video_title, video, video_name, price, description, thumbnail } = data;
 	const { actionDropdown, setActionDropdown, modalEditTrigger, setModalEditTrigger } = useHook();
 	const dispatch = useDispatch();
 
@@ -92,13 +93,23 @@ const OnlineClassesListItem = ({ data }) => {
 							<span className="sr-only">Loading...</span>
 						</div>
 					) : (
-						<video
-							className="absolute inset-0 h-full w-full rounded-t-20 object-cover object-center"
-							controls
-							src={video}
-							alt={video_name}
-							type="video/mp4"
-						/>
+						<div className="player-wrapper">
+							<ReactPlayer
+								className="video-player"
+								url={video}
+								alt={video_name}
+								width="100%"
+								height="100%"
+								playing
+								controls
+								playIcon={
+									<button>
+										<i className="fi fi-sr-play text-4xl text-white"></i>
+									</button>
+								}
+								light={thumbnail}
+							/>
+						</div>
 					)}
 					<div className="group relative">
 						<button

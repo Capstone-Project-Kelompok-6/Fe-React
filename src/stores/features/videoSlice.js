@@ -44,7 +44,7 @@ export const editVideoTitle = createAsyncThunk("edit/video/title", async (data) 
 	}
 });
 
-export const editVideo = createAsyncThunk("edit/video", async (data) => {
+export const editVideoContent = createAsyncThunk("edit/video", async (data) => {
 	try {
 		const response = await VideoAPI.editVideo(data);
 		return response.data.data;
@@ -87,7 +87,7 @@ const videoSlice = createSlice({
 			.addCase(editVideoTitle.fulfilled, (state) => {
 				state.loading = !state.loading;
 			})
-			.addCase(editVideo.fulfilled, (state) => {
+			.addCase(editVideoContent.fulfilled, (state) => {
 				state.loading = !state.loading;
 			})
 			.addCase(deleteVideo.fulfilled, (state) => {

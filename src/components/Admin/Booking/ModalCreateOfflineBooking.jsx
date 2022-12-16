@@ -48,7 +48,6 @@ const ModalCreateOfflineBooking = ({ handleModalCreateTrigger }) => {
 
 		try {
 			dispatch(createOfflineBooking({ user_id, class_id, is_online: false })).then((res) => {
-				console.log(res);
 				if (!res.error) {
 					const book_id = res.payload.book_id;
 					dispatch(
