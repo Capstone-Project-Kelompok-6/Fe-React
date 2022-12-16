@@ -42,14 +42,14 @@ export const successHandler = (response) => {
 export const errorHandler = async (error) => {
 	const err = error.response;
 	if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
-		return await axios
+		await axios
 			.patch(`${CONST.BASE_URL_API}/auth/refresh`, {
 				refresh_token: Auth.getRefreshToken(),
 			})
 			.then((res) => {
 				err.config.__isRetryRequest = true;
 				Auth.storeUserInfoToCookie(res.data.data);
-				err.config.config.headers["Authorization"] = `Bearer ${res.data.data.access_token}`;
+				err.config.headers["Authorization"] = `Bearer ${res.data.data.access_token}`;
 				return err.config;
 			});
 	}
