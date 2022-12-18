@@ -38,6 +38,7 @@ const OfflineBookingList = () => {
 
 	const dispatch = useDispatch();
 	const loading = useSelector((state) => state.offlineBooking.loading);
+	const loadingPayment = useSelector((state) => state.payment.loading);
 	const loaderFetchData = useSelector((state) => state.loaderFetchData);
 
 	const bookingOffline = new Set();
@@ -67,7 +68,7 @@ const OfflineBookingList = () => {
 				dispatch(setLoaderFetchData(false));
 			});
 		}
-	}, [loading, debouncedKeyword]);
+	}, [loading, debouncedKeyword, loadingPayment]);
 
 	useEffect(() => {
 		BookingAPI.getOfflineBooking(1000).then((result) => {
