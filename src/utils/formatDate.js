@@ -3,11 +3,15 @@ import "moment/locale/id";
 moment.locale("id");
 
 export const formatShortDate = (date) => {
-	return date.toString().length === 13 ? moment(date).format("ll") : moment(date * 1000).format("ll");
+	return date.toString().length === 13
+		? moment(date).format("ll")
+		: moment(date * 1000).format("ll");
 };
 
 export const formatLongDate = (date) => {
-	return date.toString().length === 13 ? moment(date).format("LL") : moment(date * 1000).format("LL");
+	return date.toString().length === 13
+		? moment(date).format("LL")
+		: moment(date * 1000).format("LL");
 };
 
 export const formatCommonDate = (date) => {
@@ -15,5 +19,5 @@ export const formatCommonDate = (date) => {
 };
 
 export const formatDateTime = (dateTime) => {
-	return moment(dateTime).format("ll - LT");
+	return moment(dateTime).format("ll (LT)");
 };
