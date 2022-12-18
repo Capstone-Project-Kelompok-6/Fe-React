@@ -20,6 +20,8 @@ const OfflineBookingListItem = ({ data }) => {
 		workout_image,
 		created_at,
 		status,
+		end_class_date,
+		is_expired,
 	} = data;
 	const dispatch = useDispatch();
 	const offlineClassesList = useSelector((state) => state.offlineClasses.data);
@@ -38,22 +40,22 @@ const OfflineBookingListItem = ({ data }) => {
 		<div>
 			<div className="relative h-full rounded-20 border bg-white py-4 shadow-4">
 				<div className="mb-2 flex items-center px-5">
-					<div className="min-w-0 flex-1">
-						<p className="text-sm font-medium text-neutral-100-2 md:text-base">
-							{formatDateTime(created_at)}
+					<div className="min-w-0 flex-1 flex-col">
+						<p className="text-xs font-medium text-neutral-100-2 md:text-sm">
+							{formatDateTime(created_at)} - {formatDateTime(end_class_date)}
 						</p>
 					</div>
 					<div className="mr-4 inline-flex items-center">
 						{status === "PAID" && (
-							<p className="rounded-full border border-secondary-green bg-tertiary-4 bg-opacity-25 px-2 py-1 font-medium text-secondary-green md:px-3">
-								<i className="fi fi-sr-rec mr-1 mt-1 text-[10px]"></i>
-								<span className="text-xs">{status}</span>
+							<p className="rounded-full border border-secondary-green bg-tertiary-4 bg-opacity-25 px-2 py-0 font-medium text-secondary-green md:px-3">
+								<i className="fi fi-sr-rec mr-1 mt-1 text-[6px] md:text-[8px]"></i>
+								<span className="text-[10px] md:text-xs">{status}</span>
 							</p>
 						)}
 						{status === "PENDING" && (
-							<p className="rounded-full border border-secondary-orange bg-secondary-orange bg-opacity-25 px-2 py-1 font-medium text-secondary-orange md:px-3">
-								<i className="fi fi-sr-rec mr-1 mt-1 text-[10px]"></i>
-								<span className="text-xs">{status}</span>
+							<p className="rounded-full border border-secondary-orange bg-secondary-orange bg-opacity-25 px-2 py-0 font-medium text-secondary-orange md:px-3">
+								<i className="fi fi-sr-rec mr-1 mt-1 text-[6px] md:text-[8px]"></i>
+								<span className="text-[10px] md:text-xs">{status}</span>
 							</p>
 						)}
 					</div>
@@ -98,9 +100,22 @@ const OfflineBookingListItem = ({ data }) => {
 						alt={image_name}
 					/>
 					<div className="flex flex-col py-0 px-0 leading-normal md:py-2 md:px-4">
-						<h5 className="mb-2 mt-4 text-base font-semibold tracking-tight text-neutral-100-2 md:mt-2">
-							{workout}
-						</h5>
+						<div className="inline-flex items-center">
+							<h5 className="mb-2 mt-4 text-base font-semibold tracking-tight text-neutral-100-2 md:mt-2">
+								{workout}
+							</h5>
+							{is_expired === false ? (
+								<p className="rounded-full px-2 py-1 font-semibold text-secondary-green md:px-3">
+									<span className="text-xs">Active</span>
+									<i className="fi fi-sr-rec ml-1 mt-1 text-[8px]"></i>
+								</p>
+							) : (
+								<p className="rounded-full px-2 py-1 font-medium text-secondary-red md:px-3">
+									<span className="text-xs">Expired</span>
+									<i className="fi fi-sr-rec ml-1 mt-1 text-[8px]"></i>
+								</p>
+							)}
+						</div>
 						<div className="-mb-0 grid grid-cols-2 gap-16 md:-mb-6 md:grid-cols-2 md:gap-12 xl:grid-cols-2">
 							<div className="flex">
 								<div className="inline-flex flex-shrink-0 items-center text-sm">
