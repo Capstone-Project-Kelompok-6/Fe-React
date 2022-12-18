@@ -17,6 +17,7 @@ import SkeletonLoadingOfflineClasses from "./SkeletonLoadingOfflineClasses";
 import SkeletonLoadingTabs from "../SkeletonLoadingTabs";
 import { setLoaderFetchData } from "../../../stores/features/loaderFetchDataSlice";
 import useHook from "../../../hooks/useHook";
+import LazyLoad from "react-lazyload";
 
 const Initial_Offline_Classes = {
 	data: [],
@@ -225,7 +226,16 @@ const OfflineClassesList = () => {
 						{offlineClasses.data.rows?.length > 0 ? (
 							<div className="mb-6 grid grid-cols-1 gap-3 pt-36 sm:grid-cols-2 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 								{offlineClasses.data.rows?.map((item) => {
-									return <OfflineClassesListItem data={item} key={item.class_id} />;
+									return (
+										<LazyLoad
+											once={item.once}
+											key={item.class_id}
+											offset={[6, 0]}
+											placeholder={<SkeletonLoadingOfflineClasses />}
+											debounce={500}>
+											<OfflineClassesListItem once={item.once} data={item} />
+										</LazyLoad>
+									);
 								})}
 							</div>
 						) : (

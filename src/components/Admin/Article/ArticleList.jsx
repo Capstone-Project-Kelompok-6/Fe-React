@@ -129,7 +129,7 @@ const ArticleList = () => {
 											key={item.article_id}
 											offset={[6, 0]}
 											placeholder={<SkeletonLoadingArticle />}
-											debounce={300}>
+											debounce={500}>
 											<ArticleListItem once={item.once} data={item} />
 										</LazyLoad>
 									);

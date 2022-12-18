@@ -123,9 +123,9 @@ const VideoList = () => {
 										<LazyLoad
 											once={item.once}
 											key={item.video_content_id}
-											offset={[-200, 0]}
+											offset={[6, 0]}
 											placeholder={<SkeletonLoadingVideo />}
-											debounce={300}>
+											debounce={500}>
 											<VideoListItem once={item.once} data={item} />
 										</LazyLoad>
 									);
