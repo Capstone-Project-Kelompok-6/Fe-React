@@ -72,6 +72,7 @@ const ModalCreateOfflineBooking = ({ handleModalCreateTrigger }) => {
 								1000
 							);
 							dispatch(setLoaderSubmit(false));
+							window.replace(result.payload.invoice_url, "_blank");
 						}
 					});
 				} else {
