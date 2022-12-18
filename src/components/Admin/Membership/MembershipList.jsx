@@ -12,7 +12,6 @@ import MembershipListItem from "./MembershipListItem";
 import ModalCreateMembership from "./ModalCreateMembership";
 import SkeletonLoadingMembership from "./SkeletonLoadingMembership";
 import useHook from "../../../hooks/useHook";
-import LazyLoad from "react-lazyload";
 
 const Initial_Membership = {
 	data: [],
@@ -122,16 +121,7 @@ const MembershipList = () => {
 						<div>
 							<div className="mb-6 grid grid-cols-1 gap-3 pt-20 md:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
 								{membership.data.rows?.map((item) => {
-									return (
-										<LazyLoad
-											once={item.once}
-											key={item.user_id}
-											offset={[6, 0]}
-											placeholder={<SkeletonLoadingMembership />}
-											debounce={500}>
-											<MembershipListItem once={item.once} data={item} />
-										</LazyLoad>
-									);
+									return <MembershipListItem key={item.user_id} data={item} />;
 								})}
 							</div>
 						</div>

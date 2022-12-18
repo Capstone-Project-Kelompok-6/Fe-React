@@ -17,7 +17,6 @@ import ModalCreateOfflineBooking from "./ModalCreateOfflineBooking";
 import SkeletonLoadingTabs from "../SkeletonLoadingTabs";
 import { setLoaderFetchData } from "../../../stores/features/loaderFetchDataSlice";
 import useHook from "../../../hooks/useHook";
-import LazyLoad from "react-lazyload";
 
 const Initial_Offline_Booking = {
 	data: [],
@@ -229,16 +228,7 @@ const OfflineBookingList = () => {
 					{offlineBooking.data.rows?.length > 0 ? (
 						<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 md:gap-6 xl:grid-cols-2 2xl:grid-cols-3">
 							{offlineBooking.data.rows?.map((item) => {
-								return (
-									<LazyLoad
-										once={item.once}
-										key={item.book_id}
-										offset={[6, 0]}
-										placeholder={<SkeletonLoadingBooking />}
-										debounce={500}>
-										<OfflineBookingListItem once={item.once} data={item} />
-									</LazyLoad>
-								);
+								return <OfflineBookingListItem key={item.book_id} data={item} />;
 							})}
 						</div>
 					) : (

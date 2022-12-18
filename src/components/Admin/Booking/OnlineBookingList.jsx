@@ -15,7 +15,6 @@ import OnlineBookingListItem from "./OnlineBookingListItem";
 import SkeletonLoadingBooking from "./SkeletonLoadingBooking";
 import { setLoaderFetchData } from "../../../stores/features/loaderFetchDataSlice";
 import useHook from "../../../hooks/useHook";
-import LazyLoad from "react-lazyload";
 
 const Initial_Online_Booking = {
 	data: [],
@@ -210,16 +209,7 @@ const OnlineBookingList = () => {
 					{onlineBooking.data.rows?.length > 0 ? (
 						<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 md:gap-6 xl:grid-cols-2 2xl:grid-cols-3">
 							{onlineBooking.data.rows?.map((item) => {
-								return (
-									<LazyLoad
-										once={item.once}
-										key={item.book_id}
-										offset={[6, 0]}
-										placeholder={<SkeletonLoadingBooking />}
-										debounce={500}>
-										<OnlineBookingListItem once={item.once} data={item} />
-									</LazyLoad>
-								);
+								return <OnlineBookingListItem key={item.book_id} data={item} />;
 							})}
 						</div>
 					) : (

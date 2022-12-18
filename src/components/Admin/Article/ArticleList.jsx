@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import LazyLoad from "react-lazyload";
 import { useSelector } from "react-redux";
 import ArticleAPI from "../../../apis/article.api";
 import useHook from "../../../hooks/useHook";
@@ -123,16 +122,7 @@ const ArticleList = () => {
 						{article.data.rows?.length > 0 ? (
 							<div className="mb-6 grid grid-cols-1 gap-3 pt-20 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 								{article.data.rows?.map((item) => {
-									return (
-										<LazyLoad
-											once={item.once}
-											key={item.article_id}
-											offset={[6, 0]}
-											placeholder={<SkeletonLoadingArticle />}
-											debounce={500}>
-											<ArticleListItem once={item.once} data={item} />
-										</LazyLoad>
-									);
+									return <ArticleListItem key={item.article_id} data={item} />;
 								})}
 							</div>
 						) : (

@@ -18,7 +18,6 @@ import SkeletonLoadingOnlineClasses from "./SkeletonLoadingOnlineClasses";
 import SkeletonLoadingTabs from "../SkeletonLoadingTabs";
 import { setLoaderFetchData } from "../../../stores/features/loaderFetchDataSlice";
 import useHook from "../../../hooks/useHook";
-import LazyLoad from "react-lazyload";
 
 const Initial_Online_Classes = {
 	data: [],
@@ -227,16 +226,7 @@ const OnlineClassesList = () => {
 						{onlineClasses.data.rows?.length > 0 ? (
 							<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 								{onlineClasses.data.rows?.map((item) => {
-									return (
-										<LazyLoad
-											once={item.once}
-											key={item.class_id}
-											offset={[6, 0]}
-											placeholder={<SkeletonLoadingOnlineClasses />}
-											debounce={500}>
-											<OnlineClassesListItem once={item.once} data={item} />
-										</LazyLoad>
-									);
+									return <OnlineClassesListItem key={item.class_id} data={item} />;
 								})}
 							</div>
 						) : (
