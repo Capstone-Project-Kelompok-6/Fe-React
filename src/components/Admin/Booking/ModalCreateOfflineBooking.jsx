@@ -48,8 +48,8 @@ const ModalCreateOfflineBooking = ({ handleModalCreateTrigger }) => {
 
 		try {
 			dispatch(createOfflineBooking({ user_id, class_id, is_online: false })).then((res) => {
-				if (!res.error) {
-					const book_id = res.payload.book_id;
+				if (!(res.payload.message === "classes have been extended")) {
+					const book_id = res.payload.data.book_id;
 					dispatch(
 						createPayment({
 							book_id,
@@ -72,9 +72,24 @@ const ModalCreateOfflineBooking = ({ handleModalCreateTrigger }) => {
 								1000
 							);
 							dispatch(setLoaderSubmit(false));
-							window.replace(result.payload.invoice_url);
+							window.open(result.payload.invoice_url, "_target");
 						}
 					});
+				} else if (res.payload.message === "classes have been extended") {
+					handleModalCreateTrigger();
+					setTimeout(
+						() =>
+							Swal.fire({
+								icon: "success",
+								title: "Saved",
+								text: res.payload.message,
+								showConfirmButton: false,
+								timer: 2000,
+								background: "#ffffff",
+							}),
+						1000
+					);
+					dispatch(setLoaderSubmit(false));
 				} else {
 					Swal.fire("Sorry", res.error.message.split(":")[1], "info");
 					dispatch(setLoaderSubmit(false));
