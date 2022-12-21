@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { editVideoContent, editVideoTitle } from "../../../stores/features/videoSlice";
 import {
 	cancelButton,
+	disabledButton,
 	imageMimeType,
 	inputNotError,
 	labelNotError,
@@ -13,6 +14,7 @@ import {
 import { PulseLoader } from "react-spinners";
 import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
 import { maxLengthCheck } from "../../../utils/maxLengthCheck";
+import { handleKeyDown } from "../../../utils/rmvHtmlTag";
 
 const baseErrors = {
 	video: "",
@@ -20,11 +22,11 @@ const baseErrors = {
 };
 
 const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }) => {
+	const { video_content_id, title, video, video_name, thumbnail, thumbnail_name } = update;
 	const [editVideo, setEditVideo] = useState("");
 	const [editThumbnail, setEditThumbnail] = useState("");
 	const [videoDataURL, setVideoDataURL] = useState(null);
 	const [thumbnailDataURL, setThumbnailDataURL] = useState(null);
-	const { video_content_id, title, video, video_name, thumbnail, thumbnail_name } = update;
 	const dispatch = useDispatch();
 	const [videoTitle, setVideoTitle] = useState("");
 	const [errors, setErrors] = useState(baseErrors);
@@ -206,6 +208,7 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 												placeholder=" "
 												required
 												defaultValue={title}
+												onKeyDown={handleKeyDown}
 											/>
 
 											<label htmlFor="title" className={labelNotError}>
@@ -214,13 +217,13 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 												</span>
 											</label>
 										</div>
-										{title ? (
+										{videoTitle ? (
 											<h1 className="mt-2 text-end text-xs font-normal text-dark-4 md:text-sm">
-												{title.length}/{maxTitle}
+												{videoTitle.length}/{maxTitle}
 											</h1>
 										) : (
 											<h1 className="mt-2 text-end text-xs font-normal text-dark-4 md:text-sm">
-												{videoTitle.length}/{maxTitle}
+												{title.length}/{maxTitle}
 											</h1>
 										)}
 									</div>
@@ -320,8 +323,13 @@ const ModalEditVideo = ({ handleModalEditTrigger, handleActionDropdown, update }
 										<PulseLoader size={5} color={"#ffffff"} />
 									</button>
 								) : (
-									<button type="submit" className={saveButton}>
-										Save
+									<button
+										type="submit"
+										className={
+											!videoTitle && !editVideo && !editThumbnail ? disabledButton : saveButton
+										}
+										disabled={!videoTitle && !editVideo && !editThumbnail}>
+										Save Changes
 									</button>
 								)}
 							</div>
