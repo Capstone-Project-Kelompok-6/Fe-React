@@ -36,7 +36,7 @@ const WorkoutList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			WorkoutAPI.searchWorkout(debouncedKeyword.toLowerCase()).then((result) =>
+			WorkoutAPI.searchWorkout(debouncedKeyword.toLowerCase(), 5).then((result) =>
 				setWorkout({ status: true, data: result.data.data })
 			);
 		} else {

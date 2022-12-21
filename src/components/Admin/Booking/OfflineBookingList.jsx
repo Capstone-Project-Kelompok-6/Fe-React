@@ -33,8 +33,9 @@ const OfflineBookingList = () => {
 		debouncedKeyword,
 		searchTrigger,
 		setSearchTrigger,
+		activeFilter,
+		setActiveFilter,
 	} = useHook();
-	const [active, setActive] = useState(0);
 
 	const dispatch = useDispatch();
 	const loading = useSelector((state) => state.offlineBooking.loading);
@@ -54,9 +55,9 @@ const OfflineBookingList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			BookingAPI.searchOfflineBooking(debouncedKeyword.toLowerCase()).then((result) => {
+			BookingAPI.searchOfflineBooking(debouncedKeyword.toLowerCase(), 1000).then((result) => {
 				setOfflineBooking({ data: result.data.data });
-				setActive(result.data.data.rows[0].workout);
+				setActiveFilter(result.data.data.rows[0].workout);
 			});
 		} else {
 			dispatch(setLoaderFetchData(true));
@@ -64,7 +65,7 @@ const OfflineBookingList = () => {
 				setOfflineBooking({
 					data: result.data.data,
 				});
-				setActive(0);
+				setActiveFilter(0);
 				dispatch(setLoaderFetchData(false));
 			});
 		}
@@ -78,13 +79,13 @@ const OfflineBookingList = () => {
 		});
 	}, [loading]);
 
-	const filterItem = (workout) => {
+	const filterByWorkout = (workout) => {
 		dispatch(setLoaderFetchData(true));
-		BookingAPI.filterOfflineBooking(workout).then((result) => {
+		BookingAPI.filterOfflineBooking(workout, 1000).then((result) => {
 			setOfflineBooking({
 				data: result.data.data,
 			});
-			setActive(workout);
+			setActiveFilter(workout);
 			dispatch(setLoaderFetchData(false));
 		});
 	};
@@ -94,7 +95,7 @@ const OfflineBookingList = () => {
 			setOfflineBooking({
 				data: result.data.data,
 			});
-			setActive(0);
+			setActiveFilter(0);
 		});
 	};
 
@@ -149,7 +150,7 @@ const OfflineBookingList = () => {
 								<ul className="-mb-px flex list-none overflow-x-scroll whitespace-nowrap text-center text-xs font-medium scrollbar-hide">
 									<li className="mr-2">
 										<button
-											className={active === 0 ? activeTab : notActiveTab}
+											className={activeFilter === 0 ? activeTab : notActiveTab}
 											onClick={() => {
 												filterAll();
 											}}>
@@ -176,8 +177,8 @@ const OfflineBookingList = () => {
 											return (
 												<li className="mr-2" key={workout}>
 													<button
-														className={active === workout ? activeTab : notActiveTab}
-														onClick={() => filterItem(workout)}>
+														className={activeFilter === workout ? activeTab : notActiveTab}
+														onClick={() => filterByWorkout(workout)}>
 														{workout}
 													</button>
 												</li>

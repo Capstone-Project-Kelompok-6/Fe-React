@@ -32,7 +32,7 @@ const VideoList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			VideoAPI.searchVideo(debouncedKeyword.toLowerCase()).then((result) =>
+			VideoAPI.searchVideo(debouncedKeyword.toLowerCase(), 1000).then((result) =>
 				setVideo({ status: true, data: result.data.data })
 			);
 		} else {

@@ -33,8 +33,9 @@ const OfflineClassesList = () => {
 		debouncedKeyword,
 		searchTrigger,
 		setSearchTrigger,
+		activeFilter,
+		setActiveFilter,
 	} = useHook();
-	const [active, setActive] = useState(0);
 
 	const dispatch = useDispatch();
 	const loading = useSelector((state) => state.offlineClasses.loading);
@@ -53,9 +54,9 @@ const OfflineClassesList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			ClassesAPI.serchOfflineClasses(debouncedKeyword.toLowerCase()).then((result) => {
+			ClassesAPI.serchOfflineClasses(debouncedKeyword.toLowerCase(), 1000).then((result) => {
 				setOfflineClasses({ data: result.data.data });
-				setActive(result.data.data.rows[0].workout);
+				setActiveFilter(result.data.data.rows[0].workout);
 			});
 		} else {
 			dispatch(setLoaderFetchData(true));
@@ -63,7 +64,7 @@ const OfflineClassesList = () => {
 				setOfflineClasses({
 					data: result.data.data,
 				});
-				setActive(0);
+				setActiveFilter(0);
 				dispatch(setLoaderFetchData(false));
 			});
 		}
@@ -77,11 +78,11 @@ const OfflineClassesList = () => {
 		});
 	}, [loading]);
 
-	const filterItem = (workout) => {
+	const filterByWorkout = (workout) => {
 		dispatch(setLoaderFetchData(true));
-		ClassesAPI.filterOfflineClasses(workout).then((result) => {
+		ClassesAPI.filterOfflineClasses(workout, 1000).then((result) => {
 			setOfflineClasses({ data: result.data.data });
-			setActive(workout);
+			setActiveFilter(workout);
 			dispatch(setLoaderFetchData(false));
 		});
 	};
@@ -89,7 +90,7 @@ const OfflineClassesList = () => {
 	const filterAll = () => {
 		ClassesAPI.getOfflineClasses(1000).then((result) => {
 			setOfflineClasses({ data: result.data.data });
-			setActive(0);
+			setActiveFilter(0);
 		});
 	};
 
@@ -145,7 +146,7 @@ const OfflineClassesList = () => {
 									<ul className="-mb-px flex list-none overflow-x-scroll whitespace-nowrap text-center text-xs font-medium scrollbar-hide">
 										<li className="mr-2">
 											<button
-												className={active === 0 ? activeTab : notActiveTab}
+												className={activeFilter === 0 ? activeTab : notActiveTab}
 												onClick={() => {
 													filterAll();
 												}}>
@@ -172,8 +173,8 @@ const OfflineClassesList = () => {
 												return (
 													<li className="mr-2" key={workout}>
 														<button
-															className={active === workout ? activeTab : notActiveTab}
-															onClick={() => filterItem(workout)}>
+															className={activeFilter === workout ? activeTab : notActiveTab}
+															onClick={() => filterByWorkout(workout)}>
 															{workout}
 														</button>
 													</li>

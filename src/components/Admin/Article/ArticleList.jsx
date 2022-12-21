@@ -34,7 +34,7 @@ const ArticleList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			ArticleAPI.searchArticle(debouncedKeyword.toLowerCase()).then((result) =>
+			ArticleAPI.searchArticle(debouncedKeyword.toLowerCase(), 1000).then((result) =>
 				setArticle({ status: true, data: result.data.data })
 			);
 		} else {
