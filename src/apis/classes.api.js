@@ -17,14 +17,9 @@ const ClassesAPI = {
 			throw new Error(message);
 		}
 	},
-	async getOfflineClassesByPrices(price, limit) {
+	async getOfflineClassesByPrices(price) {
 		try {
-			const config = {
-				params: {
-					limit,
-				},
-			};
-			const response = await axiosInstance.get(`/classes/offline?price=${price}`, config);
+			const response = await axiosInstance.get(`/classes/offline?price=${price}`);
 			return response;
 		} catch (error) {
 			const { message } = error.response.data;

@@ -16,14 +16,17 @@ export const fetchOfflineClasses = createAsyncThunk("fetch/classes/offline", asy
 	}
 });
 
-export const fetchOfflineClassesByPrice = createAsyncThunk("fetch/classes/offline/byprice", async (price) => {
-	try {
-		const response = await ClassesAPI.getOfflineClassesByPrices(price);
-		return response.data.data;
-	} catch (error) {
-		throw Error(error);
+export const fetchOfflineClassesByPrice = createAsyncThunk(
+	"fetch/classes/offline/byprice",
+	async (price) => {
+		try {
+			const response = await ClassesAPI.getOfflineClassesByPrices(price);
+			return response.data.data;
+		} catch (error) {
+			throw Error(error);
+		}
 	}
-});
+);
 
 export const createOfflineClasses = createAsyncThunk("create/classes/offline", async (data) => {
 	try {
