@@ -12,30 +12,40 @@ const InstructorInfo = () => {
 					<div className="py-2 lg:py-10">
 						<div className="max-w-sm">
 							<div>
-								<img className="rounded-xl object-cover" src={instructor1} alt="" />
+								<img className="rounded-xl object-cover" src={instructor1} alt="instructor-image" />
 							</div>
 							<div className="p-5">
-								<h5 className="mb-2 text-center text-lg font-bold tracking-tight text-gray-900 lg:text-2xl">Alan Ramirez</h5>
+								<h5 className="mb-2 text-center text-lg font-bold tracking-tight text-gray-900 lg:text-2xl">
+									Alan Ramirez
+								</h5>
 							</div>
 						</div>
 					</div>
 					<div className="relative py-2 lg:-mt-4 lg:py-10">
 						<div className="absolute max-w-sm">
 							<div>
-								<img className="h-48 rounded-xl object-cover md:h-96" src={instructor2} alt="" />
+								<img
+									className="h-48 rounded-xl object-cover md:h-96"
+									src={instructor2}
+									alt="instructor-image"
+								/>
 							</div>
 							<div className="p-5">
-								<h5 className="mb-2 text-center text-lg font-bold tracking-tight text-gray-900 lg:text-2xl">Natalia Baruna</h5>
+								<h5 className="mb-2 text-center text-lg font-bold tracking-tight text-gray-900 lg:text-2xl">
+									Natalia Baruna
+								</h5>
 							</div>
 						</div>
 					</div>
 					<div className="py-2 lg:py-10">
 						<div className="max-w-sm">
 							<div>
-								<img className="rounded-xl object-cover" src={instructor3} alt="" />
+								<img className="rounded-xl object-cover" src={instructor3} alt="instructor-image" />
 							</div>
 							<div className="p-5">
-								<h5 className="mb-2 text-center text-lg font-bold tracking-tight text-gray-900 lg:text-2xl">Alex Perez</h5>
+								<h5 className="mb-2 text-center text-lg font-bold tracking-tight text-gray-900 lg:text-2xl">
+									Alex Perez
+								</h5>
 							</div>
 						</div>
 					</div>

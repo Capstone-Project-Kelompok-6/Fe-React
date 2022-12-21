@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import LazyLoad from "react-lazyload";
 import { useSelector } from "react-redux";
 import VideoAPI from "../../../apis/video.api";
 import useHook from "../../../hooks/useHook";
@@ -33,7 +32,7 @@ const VideoList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			VideoAPI.searchVideo(debouncedKeyword.toLowerCase()).then((result) =>
+			VideoAPI.searchVideo(debouncedKeyword.toLowerCase(), 1000).then((result) =>
 				setVideo({ status: true, data: result.data.data })
 			);
 		} else {
@@ -119,16 +118,7 @@ const VideoList = () => {
 						{video.data.rows?.length > 0 ? (
 							<div className="mb-6 grid grid-cols-1 gap-3 pt-20 pb-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 								{video.data.rows?.map((item) => {
-									return (
-										<LazyLoad
-											once={item.once}
-											key={item.video_content_id}
-											offset={[-200, 0]}
-											placeholder={<SkeletonLoadingVideo />}
-											debounce={300}>
-											<VideoListItem once={item.once} data={item} />
-										</LazyLoad>
-									);
+									return <VideoListItem key={item.video_content_id} data={item} />;
 								})}
 							</div>
 						) : (

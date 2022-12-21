@@ -13,7 +13,9 @@ const ClassesList = () => {
 
 	return (
 		<div className="bg-secondary-navy pt-24 pb-16 lg:px-20">
-			<h1 className="text-center text-xl font-medium text-white lg:text-4xl">Lets Join Our Classes</h1>
+			<h1 className="text-center text-xl font-medium text-white lg:text-4xl">
+				Lets Join Our Classes
+			</h1>
 			<Swiper
 				slidesPerView={3}
 				spaceBetween={30}
@@ -41,14 +43,21 @@ const ClassesList = () => {
 				<SwiperSlide className="bg-secondary-navy">
 					<div className="mx-auto mt-8 max-w-xs rounded-lg bg-[#252525] bg-opacity-40 shadow-md lg:mt-14">
 						<div>
-							<img className="mx-auto rounded-t-lg lg:p-4 lg:pb-0" src={yogaClass} alt="" />
+							<img
+								className="mx-auto rounded-t-lg lg:p-4 lg:pb-0"
+								src={yogaClass}
+								alt="class-image"
+							/>
 						</div>
 						<div className="p-5">
 							<div>
-								<h5 className="mb-2 text-lg font-medium tracking-tight text-white lg:text-3xl lg:font-semibold">Yoga</h5>
+								<h5 className="mb-2 text-lg font-medium tracking-tight text-white lg:text-3xl lg:font-semibold">
+									Yoga
+								</h5>
 							</div>
 							<p className="mb-3 text-sm font-light text-white lg:text-lg lg:font-normal">
-								Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
+								Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse
+								chronological order.
 							</p>
 						</div>
 					</div>
@@ -56,14 +65,21 @@ const ClassesList = () => {
 				<SwiperSlide className="bg-secondary-navy">
 					<div className="mx-auto mt-8 max-w-xs rounded-lg bg-[#252525] bg-opacity-40 shadow-md lg:mt-14">
 						<div>
-							<img className="mx-auto rounded-t-lg lg:p-4 lg:pb-0" src={fitness} alt="" />
+							<img
+								className="mx-auto rounded-t-lg lg:p-4 lg:pb-0"
+								src={fitness}
+								alt="class-image"
+							/>
 						</div>
 						<div className="p-5">
 							<div>
-								<h5 className="mb-2 text-lg font-medium tracking-tight text-white lg:text-3xl lg:font-semibold">Yoga</h5>
+								<h5 className="mb-2 text-lg font-medium tracking-tight text-white lg:text-3xl lg:font-semibold">
+									Yoga
+								</h5>
 							</div>
 							<p className="mb-3 text-sm font-light text-white lg:text-lg lg:font-normal">
-								Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
+								Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse
+								chronological order.
 							</p>
 						</div>
 					</div>
@@ -71,14 +87,17 @@ const ClassesList = () => {
 				<SwiperSlide className="bg-secondary-navy">
 					<div className="mx-auto mt-8 max-w-xs rounded-lg bg-[#252525] bg-opacity-40 shadow-md lg:mt-14">
 						<div>
-							<img className="mx-auto rounded-t-lg lg:p-4 lg:pb-0" src={muscle} alt="" />
+							<img className="mx-auto rounded-t-lg lg:p-4 lg:pb-0" src={muscle} alt="class-image" />
 						</div>
 						<div className="p-5">
 							<div>
-								<h5 className="mb-2 text-lg font-medium tracking-tight text-white lg:text-3xl lg:font-semibold">Yoga</h5>
+								<h5 className="mb-2 text-lg font-medium tracking-tight text-white lg:text-3xl lg:font-semibold">
+									Yoga
+								</h5>
 							</div>
 							<p className="mb-3 text-sm font-light text-white lg:text-lg lg:font-normal">
-								Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
+								Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse
+								chronological order.
 							</p>
 						</div>
 					</div>
@@ -86,14 +105,21 @@ const ClassesList = () => {
 				<SwiperSlide className="bg-secondary-navy">
 					<div className="mx-auto mt-8 max-w-xs rounded-lg bg-[#252525] bg-opacity-40 shadow-md lg:mt-14">
 						<div>
-							<img className="mx-auto rounded-t-lg lg:p-4 lg:pb-0" src={yogaClass} alt="" />
+							<img
+								className="mx-auto rounded-t-lg lg:p-4 lg:pb-0"
+								src={yogaClass}
+								alt="class-image"
+							/>
 						</div>
 						<div className="p-5">
 							<div>
-								<h5 className="mb-2 text-lg font-medium tracking-tight text-white lg:text-3xl lg:font-semibold">Yoga</h5>
+								<h5 className="mb-2 text-lg font-medium tracking-tight text-white lg:text-3xl lg:font-semibold">
+									Yoga
+								</h5>
 							</div>
 							<p className="mb-3 text-sm font-light text-white lg:text-lg lg:font-normal">
-								Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
+								Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse
+								chronological order.
 							</p>
 						</div>
 					</div>
@@ -101,14 +127,21 @@ const ClassesList = () => {
 				<SwiperSlide className="bg-secondary-navy">
 					<div className="mx-auto mt-8 max-w-xs rounded-lg bg-[#252525] bg-opacity-40 shadow-md lg:mt-14">
 						<div>
-							<img className="mx-auto rounded-t-lg lg:p-4 lg:pb-0" src={yogaClass} alt="" />
+							<img
+								className="mx-auto rounded-t-lg lg:p-4 lg:pb-0"
+								src={yogaClass}
+								alt="class-image"
+							/>
 						</div>
 						<div className="p-5">
 							<div>
-								<h5 className="mb-2 text-lg font-medium tracking-tight text-white lg:text-3xl lg:font-semibold">Yoga</h5>
+								<h5 className="mb-2 text-lg font-medium tracking-tight text-white lg:text-3xl lg:font-semibold">
+									Yoga
+								</h5>
 							</div>
 							<p className="mb-3 text-sm font-light text-white lg:text-lg lg:font-normal">
-								Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
+								Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse
+								chronological order.
 							</p>
 						</div>
 					</div>

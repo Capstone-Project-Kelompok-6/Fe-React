@@ -92,7 +92,7 @@ const Overview = () => {
 			datalabels: {
 				formatter: (ctx, value) => {
 					let percentage =
-						((ctx * 100) / value.dataset.data.reduce((sum, data) => sum + data, 0)).toFixed(0) +
+						((ctx * 100) / value.dataset.data.reduce((sum, data) => sum + data, 0)).toFixed(2) +
 						"%";
 					return percentage;
 				},
@@ -129,7 +129,7 @@ const Overview = () => {
 			datalabels: {
 				formatter: (ctx, value) => {
 					let percentage =
-						((ctx * 100) / value.dataset.data.reduce((sum, data) => sum + data, 0)).toFixed(0) +
+						((ctx * 100) / value.dataset.data.reduce((sum, data) => sum + data, 0)).toFixed(2) +
 						"%";
 					return percentage;
 				},

@@ -13,6 +13,7 @@ import {
 	videoMimeType,
 } from "../../../utils/globalVariable";
 import { maxLengthCheck } from "../../../utils/maxLengthCheck";
+import { handleKeyDown } from "../../../utils/rmvHtmlTag";
 
 const baseErrors = {
 	video: "",
@@ -209,6 +210,7 @@ const ModalCreateVideo = ({ handleModalCreateTrigger }) => {
 												className={inputNotError}
 												placeholder=" "
 												required
+												onKeyDown={handleKeyDown}
 											/>
 
 											<label htmlFor="title" className={labelNotError}>

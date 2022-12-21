@@ -137,8 +137,8 @@ const FormLogin = () => {
 			style={{
 				backgroundImage: `url(${loginBG})`,
 			}}
-			className="z-[3] max-h-full w-full bg-cover bg-no-repeat md:fixed md:h-screen">
-			<div className="container z-[1] overflow-y-auto py-5">
+			className="z-[3] h-full w-full bg-cover bg-fixed bg-no-repeat 2xl:h-screen">
+			<div className="container z-[1] overflow-y-auto pt-5 pb-10">
 				<div className="inset-x-5 mx-auto">
 					<div className="lg:m-auto">
 						<div className="border-1 bg-neutral rounded-20 border-gray-200 bg-neutral-background bg-opacity-80 p-4 shadow-6 backdrop-blur-sm md:rounded-100 md:bg-opacity-90 md:p-3 lg:mx-auto lg:w-2/4">

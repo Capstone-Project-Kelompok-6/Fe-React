@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import Swal from "sweetalert2";
 import { editOfflineBooking } from "../../../stores/features/offlineBookingSlice";
-import { cancelButton, saveButton, select } from "../../../utils/globalVariable";
+import { cancelButton, disabledButton, saveButton, select } from "../../../utils/globalVariable";
 import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
 import { PulseLoader } from "react-spinners";
 
@@ -14,6 +14,7 @@ const ModalEditOfflineBooking = ({
 	update,
 }) => {
 	const { book_id, class_id, user_id, workout, instructor_name } = update;
+	const [selectedOfflineClasses, setSelectedOfflineClasses] = useState("");
 	const dispatch = useDispatch();
 	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
@@ -78,8 +79,9 @@ const ModalEditOfflineBooking = ({
 											label: `${workout} - ${instructor_name}`,
 										}}
 										placeholder="Select offline classes"
-										noOptionsMessage={() => "Membership data not found"}
+										noOptionsMessage={() => "Offline classes data not found"}
 										isClearable
+										onChange={(e) => setSelectedOfflineClasses(e.value)}
 									/>
 								</div>
 							</div>
@@ -92,8 +94,11 @@ const ModalEditOfflineBooking = ({
 										<PulseLoader size={5} color={"#ffffff"} />
 									</button>
 								) : (
-									<button type="submit" className={saveButton}>
-										Save
+									<button
+										type="submit"
+										className={!selectedOfflineClasses ? disabledButton : saveButton}
+										disabled={!selectedOfflineClasses}>
+										Save Changes
 									</button>
 								)}
 							</div>

@@ -131,34 +131,29 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 			!errors.phone_number &&
 			!errors.password
 		) {
-			try {
-				dispatch(createMembership({ first_name, last_name, phone_number, email, password })).then(
-					(res) => {
-						if (!res.error) {
-							setTimeout(
-								() =>
-									Swal.fire({
-										icon: "success",
-										title: "Saved",
-										text: "Membership data successfully saved",
-										showConfirmButton: false,
-										timer: 2000,
-										background: "#ffffff",
-									}),
-								1000
-							);
-							handleModalCreateTrigger();
-							dispatch(setLoaderSubmit(false));
-						} else {
-							Swal.fire("Sorry", res.error.message.split(":")[1], "error");
-							dispatch(setLoaderSubmit(false));
-						}
+			dispatch(createMembership({ first_name, last_name, phone_number, email, password })).then(
+				(res) => {
+					if (!res.error) {
+						setTimeout(
+							() =>
+								Swal.fire({
+									icon: "success",
+									title: "Saved",
+									text: "Membership data successfully saved",
+									showConfirmButton: false,
+									timer: 2000,
+									background: "#ffffff",
+								}),
+							1000
+						);
+						handleModalCreateTrigger();
+						dispatch(setLoaderSubmit(false));
+					} else {
+						Swal.fire("Sorry", res.error.message.split(":")[1], "error");
+						dispatch(setLoaderSubmit(false));
 					}
-				);
-			} catch (error) {
-				Swal.fire("Sorry", error.message, "error");
-				dispatch(setLoaderSubmit(false));
-			}
+				}
+			);
 		} else {
 			setTimeout(
 				() =>
@@ -201,8 +196,7 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 										/>
 										<label
 											htmlFor="first_name"
-											className={errors.last_name ? labelError : labelNotError}
-										>
+											className={errors.last_name ? labelError : labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												First Name
 											</span>
@@ -229,8 +223,7 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 										/>
 										<label
 											htmlFor="last_name"
-											className={errors.last_name ? labelError : labelNotError}
-										>
+											className={errors.last_name ? labelError : labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Last Name
 											</span>
@@ -286,8 +279,7 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 										/>
 										<label
 											htmlFor="password"
-											className={errors.password ? labelError : labelNotError}
-										>
+											className={errors.password ? labelError : labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Password
 											</span>
@@ -324,8 +316,7 @@ const ModalCreateMembership = ({ handleModalCreateTrigger }) => {
 										/>
 										<label
 											htmlFor="phone_number"
-											className={errors.phone_number ? labelError : labelNotError}
-										>
+											className={errors.phone_number ? labelError : labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Phone Number
 											</span>

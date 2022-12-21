@@ -88,7 +88,7 @@ const OnlineClassesListItem = ({ data }) => {
 					{!video_name ? (
 						<div
 							role="status"
-							className="absolute inset-0 h-full w-full animate-pulse rounded-t-20 bg-gray-300 object-fill object-center p-16 text-center">
+							className="absolute inset-0 h-full w-full animate-pulse rounded-t-20 bg-gray-300 object-fill object-center p-20 text-center">
 							<i className="fi fi-sr-play text-4xl text-gray-200"></i>
 							<span className="sr-only">Loading...</span>
 						</div>

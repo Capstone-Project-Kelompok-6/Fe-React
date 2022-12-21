@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import {
 	cancelButton,
+	disabledButton,
 	inputNotError,
 	labelNotError,
 	saveButton,
@@ -16,6 +17,11 @@ import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
 import { PulseLoader } from "react-spinners";
 import { handleKeyDown } from "../../../utils/rmvHtmlTag";
 
+const baseValues = {
+	price: "",
+	description: "",
+};
+
 const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown, update }) => {
 	const {
 		class_id,
@@ -27,28 +33,30 @@ const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown,
 		price,
 		description,
 	} = update;
+	const [values, setValues] = useState(baseValues);
+	const [selectedWorkout, setSelectedWorkout] = useState("");
+	const [selectedInstructor, setSelectedInstructor] = useState("");
+	const [selectedClassDates, setSelectedClassDates] = useState([]);
 	const dispatch = useDispatch();
 	const workoutList = useSelector((state) => state.workout.data);
 	const instructorList = useSelector((state) => state.instructor.data);
-	const [selectedClassDates, setSelectedClassDates] = useState([]);
 	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
 	useEffect(() => {
-		dispatch(fetchWorkoutList());
-		dispatch(fetchInstructor());
+		dispatch(fetchWorkoutList(1000));
+		dispatch(fetchInstructor(1000));
 	}, [dispatch]);
 
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+		setValues({
+			...values,
+			[name]: value,
+		});
+	};
+
 	const handleChangeClassDates = (e) => {
-		setSelectedClassDates(
-			Array.isArray(e)
-				? e.map((x) => x.value)
-				: [
-						class_dates.map((date) => {
-							return { value: date, label: date };
-						}),
-						// eslint-disable-next-line no-mixed-spaces-and-tabs
-				  ]
-		);
+		setSelectedClassDates(Array.isArray(e) ? e.map((item) => item.value) : []);
 	};
 
 	const handleUpdate = (e) => {
@@ -60,56 +68,52 @@ const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown,
 		const instructor_id = formData.get("instructor_id");
 		const price = Number(formData.get("price"));
 		const description = formData.get("description");
-		try {
-			dispatch(
-				editOfflineClasses({
-					class_id,
-					workout_id,
-					instructor_id,
-					class_dates: selectedClassDates,
-					price,
-					description,
-				})
-			).then((res) => {
-				if (!res.error) {
-					setTimeout(
-						() =>
-							Swal.fire({
-								icon: "success",
-								title: "Update",
-								text: "Offline classes data successfully updated",
-								showConfirmButton: false,
-								timer: 2000,
-								background: "#ffffff",
-							}),
-						1000
-					);
-					handleModalEditTrigger();
-					handleActionDropdown();
-					dispatch(setLoaderSubmit(false));
-				} else {
-					Swal.fire("Sorry", "Classes already exists", "info");
-					dispatch(setLoaderSubmit(false));
-				}
-			});
-		} catch (error) {
-			Swal.fire("Sorry", error.message.split(":")[1], "info");
-			dispatch(setLoaderSubmit(false));
-		}
+
+		dispatch(
+			editOfflineClasses({
+				class_id,
+				workout_id,
+				instructor_id,
+				class_dates: selectedClassDates,
+				price,
+				description,
+			})
+		).then((res) => {
+			if (!res.error) {
+				setTimeout(
+					() =>
+						Swal.fire({
+							icon: "success",
+							title: "Update",
+							text: "Offline classes data successfully updated",
+							showConfirmButton: false,
+							timer: 2000,
+							background: "#ffffff",
+						}),
+					1000
+				);
+				handleModalEditTrigger();
+				handleActionDropdown();
+				dispatch(setLoaderSubmit(false));
+			} else {
+				Swal.fire("Sorry", res.error.message.split(":")[1], "info");
+				dispatch(setLoaderSubmit(false));
+			}
+		});
 	};
 
 	const dataClassDates = [
 		{
-			label: "Sunday, 09:00 - 11:00",
-			value: "Sunday, 09:00 - 11:00",
+			label: "Sunday (09:00 - 11:00)",
+			value: "Sunday (09:00 - 11:00)",
 		},
 		{
-			label: "Wednesday, 13:00 - 15:00",
-			value: "Wednesday, 13:00 - 15:00",
+			label: "Wednesday (13:00 - 15:00)",
+			value: "Wednesday (13:00 - 15:00)",
 		},
 		{
-			label: "Friday, 14:00 - 18:00",
-			value: "Friday, 14:00 - 18:00",
+			label: "Friday (14:00 - 18:00)",
+			value: "Friday (14:00 - 18:00)",
 		},
 	];
 
@@ -140,6 +144,7 @@ const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown,
 										noOptionsMessage={() => "Workout data not found"}
 										defaultValue={{ value: workout_id, label: workout }}
 										isClearable
+										onChange={(e) => setSelectedWorkout(e.value)}
 									/>
 								</div>
 								<div className="relative">
@@ -151,10 +156,11 @@ const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown,
 											})
 											.sort((a, b) => a.label.localeCompare(b.label))}
 										name="instructor_id"
-										placeholder="Select instructure"
-										noOptionsMessage={() => "Instructure data not found"}
+										placeholder="Select instructor"
+										noOptionsMessage={() => "Instructor data not found"}
 										isClearable
 										defaultValue={{ value: instructor_id, label: instructor_name }}
+										onChange={(e) => setSelectedInstructor(e.value)}
 									/>
 								</div>
 								<div className="relative">
@@ -180,6 +186,7 @@ const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown,
 										className={inputNotError}
 										placeholder=" "
 										defaultValue={price}
+										onChange={handleChange}
 									/>
 									<label htmlFor="price" className={labelNotError}>
 										<span className="block after:ml-1 after:text-red-500 after:content-['*']">
@@ -195,10 +202,10 @@ const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown,
 										className={inputNotError}
 										placeholder=" "
 										defaultValue={description}
-										onKeyDown={handleKeyDown}></textarea>
+										onKeyDown={handleKeyDown}
+										onChange={handleChange}></textarea>
 									<label htmlFor="description" className={labelNotError}>
 										<span className="block after:ml-1 after:text-red-500 after:content-['*']">
-											{" "}
 											Information
 										</span>
 									</label>
@@ -213,8 +220,25 @@ const ModalEditOfflineClasses = ({ handleModalEditTrigger, handleActionDropdown,
 										<PulseLoader size={5} color={"#ffffff"} />
 									</button>
 								) : (
-									<button type="submit" className={saveButton}>
-										Save
+									<button
+										type="submit"
+										className={
+											!selectedWorkout &&
+											!selectedInstructor &&
+											!values.price &&
+											!values.description &&
+											selectedClassDates.length === 0
+												? disabledButton
+												: saveButton
+										}
+										disabled={
+											!selectedWorkout &&
+											!selectedInstructor &&
+											!values.price &&
+											!values.description &&
+											selectedClassDates.length === 0
+										}>
+										Save Changes
 									</button>
 								)}
 							</div>

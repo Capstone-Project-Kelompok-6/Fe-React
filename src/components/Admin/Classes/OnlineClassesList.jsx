@@ -34,8 +34,9 @@ const OnlineClassesList = () => {
 		debouncedKeyword,
 		searchTrigger,
 		setSearchTrigger,
+		activeFilter,
+		setActiveFilter,
 	} = useHook();
-	const [active, setActive] = useState(0);
 
 	const dispatch = useDispatch();
 	const loading = useSelector((state) => state.onlineClasses.loading);
@@ -54,16 +55,16 @@ const OnlineClassesList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			ClassesAPI.serchOnlineClasses(debouncedKeyword.toLowerCase()).then((result) => {
+			ClassesAPI.serchOnlineClasses(debouncedKeyword.toLowerCase(), 1000).then((result) => {
 				setOnlineClasses({ data: result.data.data });
-				setActive(result.data.data.rows[0].workout);
+				setActiveFilter(result.data.data.rows[0].workout);
 			});
 		} else {
 			ClassesAPI.getOnlineClasses(1000).then((result) => {
 				setOnlineClasses({
 					data: result.data.data,
 				});
-				setActive(0);
+				setActiveFilter(0);
 				dispatch(setLoaderFetchData(false));
 			});
 		}
@@ -76,13 +77,13 @@ const OnlineClassesList = () => {
 			});
 			dispatch(setLoaderFetchData(false));
 		});
-	}, [loading]);
+	}, []);
 
-	const filterItem = (workout) => {
+	const filterByWorkout = (workout) => {
 		dispatch(setLoaderFetchData(true));
-		ClassesAPI.filterOnlineClasses(workout).then((result) => {
+		ClassesAPI.filterOnlineClasses(workout, 1000).then((result) => {
 			setOnlineClasses({ data: result.data.data });
-			setActive(workout);
+			setActiveFilter(workout);
 			dispatch(setLoaderFetchData(false));
 		});
 	};
@@ -90,7 +91,7 @@ const OnlineClassesList = () => {
 	const filterAll = () => {
 		ClassesAPI.getOnlineClasses(1000).then((result) => {
 			setOnlineClasses({ data: result.data.data });
-			setActive(0);
+			setActiveFilter(0);
 		});
 	};
 
@@ -146,7 +147,7 @@ const OnlineClassesList = () => {
 									<ul className="-mb-px flex list-none overflow-x-scroll whitespace-nowrap text-center text-xs font-medium scrollbar-hide">
 										<li className="mr-2">
 											<button
-												className={active === 0 ? activeTab : notActiveTab}
+												className={activeFilter === 0 ? activeTab : notActiveTab}
 												onClick={() => {
 													filterAll();
 												}}>
@@ -173,8 +174,8 @@ const OnlineClassesList = () => {
 												return (
 													<li className="mr-2" key={workout}>
 														<button
-															className={active === workout ? activeTab : notActiveTab}
-															onClick={() => filterItem(workout)}>
+															className={activeFilter === workout ? activeTab : notActiveTab}
+															onClick={() => filterByWorkout(workout)}>
 															{workout}
 														</button>
 													</li>
@@ -226,7 +227,7 @@ const OnlineClassesList = () => {
 						{onlineClasses.data.rows?.length > 0 ? (
 							<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 								{onlineClasses.data.rows?.map((item) => {
-									return <OnlineClassesListItem data={item} key={item.class_id} />;
+									return <OnlineClassesListItem key={item.class_id} data={item} />;
 								})}
 							</div>
 						) : (

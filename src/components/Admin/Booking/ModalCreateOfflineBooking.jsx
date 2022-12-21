@@ -46,43 +46,54 @@ const ModalCreateOfflineBooking = ({ handleModalCreateTrigger }) => {
 			}
 		});
 
-		try {
-			dispatch(createOfflineBooking({ user_id, class_id, is_online: false })).then((res) => {
-				if (!res.error) {
-					const book_id = res.payload.book_id;
-					dispatch(
-						createPayment({
-							book_id,
-							mobile_number: phoneNumber[user_id],
-							items: [{ name, price, quantity: 1 }],
-						})
-					).then((result) => {
-						if (result) {
-							handleModalCreateTrigger();
-							setTimeout(
-								() =>
-									Swal.fire({
-										icon: "success",
-										title: "Saved",
-										text: "Offline booking data successfully saved",
-										showConfirmButton: false,
-										timer: 2000,
-										background: "#ffffff",
-									}),
-								1000
-							);
-							dispatch(setLoaderSubmit(false));
-						}
-					});
-				} else {
-					Swal.fire("Sorry", res.error.message.split(":")[1], "info");
-					dispatch(setLoaderSubmit(false));
-				}
-			});
-		} catch (error) {
-			Swal.fire("Sorry", error.message.split(":")[1], "info");
-			dispatch(setLoaderSubmit(false));
-		}
+		dispatch(createOfflineBooking({ user_id, class_id, is_online: false })).then((res) => {
+			if (res.payload.message !== "classes have been extended" && !res.error) {
+				const book_id = res.payload.data.book_id;
+				dispatch(
+					createPayment({
+						book_id,
+						mobile_number: phoneNumber[user_id],
+						items: [{ name, price, quantity: 1 }],
+					})
+				).then((result) => {
+					if (result) {
+						handleModalCreateTrigger();
+						setTimeout(
+							() =>
+								Swal.fire({
+									icon: "success",
+									title: "Saved",
+									text: "Offline booking data successfully saved",
+									showConfirmButton: false,
+									timer: 2000,
+									background: "#ffffff",
+								}),
+							1000
+						);
+						dispatch(setLoaderSubmit(false));
+						window.open(result.payload.invoice_url, "_target");
+					}
+				});
+			} else if (res.payload.message === "classes have been extended") {
+				handleModalCreateTrigger();
+				setTimeout(
+					() =>
+						Swal.fire({
+							icon: "success",
+							title: "Saved",
+							text: res.payload.message,
+							showConfirmButton: false,
+							timer: 2000,
+							background: "#ffffff",
+						}),
+					1000
+				);
+				dispatch(setLoaderSubmit(false));
+			} else {
+				Swal.fire("Sorry", res.error.message.split(":")[1], "info");
+				dispatch(setLoaderSubmit(false));
+			}
+		});
 	};
 
 	return (
@@ -130,6 +141,7 @@ const ModalCreateOfflineBooking = ({ handleModalCreateTrigger }) => {
 										name="class_id"
 										placeholder="Select offline classes"
 										noOptionsMessage={() => "Offline Class data not found"}
+										isClearable
 									/>
 								</div>
 							</div>

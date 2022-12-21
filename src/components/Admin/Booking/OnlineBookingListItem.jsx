@@ -14,28 +14,30 @@ const OnlineBookingListItem = ({ data }) => {
 		thumbnail,
 		thumbnail_name,
 		status,
+		end_class_date,
+		is_expired,
 	} = data;
 
 	return (
 		<div>
 			<div className="relative rounded-20 border bg-white py-4 shadow-4">
 				<div className="mb-2 flex items-center px-5">
-					<div className="min-w-0 flex-1">
-						<p className="text-sm font-medium text-neutral-100-2 md:text-base">
-							{formatDateTime(created_at)}
+					<div className="min-w-0 flex-1 flex-col">
+						<p className="text-xs font-medium text-neutral-100-2 md:text-sm">
+							{formatDateTime(created_at)} - {formatDateTime(end_class_date)}
 						</p>
 					</div>
 					<div className="mr-4 inline-flex items-center">
 						{status === "PAID" && (
-							<p className="rounded-full border border-secondary-green bg-tertiary-4 bg-opacity-25 px-2 py-1 font-medium text-secondary-green md:px-3">
-								<i className="fi fi-sr-rec mr-1 mt-1 text-[10px]"></i>
-								<span className="text-xs">{status}</span>
+							<p className="rounded-full border border-secondary-green bg-tertiary-4 bg-opacity-25 px-2 py-0 font-medium text-secondary-green md:px-3">
+								<i className="fi fi-sr-rec mr-1 mt-1 text-[6px] md:text-[8px]"></i>
+								<span className="text-[10px] md:text-xs">{status}</span>
 							</p>
 						)}
-						{status === "PENDING" && (
-							<p className="rounded-full border border-secondary-orange bg-secondary-orange bg-opacity-25 px-2 py-1 font-medium text-secondary-orange md:px-3">
-								<i className="fi fi-sr-rec mr-1 mt-1 text-[10px]"></i>
-								<span className="text-xs">{status}</span>
+						{status === "" && (
+							<p className="rounded-full border border-secondary-yellow bg-secondary-yellow bg-opacity-25 px-2 py-0 font-medium text-tertiary-yellow md:px-3">
+								<i className="fi fi-sr-rec mr-1 mt-1 text-[6px] md:text-[8px]"></i>
+								<span className="text-[10px] md:text-xs">PENDING</span>
 							</p>
 						)}
 					</div>
@@ -69,17 +71,37 @@ const OnlineBookingListItem = ({ data }) => {
 								</p>
 							</div>
 						</div>
-						<div className="mb-2 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-12 xl:grid-cols-2">
+						<div className="mt-4 grid grid-cols-2 gap-32 md:mt-4 md:grid-cols-2 md:gap-12 xl:grid-cols-2">
 							<div className="flex">
-								<div className="inline-flex flex-shrink-0 items-center">
+								<div className="flex-shrink-0">
 									<span className="mt-1 text-sm text-secondary-navy">
 										<i className="fi fi-sr-user fi-sr-briefcase mr-2"></i>
 									</span>
-									<div>
-										<p className="pt-4 text-sm font-medium tracking-tight text-neutral-100-2">
-											{full_name}
-										</p>
-										<p className="text-xs font-normal text-neutral-60">{email}</p>
+								</div>
+								<div className="flex-1 leading-relaxed">
+									<p className="text-sm font-medium tracking-tight text-neutral-100-2">
+										{full_name}
+									</p>
+									<p className="text-xs font-normal text-neutral-60">{truncate(email, 20)}</p>
+								</div>
+							</div>
+							<div className="text-sm font-medium">
+								<div className="flex">
+									<div className="mt-0.5 flex-shrink-0">
+										<span className="mr-2 text-secondary-navy">
+											<i className="fi fi-sr-info"></i>
+										</span>
+									</div>
+									<div className="flex-1 leading-relaxed">
+										{is_expired === false ? (
+											<p className="font-medium text-secondary-green">
+												<span className="text-sm">Active Class</span>
+											</p>
+										) : (
+											<p className="font-medium text-secondary-red">
+												<span className="text-sm">Expired Class</span>
+											</p>
+										)}
 									</div>
 								</div>
 							</div>

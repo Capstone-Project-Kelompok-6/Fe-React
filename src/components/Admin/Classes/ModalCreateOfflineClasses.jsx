@@ -29,7 +29,7 @@ const ModalCreateOfflineClasses = ({ handleModalCreateTrigger }) => {
 	}, [dispatch]);
 
 	const handleChangeClassDates = (e) => {
-		setSelectedClassDates(Array.isArray(e) ? e.map((x) => x.value) : []);
+		setSelectedClassDates(Array.isArray(e) ? e.map((item) => item.value) : []);
 	};
 
 	const handleSubmit = (e) => {
@@ -42,40 +42,35 @@ const ModalCreateOfflineClasses = ({ handleModalCreateTrigger }) => {
 		const price = Number(formData.get("price"));
 		const description = formData.get("description");
 
-		try {
-			dispatch(
-				createOfflineClasses({
-					workout_id,
-					instructor_id,
-					class_dates: selectedClassDates,
-					price,
-					description,
-				})
-			).then((res) => {
-				if (!res.error) {
-					setTimeout(
-						() =>
-							Swal.fire({
-								icon: "success",
-								title: "Saved",
-								text: "Offline classes data successfully saved",
-								showConfirmButton: false,
-								timer: 2000,
-								background: "#ffffff",
-							}),
-						1000
-					);
-					handleModalCreateTrigger();
-					dispatch(setLoaderSubmit(false));
-				} else {
-					Swal.fire("Sorry", res.error.message.split(":")[1], "info");
-					dispatch(setLoaderSubmit(false));
-				}
-			});
-		} catch (error) {
-			Swal.fire("Sorry", error.message.split(":")[1], "info");
-			dispatch(setLoaderSubmit(false));
-		}
+		dispatch(
+			createOfflineClasses({
+				workout_id,
+				instructor_id,
+				class_dates: selectedClassDates,
+				price,
+				description,
+			})
+		).then((res) => {
+			if (!res.error) {
+				setTimeout(
+					() =>
+						Swal.fire({
+							icon: "success",
+							title: "Saved",
+							text: "Offline classes data successfully saved",
+							showConfirmButton: false,
+							timer: 2000,
+							background: "#ffffff",
+						}),
+					1000
+				);
+				handleModalCreateTrigger();
+				dispatch(setLoaderSubmit(false));
+			} else {
+				Swal.fire("Sorry", res.error.message.split(":")[1], "info");
+				dispatch(setLoaderSubmit(false));
+			}
+		});
 	};
 
 	const dataClassDates = [

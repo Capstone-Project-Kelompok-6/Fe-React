@@ -4,6 +4,7 @@ import { editInstructor } from "../../../stores/features/instructorSlice";
 import { PulseLoader } from "react-spinners";
 import {
 	cancelButton,
+	disabledButton,
 	imageMimeType,
 	inputError,
 	inputNotError,
@@ -35,15 +36,15 @@ const baseValues = {
 const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 	const { instructor_id, instructor_image, image_name, instructor_name, phone_number, email } =
 		update;
-	const [file, setFile] = useState(null);
-	const [fileDataURL, setFileDataURL] = useState(null);
+	const [editImage, setEditImage] = useState(null);
+	const [imageDataURL, setImageDataURL] = useState(null);
 	const [errors, setErrors] = useState(baseErrors);
 	const [values, setValues] = useState(baseValues);
 	const dispatch = useDispatch();
 	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
-	const MAX_FILE_SIZE = 3072;
 	const maxLengthPhoneNumber = 13;
+	const MAX_FILE_SIZE_IMAGE = 3072;
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -111,7 +112,7 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 				image: "Image mime type is not valid",
 			});
 			return;
-		} else if (fileSizeKiloBytes > MAX_FILE_SIZE) {
+		} else if (fileSizeKiloBytes > MAX_FILE_SIZE_IMAGE) {
 			setErrors({
 				...errors,
 				image: "File size is greater than maximum limit",
@@ -121,21 +122,21 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 			setErrors({ ...errors, image: "" });
 		}
 
-		setFile(file);
+		setEditImage(file);
 	};
 
 	useEffect(() => {
 		let fileReader,
 			isCancel = false;
-		if (file) {
+		if (editImage) {
 			fileReader = new FileReader();
 			fileReader.onload = (e) => {
 				const { result } = e.target;
 				if (result && !isCancel) {
-					setFileDataURL(result);
+					setImageDataURL(result);
 				}
 			};
-			fileReader.readAsDataURL(file);
+			fileReader.readAsDataURL(editImage);
 		}
 		return () => {
 			isCancel = true;
@@ -143,7 +144,7 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 				fileReader.abort();
 			}
 		};
-	}, [file]);
+	}, [editImage]);
 
 	const handleUpdate = (e) => {
 		e.preventDefault();
@@ -156,41 +157,36 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 		const phone_number = formData.get("phone_number");
 
 		if (!errors.instructor_name && !errors.image && !errors.email && !errors.phone_number) {
-			try {
-				dispatch(
-					editInstructor({
-						instructor_id,
-						instructor_name,
-						image,
-						image_name,
-						email,
-						phone_number,
-					})
-				).then((res) => {
-					if (!res.error) {
-						setTimeout(
-							() =>
-								Swal.fire({
-									icon: "success",
-									title: "Updated",
-									text: "Instructor data successfully updated",
-									showConfirmButton: false,
-									timer: 2000,
-									background: "#ffffff",
-								}),
-							1000
-						);
-						handleModalEditTrigger();
-						dispatch(setLoaderSubmit(false));
-					} else {
-						Swal.fire("Sorry", "Email or phone number already exists", "info");
-						dispatch(setLoaderSubmit(false));
-					}
-				});
-			} catch (error) {
-				Swal.fire("Sorry", error.message, "info");
-				dispatch(setLoaderSubmit(false));
-			}
+			dispatch(
+				editInstructor({
+					instructor_id,
+					instructor_name,
+					image,
+					image_name,
+					email,
+					phone_number,
+				})
+			).then((res) => {
+				if (!res.error) {
+					setTimeout(
+						() =>
+							Swal.fire({
+								icon: "success",
+								title: "Updated",
+								text: "Instructor data successfully updated",
+								showConfirmButton: false,
+								timer: 2000,
+								background: "#ffffff",
+							}),
+						1000
+					);
+					handleModalEditTrigger();
+					dispatch(setLoaderSubmit(false));
+				} else {
+					Swal.fire("Sorry", "Email or phone number already exists", "info");
+					dispatch(setLoaderSubmit(false));
+				}
+			});
 		} else {
 			setTimeout(
 				() =>
@@ -249,11 +245,11 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 									</div>
 								</div>
 								<div className="relative">
-									{fileDataURL ? (
+									{imageDataURL ? (
 										<div className="my-5 flex w-full items-center justify-center">
 											<div className="flex flex-col items-center justify-center">
 												<img
-													src={fileDataURL}
+													src={imageDataURL}
 													alt=""
 													className="h-32 w-32 rounded-full border-2 border-dashed border-neutral-80 object-cover"
 												/>
@@ -358,8 +354,17 @@ const ModalEditInstructor = ({ handleModalEditTrigger, update }) => {
 										<PulseLoader size={5} color={"#ffffff"} />
 									</button>
 								) : (
-									<button type="submit" className={saveButton}>
-										Save
+									<button
+										type="submit"
+										className={
+											!values.instructor_name && !values.email && !values.phone_number && !editImage
+												? disabledButton
+												: saveButton
+										}
+										disabled={
+											!values.instructor_name && !values.email && !values.phone_number && !editImage
+										}>
+										Save Changes
 									</button>
 								)}
 							</div>

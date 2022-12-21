@@ -33,11 +33,13 @@ const OfflineBookingList = () => {
 		debouncedKeyword,
 		searchTrigger,
 		setSearchTrigger,
+		activeFilter,
+		setActiveFilter,
 	} = useHook();
-	const [active, setActive] = useState(0);
 
 	const dispatch = useDispatch();
 	const loading = useSelector((state) => state.offlineBooking.loading);
+	const loadingPayment = useSelector((state) => state.payment.loading);
 	const loaderFetchData = useSelector((state) => state.loaderFetchData);
 
 	const bookingOffline = new Set();
@@ -53,9 +55,9 @@ const OfflineBookingList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			BookingAPI.searchOfflineBooking(debouncedKeyword.toLowerCase()).then((result) => {
+			BookingAPI.searchOfflineBooking(debouncedKeyword.toLowerCase(), 1000).then((result) => {
 				setOfflineBooking({ data: result.data.data });
-				setActive(result.data.data.rows[0].workout);
+				setActiveFilter(result.data.data.rows[0].workout);
 			});
 		} else {
 			dispatch(setLoaderFetchData(true));
@@ -63,11 +65,11 @@ const OfflineBookingList = () => {
 				setOfflineBooking({
 					data: result.data.data,
 				});
-				setActive(0);
+				setActiveFilter(0);
 				dispatch(setLoaderFetchData(false));
 			});
 		}
-	}, [loading, debouncedKeyword]);
+	}, [loading, debouncedKeyword, loadingPayment]);
 
 	useEffect(() => {
 		BookingAPI.getOfflineBooking(1000).then((result) => {
@@ -77,13 +79,13 @@ const OfflineBookingList = () => {
 		});
 	}, [loading]);
 
-	const filterItem = (workout) => {
+	const filterByWorkout = (workout) => {
 		dispatch(setLoaderFetchData(true));
-		BookingAPI.filterOfflineBooking(workout).then((result) => {
+		BookingAPI.filterOfflineBooking(workout, 1000).then((result) => {
 			setOfflineBooking({
 				data: result.data.data,
 			});
-			setActive(workout);
+			setActiveFilter(workout);
 			dispatch(setLoaderFetchData(false));
 		});
 	};
@@ -93,7 +95,7 @@ const OfflineBookingList = () => {
 			setOfflineBooking({
 				data: result.data.data,
 			});
-			setActive(0);
+			setActiveFilter(0);
 		});
 	};
 
@@ -148,7 +150,7 @@ const OfflineBookingList = () => {
 								<ul className="-mb-px flex list-none overflow-x-scroll whitespace-nowrap text-center text-xs font-medium scrollbar-hide">
 									<li className="mr-2">
 										<button
-											className={active === 0 ? activeTab : notActiveTab}
+											className={activeFilter === 0 ? activeTab : notActiveTab}
 											onClick={() => {
 												filterAll();
 											}}>
@@ -175,8 +177,8 @@ const OfflineBookingList = () => {
 											return (
 												<li className="mr-2" key={workout}>
 													<button
-														className={active === workout ? activeTab : notActiveTab}
-														onClick={() => filterItem(workout)}>
+														className={activeFilter === workout ? activeTab : notActiveTab}
+														onClick={() => filterByWorkout(workout)}>
 														{workout}
 													</button>
 												</li>
@@ -227,7 +229,7 @@ const OfflineBookingList = () => {
 					{offlineBooking.data.rows?.length > 0 ? (
 						<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 md:gap-6 xl:grid-cols-2 2xl:grid-cols-3">
 							{offlineBooking.data.rows?.map((item) => {
-								return <OfflineBookingListItem data={item} key={item.book_id} />;
+								return <OfflineBookingListItem key={item.book_id} data={item} />;
 							})}
 						</div>
 					) : (

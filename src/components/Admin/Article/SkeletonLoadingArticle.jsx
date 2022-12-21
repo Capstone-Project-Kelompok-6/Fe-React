@@ -3,7 +3,7 @@ import React from "react";
 const SkeletonLoadingArticle = () => {
 	return (
 		<div className="rounded-20 bg-white shadow-4">
-			<div className="relative overflow-hidden rounded-20 pb-40">
+			<div className="relative overflow-hidden pb-40">
 				<div
 					role="status"
 					className="absolute inset-0 h-full w-full animate-pulse rounded-t-20 bg-gray-300 object-fill object-center p-16 text-center">

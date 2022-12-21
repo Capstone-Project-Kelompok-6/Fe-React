@@ -12,6 +12,7 @@ import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
 import { maxLengthCheck } from "./../../../utils/maxLengthCheck";
 import {
 	cancelButton,
+	disabledButton,
 	imageMimeType,
 	inputNotError,
 	labelNotError,
@@ -20,6 +21,12 @@ import {
 	videoMimeType,
 } from "../../../utils/globalVariable";
 import { handleKeyDown } from "../../../utils/rmvHtmlTag";
+
+const baseValues = {
+	video_title: "",
+	price: "",
+	description: "",
+};
 
 const baseErrors = {
 	video: "",
@@ -39,11 +46,12 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 		description,
 		workout_id,
 	} = update;
-	const [editVideo, setEditVideo] = useState("");
-	const [editThumbnail, setEditThumbnail] = useState("");
+	const [values, setValues] = useState(baseValues);
+	const [selectedWorkout, setSelectedWorkout] = useState("");
+	const [editVideo, setEditVideo] = useState(null);
+	const [editThumbnail, setEditThumbnail] = useState(null);
 	const [videoDataURL, setVideoDataURL] = useState(null);
 	const [thumbnailDataURL, setThumbnailDataURL] = useState(null);
-	const [title, setTitle] = useState("");
 	const [errors, setErrors] = useState(baseErrors);
 	const dispatch = useDispatch();
 	const workoutList = useSelector((state) => state.workout.data);
@@ -55,8 +63,16 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 	const MAX_FILE_SIZE_IMAGE = 3072;
 
 	useEffect(() => {
-		dispatch(fetchWorkoutList());
+		dispatch(fetchWorkoutList(1000));
 	}, [loading, dispatch]);
+
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+		setValues({
+			...values,
+			[name]: value,
+		});
+	};
 
 	const handleUploadVideo = (e) => {
 		e.preventDefault();
@@ -147,7 +163,7 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 		const price = Number(formData.get("price"));
 		const description = formData.get("description");
 
-		if (!errors.video) {
+		if (!errors.video && !errors.thumbnail) {
 			dispatch(editOnlineClasses({ class_id, video_title, workout_id, price, description })).then(
 				() => {
 					const video = formData.get("video");
@@ -231,7 +247,7 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 												name="video_title"
 												maxLength={maxTitle}
 												onInput={maxLengthCheck}
-												onChange={(e) => setTitle(e.target.value)}
+												onChange={handleChange}
 												className={inputNotError}
 												placeholder=" "
 												defaultValue={video_title}
@@ -243,9 +259,9 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 												</span>
 											</label>
 										</div>
-										{title ? (
+										{values.video_title ? (
 											<h1 className="mt-2 text-end text-xs font-normal text-dark-4 md:text-sm">
-												{title.length}/{maxTitle}
+												{values.video_title.length}/{maxTitle}
 											</h1>
 										) : (
 											<h1 className="mt-2 text-end text-xs font-normal text-dark-4 md:text-sm">
@@ -265,6 +281,7 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 											name="workout_id"
 											placeholder="Select workout category"
 											noOptionsMessage={() => "Workout data not found"}
+											onChange={(e) => setSelectedWorkout(e.value)}
 										/>
 									</div>
 									<div className="relative">
@@ -361,6 +378,7 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 											className={inputNotError}
 											placeholder=" "
 											defaultValue={price}
+											onChange={handleChange}
 										/>
 										<label htmlFor="price" className={labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
@@ -376,7 +394,8 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 											className={inputNotError}
 											placeholder=" "
 											defaultValue={description}
-											onKeyDown={handleKeyDown}></textarea>
+											onKeyDown={handleKeyDown}
+											onChange={handleChange}></textarea>
 										<label htmlFor="description" className={labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Information
@@ -394,8 +413,27 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 										<PulseLoader size={5} color={"#ffffff"} />
 									</button>
 								) : (
-									<button type="submit" className={saveButton}>
-										Save
+									<button
+										type="submit"
+										className={
+											!values.video_title &&
+											!selectedWorkout &&
+											!values.price &&
+											!values.description &&
+											!editVideo &&
+											!editThumbnail
+												? disabledButton
+												: saveButton
+										}
+										disabled={
+											!values.video_title &&
+											!selectedWorkout &&
+											!values.price &&
+											!values.description &&
+											!editVideo &&
+											!editThumbnail
+										}>
+										Save Changes
 									</button>
 								)}
 							</div>

@@ -33,7 +33,7 @@ const MembershipList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			MembershipAPI.searchMembership(debouncedKeyword.toLowerCase()).then((result) =>
+			MembershipAPI.searchMembership(debouncedKeyword.toLowerCase(), 1000).then((result) =>
 				setMembership({ status: true, data: result.data.data })
 			);
 		} else {
