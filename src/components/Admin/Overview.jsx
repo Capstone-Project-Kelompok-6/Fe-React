@@ -256,7 +256,7 @@ const Overview = () => {
 						<div className="rounded-xl bg-white p-4 shadow-4 lg:col-span-8">
 							<div className="flex flex-col items-center space-x-4 md:flex-row">
 								<div className="mb-4 min-w-0 flex-1 md:mb-0">
-									<p className="text-sm font-medium text-neutral-80 md:text-base">
+									<p className="text-center text-sm font-medium text-neutral-80 md:text-base">
 										Booking Offline Class
 									</p>
 									<div className="flex items-center justify-center">
@@ -266,7 +266,7 @@ const Overview = () => {
 									</div>
 								</div>
 								<div className="min-w-0 flex-1">
-									<p className="text-sm font-medium text-neutral-80 md:text-base">
+									<p className="text-center text-sm font-medium text-neutral-80 md:text-base">
 										Booking Online Class
 									</p>
 									<div className="flex items-center justify-center">
