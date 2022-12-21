@@ -164,51 +164,51 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 		const description = formData.get("description");
 
 		if (!errors.video && !errors.thumbnail) {
-			dispatch(editOnlineClasses({ class_id, video_title, workout_id, price, description })).then(
-				() => {
-					const video = formData.get("video");
-					const thumbnail = formData.get("thumbnail");
-					if (video.name !== "" && thumbnail.name !== "") {
-						dispatch(
-							editOnlineVideoClasses({ class_id, video, video_name, thumbnail, thumbnail_name })
-						).then((res) => {
-							if (res) {
-								handleModalEditTrigger();
-								handleActionDropdown();
-								setTimeout(
-									() =>
-										Swal.fire({
-											icon: "success",
-											title: "Updated",
-											text: "Online classes data successfully updated",
-											showConfirmButton: false,
-											timer: 2000,
-											background: "#ffffff",
-										}),
-									1000
-								);
-								dispatch(setLoaderSubmit(false));
-							}
-						});
-					} else {
-						handleModalEditTrigger();
-						handleActionDropdown();
-						setTimeout(
-							() =>
-								Swal.fire({
-									icon: "success",
-									title: "Updated",
-									text: "Online classes data successfully updated",
-									showConfirmButton: false,
-									timer: 2000,
-									background: "#ffffff",
-								}),
-							1000
-						);
-						dispatch(setLoaderSubmit(false));
-					}
+			dispatch(
+				editOnlineClasses({ class_id, workout, video_title, workout_id, price, description })
+			).then(() => {
+				const video = formData.get("video");
+				const thumbnail = formData.get("thumbnail");
+				if (video.name !== "" && thumbnail.name !== "") {
+					dispatch(
+						editOnlineVideoClasses({ class_id, video, video_name, thumbnail, thumbnail_name })
+					).then((res) => {
+						if (res) {
+							handleModalEditTrigger();
+							handleActionDropdown();
+							setTimeout(
+								() =>
+									Swal.fire({
+										icon: "success",
+										title: "Updated",
+										text: "Online classes data successfully updated",
+										showConfirmButton: false,
+										timer: 2000,
+										background: "#ffffff",
+									}),
+								1000
+							);
+							dispatch(setLoaderSubmit(false));
+						}
+					});
+				} else {
+					handleModalEditTrigger();
+					handleActionDropdown();
+					setTimeout(
+						() =>
+							Swal.fire({
+								icon: "success",
+								title: "Updated",
+								text: "Online classes data successfully updated",
+								showConfirmButton: false,
+								timer: 2000,
+								background: "#ffffff",
+							}),
+						1000
+					);
+					dispatch(setLoaderSubmit(false));
 				}
-			);
+			});
 		} else {
 			setTimeout(
 				() =>
