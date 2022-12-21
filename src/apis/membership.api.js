@@ -15,9 +15,14 @@ const MembershipAPI = {
 			throw new Error(message);
 		}
 	},
-	async searchMembership(keyword) {
+	async searchMembership(keyword, limit) {
 		try {
-			const response = await axiosInstance.get(`/users?query=${keyword}`);
+			const config = {
+				params: {
+					limit,
+				},
+			};
+			const response = await axiosInstance.get(`/users?query=${keyword}`, config);
 			return response;
 		} catch (error) {
 			const { message } = error.response.data;

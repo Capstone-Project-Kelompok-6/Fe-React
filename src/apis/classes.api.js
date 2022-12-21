@@ -17,27 +17,42 @@ const ClassesAPI = {
 			throw new Error(message);
 		}
 	},
-	async getOfflineClassesByPrices(price) {
+	async getOfflineClassesByPrices(price, limit) {
 		try {
-			const response = await axiosInstance.get(`/classes/offline?price=${price}`);
+			const config = {
+				params: {
+					limit,
+				},
+			};
+			const response = await axiosInstance.get(`/classes/offline?price=${price}`, config);
 			return response;
 		} catch (error) {
 			const { message } = error.response.data;
 			throw new Error(message);
 		}
 	},
-	async serchOfflineClasses(keyword) {
+	async serchOfflineClasses(keyword, limit) {
 		try {
-			const response = await axiosInstance.get(`/classes/offline?query=${keyword}`);
+			const config = {
+				params: {
+					limit,
+				},
+			};
+			const response = await axiosInstance.get(`/classes/offline?query=${keyword}`, config);
 			return response;
 		} catch (error) {
 			const { message } = error.response.data;
 			throw new Error(message);
 		}
 	},
-	async filterOfflineClasses(workout) {
+	async filterOfflineClasses(workout, limit) {
 		try {
-			const response = await axiosInstance.get(`/classes/offline?workout=${workout}`);
+			const config = {
+				params: {
+					limit,
+				},
+			};
+			const response = await axiosInstance.get(`/classes/offline?workout=${workout}`, config);
 			return response;
 		} catch (error) {
 			const { message } = error.response.data;
@@ -89,27 +104,28 @@ const ClassesAPI = {
 			throw new Error(message);
 		}
 	},
-	async getOnlineClassesByPrices(price) {
+	async serchOnlineClasses(keyword, limit) {
 		try {
-			const response = await axiosInstance.get(`/classes/online?price=${price}`);
+			const config = {
+				params: {
+					limit,
+				},
+			};
+			const response = await axiosInstance.get(`/classes/online?query=${keyword}`, config);
 			return response;
 		} catch (error) {
 			const { message } = error.response.data;
 			throw new Error(message);
 		}
 	},
-	async serchOnlineClasses(keyword) {
+	async filterOnlineClasses(workout, limit) {
 		try {
-			const response = await axiosInstance.get(`/classes/online?query=${keyword}`);
-			return response;
-		} catch (error) {
-			const { message } = error.response.data;
-			throw new Error(message);
-		}
-	},
-	async filterOnlineClasses(workout) {
-		try {
-			const response = await axiosInstance.get(`/classes/online?workout=${workout}`);
+			const config = {
+				params: {
+					limit,
+				},
+			};
+			const response = await axiosInstance.get(`/classes/online?workout=${workout}`, config);
 			return response;
 		} catch (error) {
 			const { message } = error.response.data;

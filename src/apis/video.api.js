@@ -16,9 +16,14 @@ const VideoAPI = {
 			throw new Error(message);
 		}
 	},
-	async searchVideo(keyword) {
+	async searchVideo(keyword, limit) {
 		try {
-			const response = await axiosInstance.get(`/contents?query=${keyword}`);
+			const config = {
+				params: {
+					limit,
+				},
+			};
+			const response = await axiosInstance.get(`/contents?query=${keyword}`, config);
 			return response;
 		} catch (error) {
 			const { message } = error.response.data;

@@ -16,9 +16,14 @@ const WorkoutAPI = {
 			throw new Error(message);
 		}
 	},
-	async searchWorkout(keyword) {
+	async searchWorkout(keyword, limit) {
 		try {
-			const response = await axiosInstance.get(`/workouts?query=${keyword}`);
+			const config = {
+				params: {
+					limit,
+				},
+			};
+			const response = await axiosInstance.get(`/workouts?query=${keyword}`, config);
 			return response;
 		} catch (error) {
 			const { message } = error.response.data;
