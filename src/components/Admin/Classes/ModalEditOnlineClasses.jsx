@@ -165,13 +165,35 @@ const ModalEditOnlineClasses = ({ handleModalEditTrigger, handleActionDropdown, 
 
 		if (!errors.video && !errors.thumbnail) {
 			dispatch(
-				editOnlineClasses({ class_id, workout, video_title, workout_id, price, description })
+				editOnlineClasses({
+					class_id,
+					workout,
+					video_title,
+					workout_id,
+					price,
+					description,
+					video,
+					video_name,
+					thumbnail,
+					thumbnail_name,
+				})
 			).then(() => {
 				const video = formData.get("video");
 				const thumbnail = formData.get("thumbnail");
 				if (video.name !== "" && thumbnail.name !== "") {
 					dispatch(
-						editOnlineVideoClasses({ class_id, video, video_name, thumbnail, thumbnail_name })
+						editOnlineVideoClasses({
+							class_id,
+							workout,
+							video_title,
+							workout_id,
+							price,
+							description,
+							video,
+							video_name,
+							thumbnail,
+							thumbnail_name,
+						})
 					).then((res) => {
 						if (res) {
 							handleModalEditTrigger();
