@@ -33,16 +33,16 @@ const baseValues = {
 };
 
 const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
-	const [file, setFile] = useState(null);
-	const [fileDataURL, setFileDataURL] = useState(null);
+	const [addImage, setAddImage] = useState(null);
+	const [imageDataURL, setImageDataURL] = useState(null);
 	const [errors, setErrors] = useState(baseErrors);
 	const [values, setValues] = useState(baseValues);
 	const imageInstructor = useRef(null);
 	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 	const dispatch = useDispatch();
 
-	const MAX_FILE_SIZE = 3072;
 	const maxLengthPhoneNumber = 13;
+	const MAX_FILE_SIZE_IMAGE = 3072;
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -111,7 +111,7 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 				image: "Image mime type is not valid",
 			});
 			return;
-		} else if (fileSizeKiloBytes > MAX_FILE_SIZE) {
+		} else if (fileSizeKiloBytes > MAX_FILE_SIZE_IMAGE) {
 			setErrors({
 				...errors,
 				image: "File size is greater than maximum limit",
@@ -121,21 +121,21 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 			setErrors({ ...errors, image: "" });
 		}
 
-		setFile(file);
+		setAddImage(file);
 	};
 
 	useEffect(() => {
 		let fileReader,
 			isCancel = false;
-		if (file) {
+		if (addImage) {
 			fileReader = new FileReader();
 			fileReader.onload = (e) => {
 				const { result } = e.target;
 				if (result && !isCancel) {
-					setFileDataURL(result);
+					setImageDataURL(result);
 				}
 			};
-			fileReader.readAsDataURL(file);
+			fileReader.readAsDataURL(addImage);
 		}
 		return () => {
 			isCancel = true;
@@ -143,10 +143,10 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 				fileReader.abort();
 			}
 		};
-	}, [file]);
+	}, [addImage]);
 
 	const handleCancelUpload = () => {
-		setFileDataURL("");
+		setImageDataURL("");
 		imageInstructor.current.value = "";
 	};
 
@@ -161,39 +161,34 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 		const phone_number = formData.get("phone_number");
 
 		if (!errors.instructor_name && !errors.image && !errors.email && !errors.phone_number) {
-			try {
-				dispatch(
-					createInstructor({
-						instructor_name,
-						image,
-						email,
-						phone_number,
-					})
-				).then((res) => {
-					if (!res.error) {
-						setTimeout(
-							() =>
-								Swal.fire({
-									icon: "success",
-									title: "Saved",
-									text: "Instructor data successfully saved",
-									showConfirmButton: false,
-									timer: 2000,
-									background: "#ffffff",
-								}),
-							1000
-						);
-						handleModalCreateTrigger();
-						dispatch(setLoaderSubmit(false));
-					} else {
-						Swal.fire("Sorry", res.error.message.split(":")[1], "info");
-						dispatch(setLoaderSubmit(false));
-					}
-				});
-			} catch (error) {
-				Swal.fire("Sorry", error.message, "info");
-				dispatch(setLoaderSubmit(false));
-			}
+			dispatch(
+				createInstructor({
+					instructor_name,
+					image,
+					email,
+					phone_number,
+				})
+			).then((res) => {
+				if (!res.error) {
+					setTimeout(
+						() =>
+							Swal.fire({
+								icon: "success",
+								title: "Saved",
+								text: "Instructor data successfully saved",
+								showConfirmButton: false,
+								timer: 2000,
+								background: "#ffffff",
+							}),
+						1000
+					);
+					handleModalCreateTrigger();
+					dispatch(setLoaderSubmit(false));
+				} else {
+					Swal.fire("Sorry", res.error.message.split(":")[1], "info");
+					dispatch(setLoaderSubmit(false));
+				}
+			});
 		} else {
 			setTimeout(
 				() =>
@@ -251,11 +246,11 @@ const ModalCreateInstructor = ({ handleModalCreateTrigger }) => {
 									</div>
 								</div>
 								<div className="relative">
-									{fileDataURL ? (
+									{imageDataURL ? (
 										<div className="my-5 flex w-full items-center justify-center">
 											<div className="flex flex-col items-center justify-center">
 												<img
-													src={fileDataURL}
+													src={imageDataURL}
 													alt=""
 													className="h-32 w-32 rounded-full border-2 border-dashed border-neutral-80 object-cover"
 												/>

@@ -135,7 +135,7 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 		const price = Number(formData.get("price"));
 		const description = formData.get("description");
 
-		if (!errors.video) {
+		if (!errors.video && !errors.thumbnail) {
 			dispatch(createOnlineClasses({ video_title, workout_id, price, description })).then(
 				(result) => {
 					const class_id = result.payload.class_id;
@@ -227,6 +227,7 @@ const ModalCreateOnlineClasses = ({ handleModalCreateTrigger }) => {
 												className={inputNotError}
 												placeholder=" "
 												required
+												onKeyDown={handleKeyDown}
 											/>
 
 											<label htmlFor="video_title" className={labelNotError}>
