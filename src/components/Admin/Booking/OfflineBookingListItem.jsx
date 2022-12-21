@@ -52,10 +52,10 @@ const OfflineBookingListItem = ({ data }) => {
 								<span className="text-[10px] md:text-xs">{status}</span>
 							</p>
 						)}
-						{status === "PENDING" && (
-							<p className="rounded-full border border-secondary-orange bg-secondary-orange bg-opacity-25 px-2 py-0 font-medium text-secondary-orange md:px-3">
+						{(status === "PENDING" || status === "") && (
+							<p className="rounded-full border border-secondary-yellow bg-secondary-yellow bg-opacity-25 px-2 py-0 font-medium text-tertiary-yellow md:px-3">
 								<i className="fi fi-sr-rec mr-1 mt-1 text-[6px] md:text-[8px]"></i>
-								<span className="text-[10px] md:text-xs">{status}</span>
+								<span className="text-[10px] md:text-xs">PENDING</span>
 							</p>
 						)}
 					</div>
@@ -100,27 +100,32 @@ const OfflineBookingListItem = ({ data }) => {
 						alt={image_name}
 					/>
 					<div className="flex flex-col py-0 px-0 leading-normal md:py-2 md:px-4">
-						<div className="inline-flex items-center">
-							<h5 className="mb-2 mt-4 text-base font-semibold tracking-tight text-neutral-100-2 md:mt-2">
-								{workout}
-							</h5>
-							{is_expired === false ? (
-								<p className="rounded-full px-2 py-1 font-semibold text-secondary-green md:px-3">
-									<span className="text-xs">Active</span>
-									<i className="fi fi-sr-rec ml-1 mt-1 text-[8px]"></i>
-								</p>
-							) : (
-								<p className="rounded-full px-2 py-1 font-medium text-secondary-red md:px-3">
-									<span className="text-xs">Expired</span>
-									<i className="fi fi-sr-rec ml-1 mt-1 text-[8px]"></i>
-								</p>
-							)}
+						<div className="-mb-0 mt-2 grid grid-cols-2 gap-16 md:-mb-6 md:grid-cols-2 md:gap-12 xl:grid-cols-2">
+							<div className="flex">
+								<h5 className="text-base font-semibold tracking-tight text-neutral-100-2">
+									{workout}
+								</h5>
+							</div>
+							<div className="inline-flex items-center text-sm font-medium">
+								<span className="mt-1 text-secondary-navy">
+									<i className="fi fi-sr-info mr-2"></i>
+								</span>
+								{is_expired === false ? (
+									<p className="font-medium text-secondary-green">
+										<span className="text-sm">Active Class</span>
+									</p>
+								) : (
+									<p className="font-medium text-secondary-red">
+										<span className="text-sm">Expired Class</span>
+									</p>
+								)}
+							</div>
 						</div>
-						<div className="-mb-0 grid grid-cols-2 gap-16 md:-mb-6 md:grid-cols-2 md:gap-12 xl:grid-cols-2">
+						<div className="mt-4 grid grid-cols-2 gap-16 md:mt-8 md:-mb-6 md:grid-cols-2 md:gap-12 xl:grid-cols-2">
 							<div className="flex">
 								<div className="inline-flex flex-shrink-0 items-center text-sm">
 									<span className="mt-1 text-primary-violet">
-										<i className="fi fi-sr-clock fi-sr-briefcase mr-2"></i>
+										<i className="fi fi-sr-briefcase mr-2"></i>
 									</span>
 									<p className="font-medium tracking-tight text-neutral-100-2">{instructor_name}</p>
 								</div>
@@ -156,12 +161,14 @@ const OfflineBookingListItem = ({ data }) => {
 										</span>
 									</div>
 									<div className="flex-1 leading-relaxed">
-										<p className="font-medium tracking-tight text-neutral-100-2">
-											{class_dates &&
-												class_dates.map((date) => {
-													return date + "; ";
-												})}
-										</p>
+										{class_dates &&
+											class_dates.map((date) => {
+												return (
+													<h5 className="font-normal tracking-tight text-neutral-100-2" key={date}>
+														{date}
+													</h5>
+												);
+											})}
 									</div>
 								</div>
 							</div>

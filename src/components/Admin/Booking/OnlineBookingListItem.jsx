@@ -35,7 +35,7 @@ const OnlineBookingListItem = ({ data }) => {
 							</p>
 						)}
 						{status === "" && (
-							<p className="rounded-full border border-secondary-orange bg-secondary-orange bg-opacity-25 px-2 py-0 font-medium text-secondary-orange md:px-3">
+							<p className="rounded-full border border-secondary-yellow bg-secondary-yellow bg-opacity-25 px-2 py-0 font-medium text-tertiary-yellow md:px-3">
 								<i className="fi fi-sr-rec mr-1 mt-1 text-[6px] md:text-[8px]"></i>
 								<span className="text-[10px] md:text-xs">PENDING</span>
 							</p>
@@ -71,7 +71,7 @@ const OnlineBookingListItem = ({ data }) => {
 								</p>
 							</div>
 						</div>
-						<div className="mt-4 grid grid-cols-1 gap-3 md:mt-4 md:grid-cols-2 md:gap-12 xl:grid-cols-2">
+						<div className="mt-4 grid grid-cols-2 gap-32 md:mt-4 md:grid-cols-2 md:gap-12 xl:grid-cols-2">
 							<div className="flex">
 								<div className="flex-shrink-0">
 									<span className="mt-1 text-sm text-secondary-navy">
@@ -94,55 +94,18 @@ const OnlineBookingListItem = ({ data }) => {
 									</div>
 									<div className="flex-1 leading-relaxed">
 										{is_expired === false ? (
-											<p className="font-semibold text-secondary-green">
-												<span className="text-sm">Active</span>
+											<p className="font-medium text-secondary-green">
+												<span className="text-sm">Active Class</span>
 											</p>
 										) : (
 											<p className="font-medium text-secondary-red">
-												<span className="text-sm">Expired</span>
+												<span className="text-sm">Expired Class</span>
 											</p>
 										)}
 									</div>
 								</div>
 							</div>
 						</div>
-						{/* <div className="mb-2 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-12 xl:grid-cols-2">
-							<div className="flex">
-								<div className="inline-flex flex-shrink-0 items-center">
-									<span className="mt-1 text-sm text-secondary-navy">
-										<i className="fi fi-sr-user fi-sr-briefcase mr-2"></i>
-									</span>
-									<div className="flex-1 leading-relaxed">
-										<p className="pt-4 text-sm font-medium tracking-tight text-neutral-100-2">
-											{full_name}
-										</p>
-										<p className="text-xs font-normal text-neutral-60">{email}</p>
-									</div>
-								</div>
-								<div className="text-sm font-medium">
-									<div className="flex">
-										<div className="flex-shrink-0">
-											<span className="text-secondary-navy">
-												<i className="fi fi-sr-info"></i>
-											</span>
-										</div>
-										<div className="flex-1 leading-relaxed">
-											{is_expired === false ? (
-												<p className="rounded-full px-2 py-1 font-semibold text-secondary-green md:px-3">
-													<span className="text-xs">Active</span>
-													<i className="fi fi-sr-rec ml-1 mt-1 text-[8px]"></i>
-												</p>
-											) : (
-												<p className="rounded-full px-2 py-1 font-medium text-secondary-red md:px-3">
-													<span className="text-xs">Expired</span>
-													<i className="fi fi-sr-rec ml-1 mt-1 text-[8px]"></i>
-												</p>
-											)}
-										</div>
-									</div>
-								</div>
-							</div>
-						</div> */}
 					</div>
 				</div>
 			</div>
