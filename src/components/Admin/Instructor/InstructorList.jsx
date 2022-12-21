@@ -37,7 +37,7 @@ const InstructorList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			InstructorAPI.searchInstructor(debouncedKeyword.toLowerCase()).then((result) =>
+			InstructorAPI.searchInstructor(debouncedKeyword.toLowerCase(), 10).then((result) =>
 				setInstructor({ status: true, data: result.data.data })
 			);
 		} else {

@@ -1,14 +1,24 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 
-import { Navbar, Hero, AboutUs, ClassesInfo, Testimonial, Footer, ClassesList, InstructorInfo, ToTop } from "../components/LayoutLanding";
+import {
+	Navbar,
+	Hero,
+	AboutUs,
+	ClassesInfo,
+	Testimonial,
+	Footer,
+	ClassesList,
+	InstructorInfo,
+	ToTop,
+} from "../components/LayoutLanding";
 
 const LandingPage = () => {
 	return (
 		<>
 			<Helmet>
-				<title>Gym Membership</title>
-				<meta name="website" content="Gym Membership" />
+				<title>WorkFit</title>
+				<meta name="website" content="WorkFit" />
 			</Helmet>
 			<Navbar />
 			<main>

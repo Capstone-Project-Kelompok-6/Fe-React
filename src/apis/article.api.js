@@ -16,9 +16,14 @@ const ArticleAPI = {
 			throw new Error(message);
 		}
 	},
-	async searchArticle(keyword) {
+	async searchArticle(keyword, limit) {
 		try {
-			const response = await axiosInstance.get(`/articles?query=${keyword}`);
+			const config = {
+				params: {
+					limit,
+				},
+			};
+			const response = await axiosInstance.get(`/articles?query=${keyword}`, config);
 			return response;
 		} catch (error) {
 			const { message } = error.response.data;

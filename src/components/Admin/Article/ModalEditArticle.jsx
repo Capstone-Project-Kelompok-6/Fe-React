@@ -4,12 +4,21 @@ import Swal from "sweetalert2";
 import { editArticle } from "../../../stores/features/articleSlice";
 import {
 	cancelButton,
+	disabledButton,
 	inputNotError,
 	labelNotError,
 	saveButton,
+	videoMimeType,
 } from "../../../utils/globalVariable";
 import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
 import { PulseLoader } from "react-spinners";
+import { handleKeyDown } from "../../../utils/rmvHtmlTag";
+import { maxLengthCheck } from "../../../utils/maxLengthCheck";
+
+const baseValues = {
+	title: "",
+	description: "",
+};
 
 const baseErrors = {
 	image: "",
@@ -17,13 +26,23 @@ const baseErrors = {
 
 const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update }) => {
 	const { article_id, title, article_image, image_name, description } = update;
-	const [file, setFile] = useState(null);
-	const [fileDataURL, setFileDataURL] = useState(null);
+	const [values, setValues] = useState(baseValues);
+	const [editImage, setEditImage] = useState(null);
+	const [imageDataURL, setImageDataURL] = useState(null);
 	const [errors, setErrors] = useState(baseErrors);
 	const dispatch = useDispatch();
 	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
-	const MAX_FILE_SIZE = 3072;
+	const maxTitle = 100;
+	const MAX_FILE_SIZE_IMAGE = 3072;
+
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+		setValues({
+			...values,
+			[name]: value,
+		});
+	};
 
 	const handleUploadImage = (e) => {
 		e.preventDefault();
@@ -33,7 +52,13 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 
 		const fileSizeKiloBytes = file.size / 1024;
 
-		if (fileSizeKiloBytes > MAX_FILE_SIZE) {
+		if (!file.type.match(videoMimeType)) {
+			setErrors({
+				...errors,
+				video: "Video mime type is not valid",
+			});
+			return;
+		} else if (fileSizeKiloBytes > MAX_FILE_SIZE_IMAGE) {
 			setErrors({
 				...errors,
 				image: "File size is greater than maximum limit",
@@ -43,21 +68,21 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 			setErrors({ ...errors, image: "" });
 		}
 
-		setFile(file);
+		setEditImage(file);
 	};
 
 	useEffect(() => {
 		let fileReader,
 			isCancel = false;
-		if (file) {
+		if (editImage) {
 			fileReader = new FileReader();
 			fileReader.onload = (e) => {
 				const { result } = e.target;
 				if (result && !isCancel) {
-					setFileDataURL(result);
+					setImageDataURL(result);
 				}
 			};
-			fileReader.readAsDataURL(file);
+			fileReader.readAsDataURL(editImage);
 		}
 		return () => {
 			isCancel = true;
@@ -65,7 +90,7 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 				fileReader.abort();
 			}
 		};
-	}, [file]);
+	}, [editImage]);
 
 	const handleUpdate = (e) => {
 		e.preventDefault();
@@ -76,33 +101,28 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 		const description = formData.get("description");
 
 		if (!errors.image) {
-			try {
-				dispatch(editArticle({ article_id, title, image, image_name, description })).then((res) => {
-					if (!res.error) {
-						setTimeout(
-							() =>
-								Swal.fire({
-									icon: "success",
-									title: "Update",
-									text: "Article data successfully updated",
-									showConfirmButton: false,
-									timer: 2000,
-									background: "#ffffff",
-								}),
-							1000
-						);
-						handleModalEditTrigger();
-						handleActionDropdown();
-						dispatch(setLoaderSubmit(false));
-					} else {
-						Swal.fire("Sorry", "One article just have one image", "info");
-						dispatch(setLoaderSubmit(false));
-					}
-				});
-			} catch (error) {
-				Swal.fire("Sorry", "Error", "info");
-				dispatch(setLoaderSubmit(false));
-			}
+			dispatch(editArticle({ article_id, title, image, image_name, description })).then((res) => {
+				if (!res.error) {
+					setTimeout(
+						() =>
+							Swal.fire({
+								icon: "success",
+								title: "Update",
+								text: "Article data successfully updated",
+								showConfirmButton: false,
+								timer: 2000,
+								background: "#ffffff",
+							}),
+						1000
+					);
+					handleModalEditTrigger();
+					handleActionDropdown();
+					dispatch(setLoaderSubmit(false));
+				} else {
+					Swal.fire("Sorry", "One article just have one image", "info");
+					dispatch(setLoaderSubmit(false));
+				}
+			});
 		} else {
 			setTimeout(
 				() =>
@@ -131,8 +151,8 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 									Edit Article
 								</h3>
 							</div>
-							<div className="h-[65vh] overflow-y-auto p-6">
-								<div className="h-[90&] space-y-6">
+							<div className="h-[68vh] overflow-y-auto px-6 pt-2 pb-6">
+								<div className="h-[90%] space-y-6">
 									<div className="relative">
 										<div className="relative">
 											<input
@@ -143,6 +163,10 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 												placeholder=" "
 												required
 												defaultValue={title}
+												onChange={handleChange}
+												maxLength={maxTitle}
+												onInput={maxLengthCheck}
+												onKeyDown={handleKeyDown}
 											/>
 											<label htmlFor="workout" className={labelNotError}>
 												<span className="block after:ml-1 after:text-red-500 after:content-['*']">
@@ -150,13 +174,22 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 												</span>
 											</label>
 										</div>
+										{values.title ? (
+											<h1 className="mt-2 text-end text-xs font-normal text-dark-4 md:text-sm">
+												{values.title.length}/{maxTitle}
+											</h1>
+										) : (
+											<h1 className="mt-2 text-end text-xs font-normal text-dark-4 md:text-sm">
+												{title.length}/{maxTitle}
+											</h1>
+										)}
 									</div>
 									<div className="relative">
-										{fileDataURL ? (
+										{imageDataURL ? (
 											<div className="my-5 flex w-full items-center justify-center">
 												<div className="flex flex-col items-center justify-center">
 													<img
-														src={fileDataURL}
+														src={imageDataURL}
 														alt=""
 														className="h-52 w-80 rounded-lg border-2 border-dashed border-neutral-80 object-cover object-center"
 													/>
@@ -204,7 +237,8 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 											placeholder=" "
 											required
 											defaultValue={description}
-										></textarea>
+											onKeyDown={handleKeyDown}
+											onChange={handleChange}></textarea>
 										<label htmlFor="description" className={labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Description
@@ -222,8 +256,15 @@ const ModalEditArticle = ({ handleModalEditTrigger, handleActionDropdown, update
 										<PulseLoader size={5} color={"#ffffff"} />
 									</button>
 								) : (
-									<button type="submit" className={saveButton}>
-										Save
+									<button
+										type="submit"
+										className={
+											!values.title && !values.description && !editImage
+												? disabledButton
+												: saveButton
+										}
+										disabled={!values.title && !values.description && !editImage}>
+										Save Changes
 									</button>
 								)}
 							</div>

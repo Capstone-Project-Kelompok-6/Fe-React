@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { editMembership } from "../../../stores/features/membershipSlice";
 import { PulseLoader } from "react-spinners";
 import {
 	cancelButton,
+	disabledButton,
 	inputNotError,
 	labelNotError,
 	saveButton,
@@ -16,6 +17,11 @@ const ModalEditMembership = ({ handleModalEditTrigger, handleActionDrowpdon, upd
 	const { user_id, email } = update;
 	const dispatch = useDispatch();
 	const loaderSubmit = useSelector((state) => state.loaderSubmit);
+	const [value, setValue] = useState("");
+
+	const handleChange = (e) => {
+		setValue(e.target.value);
+	};
 
 	const handleUpdate = (e) => {
 		e.preventDefault();
@@ -24,33 +30,28 @@ const ModalEditMembership = ({ handleModalEditTrigger, handleActionDrowpdon, upd
 		const formData = new FormData(e.target);
 		const email = formData.get("email");
 
-		try {
-			dispatch(editMembership({ user_id, email })).then((res) => {
-				if (!res.error) {
-					setTimeout(
-						() =>
-							Swal.fire({
-								icon: "success",
-								title: "Updated",
-								text: "Membership data successfully updated",
-								showConfirmButton: false,
-								timer: 2000,
-								background: "#ffffff",
-							}),
-						1000
-					);
-					dispatch(setLoaderSubmit(false));
-					handleModalEditTrigger();
-					handleActionDrowpdon();
-				} else {
-					Swal.fire("Sorry", "Email is already exists", "error");
-					dispatch(setLoaderSubmit(false));
-				}
-			});
-		} catch (error) {
-			Swal.fire("Sorry", error.message, "error");
-			dispatch(setLoaderSubmit(false));
-		}
+		dispatch(editMembership({ user_id, email })).then((res) => {
+			if (!res.error) {
+				setTimeout(
+					() =>
+						Swal.fire({
+							icon: "success",
+							title: "Updated",
+							text: "Membership data successfully updated",
+							showConfirmButton: false,
+							timer: 2000,
+							background: "#ffffff",
+						}),
+					1000
+				);
+				dispatch(setLoaderSubmit(false));
+				handleModalEditTrigger();
+				handleActionDrowpdon();
+			} else {
+				Swal.fire("Sorry", "Email is already exists", "error");
+				dispatch(setLoaderSubmit(false));
+			}
+		});
 	};
 
 	return (
@@ -76,6 +77,7 @@ const ModalEditMembership = ({ handleModalEditTrigger, handleActionDrowpdon, upd
 										placeholder=" "
 										required
 										defaultValue={email}
+										onChange={handleChange}
 									/>
 									<label htmlFor="email" className={labelNotError}>
 										<span className="block after:ml-1 after:text-red-500 after:content-['*']">
@@ -93,8 +95,11 @@ const ModalEditMembership = ({ handleModalEditTrigger, handleActionDrowpdon, upd
 										<PulseLoader size={5} color={"#ffffff"} />
 									</button>
 								) : (
-									<button type="submit" className={saveButton}>
-										Save
+									<button
+										type="submit"
+										className={!value ? disabledButton : saveButton}
+										disabled={!value}>
+										Save Changes
 									</button>
 								)}
 							</div>

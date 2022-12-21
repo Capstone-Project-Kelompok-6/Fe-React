@@ -38,12 +38,12 @@ const Overview = () => {
 	useEffect(() => {
 		dispatch(fetchInstructor(4));
 		dispatch(fetchMembership(4));
-		dispatch(fetchOfflineClasses());
-		dispatch(fetchOnlineClasses());
+		dispatch(fetchOfflineClasses(1000));
+		dispatch(fetchOnlineClasses(1000));
 		dispatch(fetchOfflineBookingList(1000));
-		dispatch(fetchWorkoutList());
+		dispatch(fetchWorkoutList(1000));
 		dispatch(fetchOnlineBookingList(1000));
-		dispatch(fetchVideo());
+		dispatch(fetchVideo(1000));
 	}, [dispatch]);
 
 	const bookingOffline = new Set();
@@ -74,7 +74,7 @@ const Overview = () => {
 		const book = [];
 		bookingOnline.forEach(function (val) {
 			book[[...bookingOnline].indexOf(val)] = 0;
-			bookingOfflineList.rows?.forEach(function (value) {
+			bookingOnlineList.rows?.forEach(function (value) {
 				if (val === value.workout) {
 					book[[...bookingOnline].indexOf(val)] += 1;
 				}
@@ -92,7 +92,7 @@ const Overview = () => {
 			datalabels: {
 				formatter: (ctx, value) => {
 					let percentage =
-						((ctx * 100) / value.dataset.data.reduce((sum, data) => sum + data, 0)).toFixed(0) +
+						((ctx * 100) / value.dataset.data.reduce((sum, data) => sum + data, 0)).toFixed(2) +
 						"%";
 					return percentage;
 				},
@@ -129,7 +129,7 @@ const Overview = () => {
 			datalabels: {
 				formatter: (ctx, value) => {
 					let percentage =
-						((ctx * 100) / value.dataset.data.reduce((sum, data) => sum + data, 0)).toFixed(0) +
+						((ctx * 100) / value.dataset.data.reduce((sum, data) => sum + data, 0)).toFixed(2) +
 						"%";
 					return percentage;
 				},
@@ -295,8 +295,7 @@ const Overview = () => {
 										<p className="text-base font-medium text-neutral-80">Instructors</p>
 										<Link
 											to="/instructor"
-											className="inline-flex items-center justify-center text-sm font-normal text-primary-violet hover:text-blue-600"
-										>
+											className="inline-flex items-center justify-center text-sm font-normal text-primary-violet hover:text-blue-600">
 											View all
 											<i className="fi fi-rr-angle-small-right ml-2 mt-1"></i>
 										</Link>
@@ -344,8 +343,7 @@ const Overview = () => {
 										<p className="text-base font-medium text-neutral-80">Members</p>
 										<Link
 											to="/membership"
-											className="inline-flex items-center justify-center text-sm font-normal text-primary-violet hover:text-blue-600"
-										>
+											className="inline-flex items-center justify-center text-sm font-normal text-primary-violet hover:text-blue-600">
 											View all
 											<i className="fi fi-rr-angle-small-right ml-2 mt-1"></i>
 										</Link>

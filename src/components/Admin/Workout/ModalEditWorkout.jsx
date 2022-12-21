@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import { editWorkout } from "../../../stores/features/workoutSlice";
 import {
 	cancelButton,
+	disabledButton,
+	imageMimeType,
 	inputError,
 	inputNotError,
 	labelError,
@@ -13,10 +15,12 @@ import {
 } from "../../../utils/globalVariable";
 import { PulseLoader } from "react-spinners";
 import { setLoaderSubmit } from "../../../stores/features/loaderSubmitSlice";
+import { handleKeyDown } from "../../../utils/rmvHtmlTag";
 
 const baseValues = {
 	workout: "",
 	image: "",
+	description: "",
 };
 
 const baseErrors = {
@@ -27,57 +31,53 @@ const baseErrors = {
 const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 	const { workout_id, workout_image, image_name, workout, description } = update;
 	const dispatch = useDispatch();
-	const [file, setFile] = useState(null);
-	const [fileDataURL, setFileDataURL] = useState(null);
+	const [editImage, setEditImage] = useState(null);
+	const [imageDataURL, setImageDataURL] = useState(null);
 	const [errors, setErrors] = useState(baseErrors);
 	const [values, setValues] = useState(baseValues);
 	const loaderSubmit = useSelector((state) => state.loaderSubmit);
 
-	const MAX_FILE_SIZE = 3072;
+	const MAX_FILE_SIZE_IMAGE = 3072;
 
 	const handleUpdate = (e) => {
 		e.preventDefault();
 		dispatch(setLoaderSubmit(true));
+
 		const formData = new FormData(e.target);
 		const workout = formData.get("workout");
 		const image = formData.get("image");
 		const description = formData.get("description");
 
 		if (!errors.workout && !errors.image) {
-			try {
-				dispatch(
-					editWorkout({
-						workout_id,
-						image,
-						image_name,
-						workout,
-						description,
-					})
-				).then((res) => {
-					if (!res.error) {
-						setTimeout(
-							() =>
-								Swal.fire({
-									icon: "success",
-									title: "Updated",
-									text: "Workout data successfully updated",
-									showConfirmButton: false,
-									timer: 2000,
-									background: "#ffffff",
-								}),
-							1000
-						);
-						dispatch(setLoaderSubmit(false));
-						handleModalEditTrigger();
-					} else {
-						Swal.fire("Sorry", "Workout already exists", "info");
-						dispatch(setLoaderSubmit(false));
-					}
-				});
-			} catch (error) {
-				Swal.fire("Sorry", error.message, "info");
-				dispatch(setLoaderSubmit(false));
-			}
+			dispatch(
+				editWorkout({
+					workout_id,
+					image,
+					image_name,
+					workout,
+					description,
+				})
+			).then((res) => {
+				if (!res.error) {
+					setTimeout(
+						() =>
+							Swal.fire({
+								icon: "success",
+								title: "Updated",
+								text: "Workout data successfully updated",
+								showConfirmButton: false,
+								timer: 2000,
+								background: "#ffffff",
+							}),
+						1000
+					);
+					dispatch(setLoaderSubmit(false));
+					handleModalEditTrigger();
+				} else {
+					Swal.fire("Sorry", "Workout already exists", "info");
+					dispatch(setLoaderSubmit(false));
+				}
+			});
 		} else {
 			setTimeout(
 				() =>
@@ -127,7 +127,13 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 
 		const fileSizeKiloBytes = file.size / 1024;
 
-		if (fileSizeKiloBytes > MAX_FILE_SIZE) {
+		if (!file.type.match(imageMimeType)) {
+			setErrors({
+				...errors,
+				image: "Image mime type is not valid",
+			});
+			return;
+		} else if (fileSizeKiloBytes > MAX_FILE_SIZE_IMAGE) {
 			setErrors({
 				...errors,
 				image: "File size is greater than maximum limit",
@@ -137,21 +143,21 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 			setErrors({ ...errors, image: "" });
 		}
 
-		setFile(file);
+		setEditImage(file);
 	};
 
 	useEffect(() => {
 		let fileReader,
 			isCancel = false;
-		if (file) {
+		if (editImage) {
 			fileReader = new FileReader();
 			fileReader.onload = (e) => {
 				const { result } = e.target;
 				if (result && !isCancel) {
-					setFileDataURL(result);
+					setImageDataURL(result);
 				}
 			};
-			fileReader.readAsDataURL(file);
+			fileReader.readAsDataURL(editImage);
 		}
 		return () => {
 			isCancel = true;
@@ -159,7 +165,7 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 				fileReader.abort();
 			}
 		};
-	}, [file]);
+	}, [editImage]);
 
 	return (
 		<div className="relative z-50">
@@ -174,8 +180,8 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 									Edit Workout
 								</h3>
 							</div>
-							<div className="h-[65vh] overflow-y-auto p-6">
-								<div className="h-[90&] space-y-6">
+							<div className="h-[68vh] overflow-y-auto px-6 pt-2 pb-6">
+								<div className="h-[90%] space-y-6">
 									<div>
 										<div className="relative">
 											<input
@@ -190,8 +196,7 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 											/>
 											<label
 												htmlFor="workout"
-												className={errors.workout ? labelError : labelNotError}
-											>
+												className={errors.workout ? labelError : labelNotError}>
 												<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 													Workout Name
 												</span>
@@ -206,11 +211,11 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 										</div>
 									</div>
 									<div className="relative">
-										{fileDataURL ? (
+										{imageDataURL ? (
 											<div className="my-5 flex w-full items-center justify-center">
 												<div className="flex flex-col items-center justify-center">
 													<img
-														src={fileDataURL}
+														src={imageDataURL}
 														alt=""
 														className="h-52 w-80 rounded-lg border-2 border-dashed border-neutral-80 object-cover object-center"
 													/>
@@ -257,7 +262,8 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 											rows="5"
 											className={inputNotError}
 											placeholder=" "
-										></textarea>
+											onKeyDown={handleKeyDown}
+											onChange={handleChange}></textarea>
 										<label htmlFor="description" className={labelNotError}>
 											<span className="block after:ml-1 after:text-red-500 after:content-['*']">
 												Information
@@ -275,7 +281,14 @@ const ModalEditWorkout = ({ handleModalEditTrigger, update }) => {
 										<PulseLoader size={5} color={"#ffffff"} />
 									</button>
 								) : (
-									<button type="submit" className={saveButton}>
+									<button
+										type="submit"
+										className={
+											!values.workout && !values.description && !editImage
+												? disabledButton
+												: saveButton
+										}
+										disabled={!values.workout && !values.description && !editImage}>
 										Save
 									</button>
 								)}

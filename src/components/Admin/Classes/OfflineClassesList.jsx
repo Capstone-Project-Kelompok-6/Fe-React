@@ -33,8 +33,9 @@ const OfflineClassesList = () => {
 		debouncedKeyword,
 		searchTrigger,
 		setSearchTrigger,
+		activeFilter,
+		setActiveFilter,
 	} = useHook();
-	const [active, setActive] = useState(0);
 
 	const dispatch = useDispatch();
 	const loading = useSelector((state) => state.offlineClasses.loading);
@@ -53,17 +54,17 @@ const OfflineClassesList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			ClassesAPI.serchOfflineClasses(debouncedKeyword.toLowerCase()).then((result) => {
+			ClassesAPI.serchOfflineClasses(debouncedKeyword.toLowerCase(), 1000).then((result) => {
 				setOfflineClasses({ data: result.data.data });
-				setActive(result.data.data.rows[0].workout);
+				setActiveFilter(result.data.data.rows[0].workout);
 			});
 		} else {
 			dispatch(setLoaderFetchData(true));
-			ClassesAPI.getOfflineClasses(10).then((result) => {
+			ClassesAPI.getOfflineClasses(1000).then((result) => {
 				setOfflineClasses({
 					data: result.data.data,
 				});
-				setActive(0);
+				setActiveFilter(0);
 				dispatch(setLoaderFetchData(false));
 			});
 		}
@@ -77,19 +78,19 @@ const OfflineClassesList = () => {
 		});
 	}, [loading]);
 
-	const filterItem = (workout) => {
+	const filterByWorkout = (workout) => {
 		dispatch(setLoaderFetchData(true));
-		ClassesAPI.filterOfflineClasses(workout).then((result) => {
+		ClassesAPI.filterOfflineClasses(workout, 1000).then((result) => {
 			setOfflineClasses({ data: result.data.data });
-			setActive(workout);
+			setActiveFilter(workout);
 			dispatch(setLoaderFetchData(false));
 		});
 	};
 
 	const filterAll = () => {
-		ClassesAPI.getOfflineClasses().then((result) => {
+		ClassesAPI.getOfflineClasses(1000).then((result) => {
 			setOfflineClasses({ data: result.data.data });
-			setActive(0);
+			setActiveFilter(0);
 		});
 	};
 
@@ -145,7 +146,7 @@ const OfflineClassesList = () => {
 									<ul className="-mb-px flex list-none overflow-x-scroll whitespace-nowrap text-center text-xs font-medium scrollbar-hide">
 										<li className="mr-2">
 											<button
-												className={active === 0 ? activeTab : notActiveTab}
+												className={activeFilter === 0 ? activeTab : notActiveTab}
 												onClick={() => {
 													filterAll();
 												}}>
@@ -172,8 +173,8 @@ const OfflineClassesList = () => {
 												return (
 													<li className="mr-2" key={workout}>
 														<button
-															className={active === workout ? activeTab : notActiveTab}
-															onClick={() => filterItem(workout)}>
+															className={activeFilter === workout ? activeTab : notActiveTab}
+															onClick={() => filterByWorkout(workout)}>
 															{workout}
 														</button>
 													</li>
@@ -215,7 +216,7 @@ const OfflineClassesList = () => {
 					</div>
 				)}
 				{loaderFetchData ? (
-					<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+					<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 						<SkeletonLoadingOfflineClasses />
 						<SkeletonLoadingOfflineClasses />
 						<SkeletonLoadingOfflineClasses />
@@ -223,9 +224,9 @@ const OfflineClassesList = () => {
 				) : (
 					<div>
 						{offlineClasses.data.rows?.length > 0 ? (
-							<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+							<div className="mb-6 grid grid-cols-1 gap-3 pt-36 sm:grid-cols-2 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 								{offlineClasses.data.rows?.map((item) => {
-									return <OfflineClassesListItem data={item} key={item.class_id} />;
+									return <OfflineClassesListItem key={item.class_id} data={item} />;
 								})}
 							</div>
 						) : (

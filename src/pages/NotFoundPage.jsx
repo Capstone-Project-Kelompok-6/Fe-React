@@ -7,15 +7,16 @@ const NotFoundPage = () => {
 	return (
 		<div className="lg:mt-38 container mt-6">
 			<Helmet>
-				<title>Not Found - Gym Membership</title>
-				<meta name="website" content="Gym Membership" />
+				<title>Not Found - WorkFit</title>
+				<meta name="website" content="WorkFit" />
 			</Helmet>
 			<div className="flex flex-col-reverse lg:flex-row">
 				<div className="flex-1 text-center lg:text-left">
 					<h1 className="my-2 text-xl font-semibold lg:text-5xl">Ooops...</h1>
 					<h3 className="my-2 text-lg lg:text-4xl">Page Not Found</h3>
 					<p className="my-5 text-base lg:text-2xl">
-						The page you are looking for doesn’t exist or an other error occurred We suggest you back to home
+						The page you are looking for doesn’t exist or an other error occurred We suggest you
+						back to home
 					</p>
 					<Link to="/">
 						<button

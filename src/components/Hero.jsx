@@ -9,11 +9,10 @@ const Hero = () => {
 			<div className="flex flex-col-reverse lg:flex lg:flex-row">
 				<div className="flex-1 lg:pb-28">
 					<h1 className="text-xl font-semibold leading-normal tracking-widest lg:text-6xl">
-						LET’S START A NEW LIFE TODAY
+						LET`S START A NEW LIFE TODAY
 					</h1>
 					<p className="mt-3 text-base font-normal leading-snug tracking-normal lg:my-7 lg:pr-32 lg:text-4xl">
-						We are here to help organize your diet plan for a better
-						lifestyle
+						We are here to help organize your diet plan for a better lifestyle
 					</p>
 					<div className="mx-auto mt-6 flex w-3/4 lg:mx-0 lg:mt-16 lg:flex">
 						<div className="mr-4 flex-1">

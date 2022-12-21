@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import useHook from "../../hooks/useHook";
 import { contentSidebarCollections, mainSidebarCollections } from "../../mocks/sidebarCollections";
 import Auth from "../../utils/auth";
 import { sidebarActive, sidebarInActive } from "../../utils/globalVariable";
 
 const Sidebar = () => {
+	const { activeLink, setActiveLink } = useHook();
 	const navigate = useNavigate();
-	const [active, setActive] = useState([]);
 	const location = useLocation();
 
 	useEffect(() => {
-		setActive(location.pathname);
+		setActiveLink(location.pathname);
 	}, [location]);
 
 	const handleLogout = () => {
@@ -58,7 +59,7 @@ const Sidebar = () => {
 	};
 
 	return (
-		<aside className="fixed top-0 bottom-0 left-0 z-30 mt-14 hidden w-52 leading-none transition-all duration-300 md:block">
+		<aside className="fixed top-0 bottom-0 left-0 z-30 mt-14 hidden w-52 leading-none transition-all duration-300 sm:hidden md:block">
 			<div className="relative z-40 hidden h-full flex-col justify-between overflow-y-auto bg-white py-2 px-3 sm:flex md:h-full">
 				<div className="relative">
 					<ul>
@@ -76,11 +77,18 @@ const Sidebar = () => {
 								</li>
 							);
 						})}
-						<div className="ml-2 flex px-2 py-2 text-base font-bold text-primary-violet">Manage Classes</div>
+						<div className="flex px-2 py-2 text-base font-bold text-primary-violet">
+							Manage Classes
+						</div>
 						<li>
 							<NavLink to="/classes/offline">
-								<div className={active === "/classes/offline" || active === "/classes/online" ? sidebarActive : sidebarInActive}>
-									{active === "/classes/offline" || active === "/classes/online" ? (
+								<div
+									className={
+										activeLink === "/classes/offline" || activeLink === "/classes/online"
+											? sidebarActive
+											: sidebarInActive
+									}>
+									{activeLink === "/classes/offline" || activeLink === "/classes/online" ? (
 										<i className="fi fi-sr-school ml-2 flex items-center justify-center text-base"></i>
 									) : (
 										<i className="fi fi-rr-school ml-2 flex items-center justify-center text-base"></i>
@@ -92,8 +100,13 @@ const Sidebar = () => {
 
 						<li>
 							<NavLink to="/booking/offline">
-								<div className={active === "/booking/offline" || active === "/booking/online" ? sidebarActive : sidebarInActive}>
-									{active === "/booking/offline" || active === "/booking/online" ? (
+								<div
+									className={
+										activeLink === "/booking/offline" || activeLink === "/booking/online"
+											? sidebarActive
+											: sidebarInActive
+									}>
+									{activeLink === "/booking/offline" || activeLink === "/booking/online" ? (
 										<i className="fi fi-sr-book-alt ml-2 flex items-center justify-center text-base"></i>
 									) : (
 										<i className="fi fi-rr-book-alt ml-2 flex items-center justify-center text-base"></i>
@@ -102,7 +115,9 @@ const Sidebar = () => {
 								</div>
 							</NavLink>
 						</li>
-						<div className="ml-2 flex px-2 py-2 text-base font-bold text-primary-violet">Manage Content</div>
+						<div className="flex px-2 py-2 text-base font-bold text-primary-violet">
+							Manage Content
+						</div>
 						{contentSidebarCollections.map((item, idx) => {
 							return (
 								<li key={idx}>

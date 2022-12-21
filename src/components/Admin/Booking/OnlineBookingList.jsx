@@ -23,8 +23,15 @@ const Initial_Online_Booking = {
 const OnlineBookingList = () => {
 	const [onlineBooking, setOnlineBooking] = useState(Initial_Online_Booking);
 	const [filterOnlineBooking, setFilterOnlineBooking] = useState(Initial_Online_Booking);
-	const [active, setActive] = useState(0);
-	const { keyword, setKeyword, debouncedKeyword, searchTrigger, setSearchTrigger } = useHook();
+	const {
+		keyword,
+		setKeyword,
+		debouncedKeyword,
+		searchTrigger,
+		setSearchTrigger,
+		activeFilter,
+		setActiveFilter,
+	} = useHook();
 
 	const dispatch = useDispatch();
 	const loading = useSelector((state) => state.onlineBooking.loading);
@@ -43,9 +50,9 @@ const OnlineBookingList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			BookingAPI.searchOnlineBooking(debouncedKeyword.toLowerCase()).then((result) => {
+			BookingAPI.searchOnlineBooking(debouncedKeyword.toLowerCase(), 1000).then((result) => {
 				setOnlineBooking({ data: result.data.data });
-				setActive(result.data.data.rows[0].workout);
+				setActiveFilter(result.data.data.rows[0].workout);
 			});
 		} else {
 			dispatch(setLoaderFetchData(true));
@@ -53,7 +60,7 @@ const OnlineBookingList = () => {
 				setOnlineBooking({
 					data: result.data.data,
 				});
-				setActive(0);
+				setActiveFilter(0);
 				dispatch(setLoaderFetchData(false));
 			});
 		}
@@ -67,13 +74,13 @@ const OnlineBookingList = () => {
 		});
 	}, [loading]);
 
-	const filterItem = (workout) => {
+	const filterByWorkout = (workout) => {
 		dispatch(setLoaderFetchData(true));
-		BookingAPI.filterOnlineBooking(workout).then((result) => {
+		BookingAPI.filterOnlineBooking(workout, 1000).then((result) => {
 			setOnlineBooking({
 				data: result.data.data,
 			});
-			setActive(workout);
+			setActiveFilter(workout);
 			dispatch(setLoaderFetchData(false));
 		});
 	};
@@ -83,7 +90,7 @@ const OnlineBookingList = () => {
 			setOnlineBooking({
 				data: result.data.data,
 			});
-			setActive(0);
+			setActiveFilter(0);
 		});
 	};
 
@@ -130,7 +137,7 @@ const OnlineBookingList = () => {
 								<ul className="-mb-px flex list-none overflow-x-scroll whitespace-nowrap text-center text-xs font-medium scrollbar-hide">
 									<li className="mr-2">
 										<button
-											className={active === 0 ? activeTab : notActiveTab}
+											className={activeFilter === 0 ? activeTab : notActiveTab}
 											onClick={() => {
 												filterAll();
 											}}>
@@ -157,8 +164,8 @@ const OnlineBookingList = () => {
 											return (
 												<li className="mr-2" key={workout}>
 													<button
-														className={active === workout ? activeTab : notActiveTab}
-														onClick={() => filterItem(workout)}>
+														className={activeFilter === workout ? activeTab : notActiveTab}
+														onClick={() => filterByWorkout(workout)}>
 														{workout}
 													</button>
 												</li>
@@ -199,7 +206,7 @@ const OnlineBookingList = () => {
 				</div>
 			)}
 			{loaderFetchData ? (
-				<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
+				<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 md:gap-6 xl:grid-cols-2 2xl:grid-cols-3">
 					<SkeletonLoadingBooking />
 					<SkeletonLoadingBooking />
 					<SkeletonLoadingBooking />
@@ -207,9 +214,9 @@ const OnlineBookingList = () => {
 			) : (
 				<div>
 					{onlineBooking.data.rows?.length > 0 ? (
-						<div className="mb-6 grid grid-cols-1 gap-6 pt-36 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
+						<div className="mb-6 grid grid-cols-1 gap-3 pt-36 md:grid-cols-2 md:gap-6 xl:grid-cols-2 2xl:grid-cols-3">
 							{onlineBooking.data.rows?.map((item) => {
-								return <OnlineBookingListItem data={item} key={item.book_id} />;
+								return <OnlineBookingListItem key={item.book_id} data={item} />;
 							})}
 						</div>
 					) : (

@@ -32,7 +32,7 @@ const VideoList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			VideoAPI.searchVideo(debouncedKeyword.toLowerCase()).then((result) =>
+			VideoAPI.searchVideo(debouncedKeyword.toLowerCase(), 1000).then((result) =>
 				setVideo({ status: true, data: result.data.data })
 			);
 		} else {
@@ -116,9 +116,9 @@ const VideoList = () => {
 				{video.status ? (
 					<div>
 						{video.data.rows?.length > 0 ? (
-							<div className="mb-6 grid grid-cols-1 gap-6 pt-20 pb-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+							<div className="mb-6 grid grid-cols-1 gap-3 pt-20 pb-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 								{video.data.rows?.map((item) => {
-									return <VideoListItem data={item} key={item.video_content_id} />;
+									return <VideoListItem key={item.video_content_id} data={item} />;
 								})}
 							</div>
 						) : (
@@ -131,8 +131,7 @@ const VideoList = () => {
 						)}
 					</div>
 				) : (
-					<div className="mb-6 grid grid-cols-1 gap-6 pt-20 pb-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-						<SkeletonLoadingVideo />
+					<div className="mb-6 grid grid-cols-1 gap-3 pt-20 pb-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 						<SkeletonLoadingVideo />
 						<SkeletonLoadingVideo />
 						<SkeletonLoadingVideo />

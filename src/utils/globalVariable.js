@@ -28,6 +28,10 @@ export const regexEmailValidation =
 
 export const regexPasswordValidation = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
 
+export const imageMimeType = /image\/(png|jpg|jpeg)/i;
+
+export const videoMimeType = /video\/(mp4)/i;
+
 // Tabs
 export const activeTab =
 	"inline-block rounded-full border border-primary-violet bg-tertiary-background-1 px-3 py-1 text-xs text-tertiary-3";
@@ -47,6 +51,9 @@ export const cancelButton =
 
 export const saveButton =
 	"w-full rounded-10 bg-secondary-navy px-5 py-2.5 text-center text-sm font-normal text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300";
+
+export const disabledButton =
+	"w-full rounded-10 bg-neutral-20 px-5 py-2.5 text-center text-sm font-normal text-neutral-60 cursor-not-allowed";
 
 export const addButton =
 	"inline-flex items-center rounded-lg bg-secondary-navy px-3 py-1.5 text-center text-[10px] font-normal text-white focus:outline-none focus:ring-4 focus:ring-blue-300 md:px-3 md:py-1";

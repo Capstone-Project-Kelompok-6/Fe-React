@@ -34,7 +34,7 @@ const ArticleList = () => {
 
 	useEffect(() => {
 		if (debouncedKeyword) {
-			ArticleAPI.searchArticle(debouncedKeyword.toLowerCase()).then((result) =>
+			ArticleAPI.searchArticle(debouncedKeyword.toLowerCase(), 1000).then((result) =>
 				setArticle({ status: true, data: result.data.data })
 			);
 		} else {
@@ -120,9 +120,9 @@ const ArticleList = () => {
 				{article.status ? (
 					<div>
 						{article.data.rows?.length > 0 ? (
-							<div className="mb-6 grid grid-cols-1 gap-6 pt-20 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+							<div className="mb-6 grid grid-cols-1 gap-3 pt-20 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 								{article.data.rows?.map((item) => {
-									return <ArticleListItem data={item} key={item.article_id} />;
+									return <ArticleListItem key={item.article_id} data={item} />;
 								})}
 							</div>
 						) : (
@@ -135,8 +135,7 @@ const ArticleList = () => {
 						)}
 					</div>
 				) : (
-					<div className="mb-6 grid grid-cols-1 gap-6 pt-20 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-						<SkeletonLoadingArticle />
+					<div className="mb-6 grid grid-cols-1 gap-3 pt-20 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
 						<SkeletonLoadingArticle />
 						<SkeletonLoadingArticle />
 						<SkeletonLoadingArticle />

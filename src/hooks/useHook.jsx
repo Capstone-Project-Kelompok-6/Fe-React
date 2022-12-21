@@ -7,6 +7,8 @@ const useHook = () => {
 	const [modalEditTrigger, setModalEditTrigger] = useState(false);
 	const [searchTrigger, setSearchTrigger] = useState(false);
 	const [keyword, setKeyword] = useState("");
+	const [activeLink, setActiveLink] = useState([]);
+	const [activeFilter, setActiveFilter] = useState(0);
 	const [debouncedKeyword] = useDebounce(keyword, 1300);
 
 	return {
@@ -21,6 +23,10 @@ const useHook = () => {
 		setKeyword,
 		searchTrigger,
 		setSearchTrigger,
+		activeLink,
+		setActiveLink,
+		activeFilter,
+		setActiveFilter,
 	};
 };
 

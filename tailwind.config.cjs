@@ -38,6 +38,7 @@ module.exports = {
 				"dark-4": "#737373",
 				"red-1": "#800017",
 				"red-2": "#B00020",
+				"tertiary-yellow": "#E5A400",
 			},
 			boxShadow: {
 				1: "0px 1px 2px rgba(0, 0, 0, 0.05), 0px 1px 3px 1px rgba(0, 0, 0, 0.03)",
