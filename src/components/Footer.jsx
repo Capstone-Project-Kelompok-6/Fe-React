@@ -3,7 +3,7 @@ import React from "react";
 const Footer = () => {
 	return (
 		<div className="mt-8 lg:mt-20">
-			<footer className="bg-secondary-navy py-5 px-6 dark:bg-gray-900 sm:py-16 lg:py-10 lg:px-36">
+			<footer className="bg-secondary-navy py-5 px-6 sm:py-16 lg:py-10 lg:px-36">
 				<div className="flex-none text-white lg:flex lg:justify-between lg:text-left">
 					<div className="mb-6 lg:mb-0">
 						<h3 className="text-2xl font-semibold lg:text-5xl">WorkFit.</h3>
@@ -14,17 +14,25 @@ const Footer = () => {
 						<div className="mt-4 flex lg:mt-5">
 							<a
 								className="border-r pr-6 pt-1"
-								href="https://www.youtube.com/@AlterraAcademy"
+								href="https://www.facebook.com/alterra.academy"
 								target="_blank"
 								rel="noopener noreferrer">
 								<i className="fi fi-brands-facebook text-xl lg:text-3xl"></i>
 							</a>
-							<div className="border-r px-6 pt-1">
+							<a
+								className="border-r px-6 pt-1"
+								href="https://www.instagram.com/alterra.academy/"
+								target="_blank"
+								rel="noopener noreferrer">
 								<i className="fi fi-brands-instagram text-xl lg:text-3xl"></i>
-							</div>
-							<div className="border-r px-6 pt-1">
+							</a>
+							<a
+								className="border-r px-6 pt-1"
+								href="https://twitter.com/alterra.academy"
+								target="_blank"
+								rel="noopener noreferrer">
 								<i className="fi fi-brands-twitter text-xl lg:text-3xl"></i>
-							</div>
+							</a>
 							<a
 								className="px-6 pt-1"
 								href="https://www.youtube.com/@AlterraAcademy"
@@ -85,15 +93,7 @@ const Footer = () => {
 									</label>
 									<div className="relative">
 										<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-											<svg
-												aria-hidden="true"
-												className="h-5 w-5 text-gray-500 dark:text-gray-400"
-												fill="currentColor"
-												viewBox="0 0 20 20"
-												xmlns="http://www.w3.org/2000/svg">
-												<path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-												<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-											</svg>
+											<i className="fi fi-sr-envelope mt-1 text-neutral-80"></i>
 										</div>
 										<input
 											type="email"
